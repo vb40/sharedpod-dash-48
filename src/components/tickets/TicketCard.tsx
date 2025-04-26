@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,7 +96,9 @@ const TicketCard = ({ ticket, onEdit }: TicketCardProps) => {
       <CardHeader className="pb-2 flex flex-row justify-between items-start space-y-0">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Badge variant="outline">{ticket.id}</Badge>
+            <Badge variant="outline" className="font-mono">
+              {ticket.id.replace('TICK-', ticket.project + '-')}
+            </Badge>
             <Badge className={cn(getStatusColor(ticket.status))}>
               {getStatusLabel(ticket.status)}
             </Badge>

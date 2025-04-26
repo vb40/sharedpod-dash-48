@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 
 interface Ticket {
@@ -53,8 +52,8 @@ export const TicketList = ({
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                  {ticket.id}
+                <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded font-mono">
+                  {ticket.id.replace('TICK-', ticket.project + '-')}
                 </span>
                 <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
                   ticket.status === "dev" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" : 

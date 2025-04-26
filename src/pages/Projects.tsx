@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -55,10 +54,7 @@ const Projects = () => {
     setSelectedProject(undefined);
   };
 
-  // Calculate hours used (mocked data, 80 hours per month)
   const getHoursUsed = (project: any) => {
-    // Let's generate a random number here for demo purposes
-    // This would normally come from the project data
     return project.hoursUsed || Math.floor(Math.random() * 80);
   };
 
@@ -87,7 +83,6 @@ const Projects = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle>{project.name}</CardTitle>
-                    <CardDescription className="line-clamp-1">ID: {project.id}</CardDescription>
                   </div>
                   <Badge
                     className={cn(
