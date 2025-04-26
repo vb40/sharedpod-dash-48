@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useApp } from "@/context/AppContext";
 
 interface Ticket {
@@ -52,7 +52,7 @@ export function useTicketState(ticket?: Ticket, mode: "create" | "edit" = "creat
   const [errors, setErrors] = useState<FormErrors>({});
   const [comments, setComments] = useState<{ author: string; text: string; timestamp: string }[]>([]);
 
-  const resetForm = (ticket?: Ticket, mode: "create" | "edit" = "create") => {
+  const resetForm = useCallback((ticket?: Ticket, mode: "create" | "edit" = "create") => {
     if (ticket && mode === "edit") {
       setFormData({
         title: ticket.title,
@@ -79,7 +79,11 @@ export function useTicketState(ticket?: Ticket, mode: "create" | "edit" = "creat
       setComments([]);
     }
     setErrors({});
-  };
+  }, []);
+
+  useEffect(() => {
+    resetForm(ticket, mode);
+  }, [ticket, mode, resetForm]);
 
   const validateForm = () => {
     const newErrors = {
@@ -90,8 +94,9 @@ export function useTicketState(ticket?: Ticket, mode: "create" | "edit" = "creat
       timeEstimate: formData.timeEstimate <= 0 ? "Time estimate must be greater than 0" : "",
     };
     
+    const hasErrors = Object.values(newErrors).some(error => error);
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
+    return !hasErrors;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -111,7 +116,7 @@ export function useTicketState(ticket?: Ticket, mode: "create" | "edit" = "creat
 
   const handleAddComment = (text: string) => {
     const newComment = {
-      author: teamMembers[0].name,
+      author: teamMembers[0]?.name || "Anonymous",
       text,
       timestamp: new Date().toISOString(),
     };

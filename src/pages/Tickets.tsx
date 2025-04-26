@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import TicketCard from "@/components/tickets/TicketCard";
@@ -33,21 +32,17 @@ const Tickets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentTab, setCurrentTab] = useState("all");
 
-  // Apply filters when status filter or search query changes
   useEffect(() => {
     let results = tickets;
     
-    // Apply status filter
     if (statusFilter) {
       results = filterTickets(statusFilter);
     }
     
-    // Apply search query
     if (searchQuery) {
       results = searchTickets(searchQuery);
     }
     
-    // Apply tab filter
     if (currentTab === "active") {
       results = results.filter(ticket => !["completed", "done"].includes(ticket.status));
     } else if (currentTab === "completed") {
@@ -71,11 +66,8 @@ const Tickets = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    // Show success message based on modal mode
-    if (modalMode === "create") {
-      toast.success("Ticket created successfully");
-    } else {
-      toast.success("Ticket updated successfully");
+    if (modalMode === "create" || modalMode === "edit") {
+      toast.success(modalMode === "create" ? "Ticket created successfully" : "Ticket updated successfully");
     }
   };
 

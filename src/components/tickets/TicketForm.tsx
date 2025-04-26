@@ -1,6 +1,7 @@
 
 import { TicketFormFields } from "./TicketFormFields";
 import { TicketComments } from "./TicketComments";
+import { useApp } from "@/context/AppContext";
 
 interface FormData {
   title: string;
@@ -25,25 +26,23 @@ interface TicketFormProps {
   formData: FormData;
   errors: FormErrors;
   comments: { author: string; text: string; timestamp: string }[];
-  teamMembers: { id: number; name: string }[];
-  projects: { id: string; name: string }[];
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSelectChange: (name: string, value: string) => void;
   onAddComment: (text: string) => void;
-  currentUser: string;
 }
 
 export function TicketForm({
   formData,
   errors,
   comments,
-  teamMembers,
-  projects,
   onChange,
   onSelectChange,
   onAddComment,
-  currentUser,
 }: TicketFormProps) {
+  const { teamMembers, projects } = useApp();
+  // Use first team member as current user for simplicity
+  const currentUser = teamMembers[0]?.name || "Anonymous";
+
   return (
     <div className="space-y-6">
       <TicketFormFields

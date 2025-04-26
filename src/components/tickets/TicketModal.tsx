@@ -32,12 +32,12 @@ interface TicketModalProps {
 const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const { addTicket, updateTicket } = useApp();
   const { formData, errors, comments, handleChange, handleSelectChange, handleAddComment, validateForm, resetForm } = useTicketState(ticket, mode);
-
+  
   useEffect(() => {
     if (isOpen) {
       resetForm(ticket, mode);
     }
-  }, [isOpen, ticket, mode]);
+  }, [isOpen, ticket, mode, resetForm]);
 
   const handleSubmit = () => {
     if (!validateForm()) return;
@@ -65,7 +65,9 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) onClose();
+    }}>
       <DialogContent className="sm:max-w-[600px]">
         <TicketHeader mode={mode} />
         
@@ -86,6 +88,6 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 export default TicketModal;

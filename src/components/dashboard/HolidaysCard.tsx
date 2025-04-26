@@ -24,25 +24,16 @@ const HolidaysCard = () => {
   );
   
   // Create a function to add class to holiday dates
-  const dayClassName = (date: Date) => {
-    const isHoliday = holidayDates.some(
-      holiday => format(holiday.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
-    );
-    
-    if (isHoliday) {
-      // Find the type of holiday to determine color
-      const holiday = holidayDates.find(
-        h => format(h.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
-      );
-      
-      return cn(
-        "relative",
-        "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-1 after:rounded-full",
-        holiday?.type === "public" ? "after:bg-primary" : "after:bg-orange-500"
-      );
-    }
-    
-    return "";
+  const modifiers = {
+    holiday: holidayDates.map(holiday => holiday.date),
+    publicHoliday: holidayDates.filter(h => h.type === "public").map(h => h.date),
+    observanceHoliday: holidayDates.filter(h => h.type === "observance").map(h => h.date)
+  };
+
+  const modifiersClassNames = {
+    holiday: "relative",
+    publicHoliday: "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-1 after:rounded-full after:bg-primary",
+    observanceHoliday: "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-1 after:rounded-full after:bg-orange-500"
   };
 
   return (
@@ -65,8 +56,9 @@ const HolidaysCard = () => {
           mode="single"
           selected={selectedDate}
           onSelect={setSelectedDate}
-          className="rounded-md border"
-          dayClassName={dayClassName}
+          className="rounded-md border pointer-events-auto"
+          modifiers={modifiers}
+          modifiersClassNames={modifiersClassNames}
         />
         
         {selectedHoliday && (
