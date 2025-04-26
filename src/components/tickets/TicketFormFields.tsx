@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TeamMember, Project } from "@/context/types";
 
 interface FormData {
   title: string;
@@ -26,8 +27,8 @@ interface FormErrors {
 interface TicketFormFieldsProps {
   formData: FormData;
   errors: FormErrors;
-  teamMembers: { id: number; name: string }[];
-  projects: { id: string; name: string }[];
+  teamMembers: TeamMember[];
+  projects: Project[];
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSelectChange: (name: string, value: string) => void;
 }

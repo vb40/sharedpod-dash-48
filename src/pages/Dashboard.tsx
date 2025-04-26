@@ -48,32 +48,28 @@ const Dashboard = () => {
           value={`${completionRate}%`}
           description={`${completedTickets} / ${totalTickets} tickets`}
           icon={<Clock className="h-5 w-5" />}
-          trend={completionRate > 50 ? "up" : "down"}
-          trendValue="+5.2%"
+          trend={{ value: 5.2, isPositive: completionRate > 50 }}
         />
         <StatCard 
           title="Active Projects"
           value={activeProjects}
           description={`Out of ${projects.length} total projects`}
           icon={<Briefcase className="h-5 w-5" />}
-          trend="up"
-          trendValue="+2"
+          trend={{ value: 2, isPositive: true }}
         />
         <StatCard 
           title="Team Members"
           value={totalTeamMembers}
           description="Active team members"
           icon={<Users className="h-5 w-5" />}
-          trend="none"
-          trendValue="0"
+          trend={{ value: 0, isPositive: true }}
         />
         <StatCard 
           title="Team Performance"
           value={`${avgPerformance}%`}
           description="Average performance score"
           icon={<BarChart2 className="h-5 w-5" />}
-          trend={avgPerformance > 75 ? "up" : "down"}
-          trendValue={avgPerformance > 75 ? "+3.1%" : "-2.4%"}
+          trend={{ value: 3.1, isPositive: avgPerformance > 75 }}
         />
       </div>
       
