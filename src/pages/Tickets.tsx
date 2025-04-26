@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import TicketFilter from "@/components/tickets/TicketFilter";
@@ -114,7 +113,9 @@ const Tickets = () => {
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">{ticket.id}</span>
+                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                          {ticket.id}
+                        </span>
                         <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
                           ticket.status === "dev" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" : 
                           ticket.status === "in-progress" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" :
@@ -175,7 +176,6 @@ const Tickets = () => {
             onCreateTicket={handleCreateTicket}
           />
           
-          {/* Same structure for the active tab */}
           {filteredTickets.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No active tickets found</p>
@@ -189,11 +189,12 @@ const Tickets = () => {
                   className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card cursor-pointer"
                   onClick={() => handleEditTicket(ticket)}
                 >
-                  {/* Same content as "all" tab */}
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">{ticket.id}</span>
+                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                          {ticket.id}
+                        </span>
                         <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
                           ticket.status === "dev" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" : 
                           ticket.status === "in-progress" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" :
@@ -266,11 +267,12 @@ const Tickets = () => {
                   className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card cursor-pointer"
                   onClick={() => handleEditTicket(ticket)}
                 >
-                  {/* Same content as "all" tab */}
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">{ticket.id}</span>
+                        <span className="bg-gray-100 dark:bg-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                          {ticket.id}
+                        </span>
                         <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
                           ticket.status === "dev" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" : 
                           ticket.status === "in-progress" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" :

@@ -44,7 +44,6 @@ const generateProjectCode = (projectName: string) => {
     "ArdentMills": "ARM",
     "Paramount": "PAR",
     "SharedPod Dashboard": "SPD",
-    // Add more mappings as needed
   };
   
   // Return project code or use first 3 characters of project name
@@ -84,14 +83,15 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
     
     if (mode === "create") {
       addTicket(updatedTicket);
+      toast.success("Ticket created successfully!");
     } else {
       updateTicket(updatedTicket);
+      toast.success("Ticket updated successfully!");
     }
     
     setIsSubmitting(false);
     setIsSubmitted(true);
-    
-    toast.success(`Ticket ${mode === "create" ? "created" : "updated"} successfully!`);
+    onClose();
   };
 
   return (
