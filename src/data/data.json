@@ -1,0 +1,600 @@
+
+{
+  "teamMembers": [
+    {
+      "id": 1,
+      "name": "Raja I",
+      "role": "Manager Delivery",
+      "projects": [],
+      "performance": 92,
+      "hoursLogged": 168,
+      "avatar": "/placeholder.svg",
+      "tasks": 14,
+      "tasksCompleted": 12,
+      "attendance": 96
+    },
+    {
+      "id": 2,
+      "name": "Manasvini",
+      "role": "Project Manager",
+      "projects": ["+9 Projects"],
+      "performance": 89,
+      "hoursLogged": 172,
+      "avatar": "/placeholder.svg",
+      "tasks": 21,
+      "tasksCompleted": 18,
+      "attendance": 94
+    },
+    {
+      "id": 3,
+      "name": "Balaji",
+      "role": "App Dev",
+      "projects": ["USHG", "SharedPod Dashboard"],
+      "performance": 85,
+      "hoursLogged": 155,
+      "avatar": "/placeholder.svg",
+      "tasks": 18,
+      "tasksCompleted": 14,
+      "attendance": 90
+    },
+    {
+      "id": 4,
+      "name": "Ashiq",
+      "role": "App Dev",
+      "projects": ["USHG", "Data"],
+      "performance": 87,
+      "hoursLogged": 162,
+      "avatar": "/placeholder.svg",
+      "tasks": 16,
+      "tasksCompleted": 14,
+      "attendance": 92
+    },
+    {
+      "id": 5,
+      "name": "Shoban",
+      "role": "App Dev",
+      "projects": ["P2P"],
+      "performance": 84,
+      "hoursLogged": 158,
+      "avatar": "/placeholder.svg",
+      "tasks": 17,
+      "tasksCompleted": 14,
+      "attendance": 88
+    },
+    {
+      "id": 6,
+      "name": "Ajjai",
+      "role": "AWS, DevOps",
+      "projects": ["PIMA", "Metiren", "DN"],
+      "performance": 91,
+      "hoursLogged": 167,
+      "avatar": "/placeholder.svg",
+      "tasks": 19,
+      "tasksCompleted": 17,
+      "attendance": 95
+    },
+    {
+      "id": 7,
+      "name": "Souvrao",
+      "role": "App Dev",
+      "projects": ["DN"],
+      "performance": 83,
+      "hoursLogged": 152,
+      "avatar": "/placeholder.svg",
+      "tasks": 15,
+      "tasksCompleted": 12,
+      "attendance": 87
+    },
+    {
+      "id": 8,
+      "name": "Yeswanth",
+      "role": "Mulesoft",
+      "projects": ["PIMA"],
+      "performance": 86,
+      "hoursLogged": 159,
+      "avatar": "/placeholder.svg",
+      "tasks": 14,
+      "tasksCompleted": 12,
+      "attendance": 91
+    },
+    {
+      "id": 9,
+      "name": "Pooja",
+      "role": "App Dev",
+      "projects": ["PIMA", "P2P"],
+      "performance": 88,
+      "hoursLogged": 164,
+      "avatar": "/placeholder.svg",
+      "tasks": 16,
+      "tasksCompleted": 14,
+      "attendance": 93
+    },
+    {
+      "id": 10,
+      "name": "Shangamesh",
+      "role": "DevOps, Azure",
+      "projects": ["Octapharma"],
+      "performance": 85,
+      "hoursLogged": 156,
+      "avatar": "/placeholder.svg",
+      "tasks": 15,
+      "tasksCompleted": 13,
+      "attendance": 89
+    },
+    {
+      "id": 11,
+      "name": "Ashwatha",
+      "role": "DevOps",
+      "projects": ["Octapharma", "FPL"],
+      "performance": 87,
+      "hoursLogged": 160,
+      "avatar": "/placeholder.svg",
+      "tasks": 18,
+      "tasksCompleted": 16,
+      "attendance": 91
+    },
+    {
+      "id": 12,
+      "name": "Giri",
+      "role": "AWS, DevOps",
+      "projects": ["FPL", "Metiren"],
+      "performance": 89,
+      "hoursLogged": 166,
+      "avatar": "/placeholder.svg",
+      "tasks": 17,
+      "tasksCompleted": 15,
+      "attendance": 92
+    },
+    {
+      "id": 13,
+      "name": "Neha",
+      "role": "App Dev",
+      "projects": ["ArdentMills"],
+      "performance": 84,
+      "hoursLogged": 157,
+      "avatar": "/placeholder.svg",
+      "tasks": 16,
+      "tasksCompleted": 13,
+      "attendance": 88
+    },
+    {
+      "id": 14,
+      "name": "Niyaz",
+      "role": "App Dev",
+      "projects": ["Paramount"],
+      "performance": 86,
+      "hoursLogged": 159,
+      "avatar": "/placeholder.svg",
+      "tasks": 15,
+      "tasksCompleted": 13,
+      "attendance": 90
+    }
+  ],
+  "projects": [
+    {
+      "id": "ushg",
+      "name": "USHG",
+      "progress": 75,
+      "status": "In Progress",
+      "team": ["Balaji", "Ashiq"],
+      "hoursLogged": 342,
+      "startDate": "2024-01-10",
+      "endDate": "2024-06-30",
+      "budget": 120000,
+      "spent": 78000,
+      "tasks": {
+        "total": 87,
+        "completed": 65,
+        "inProgress": 15,
+        "blocked": 7
+      }
+    },
+    {
+      "id": "p2p",
+      "name": "P2P",
+      "progress": 60,
+      "status": "In Progress",
+      "team": ["Shoban", "Pooja"],
+      "hoursLogged": 278,
+      "startDate": "2024-02-15",
+      "endDate": "2024-07-15",
+      "budget": 95000,
+      "spent": 57000,
+      "tasks": {
+        "total": 72,
+        "completed": 43,
+        "inProgress": 22,
+        "blocked": 7
+      }
+    },
+    {
+      "id": "pima",
+      "name": "PIMA",
+      "progress": 82,
+      "status": "In Progress",
+      "team": ["Ajjai", "Yeswanth", "Pooja"],
+      "hoursLogged": 412,
+      "startDate": "2023-11-01",
+      "endDate": "2024-05-15",
+      "budget": 180000,
+      "spent": 148000,
+      "tasks": {
+        "total": 104,
+        "completed": 85,
+        "inProgress": 12,
+        "blocked": 7
+      }
+    },
+    {
+      "id": "metiren",
+      "name": "Metiren",
+      "progress": 40,
+      "status": "In Progress",
+      "team": ["Ajjai", "Giri"],
+      "hoursLogged": 186,
+      "startDate": "2024-03-10",
+      "endDate": "2024-08-30",
+      "budget": 135000,
+      "spent": 54000,
+      "tasks": {
+        "total": 96,
+        "completed": 38,
+        "inProgress": 31,
+        "blocked": 27
+      }
+    },
+    {
+      "id": "dn",
+      "name": "DN",
+      "progress": 68,
+      "status": "In Progress",
+      "team": ["Ajjai", "Souvrao"],
+      "hoursLogged": 289,
+      "startDate": "2024-01-20",
+      "endDate": "2024-06-15",
+      "budget": 110000,
+      "spent": 75000,
+      "tasks": {
+        "total": 78,
+        "completed": 53,
+        "inProgress": 18,
+        "blocked": 7
+      }
+    },
+    {
+      "id": "octapharma",
+      "name": "Octapharma",
+      "progress": 32,
+      "status": "In Progress",
+      "team": ["Shangamesh", "Ashwatha"],
+      "hoursLogged": 154,
+      "startDate": "2024-03-25",
+      "endDate": "2024-09-15",
+      "budget": 140000,
+      "spent": 45000,
+      "tasks": {
+        "total": 92,
+        "completed": 29,
+        "inProgress": 38,
+        "blocked": 25
+      }
+    },
+    {
+      "id": "fpl",
+      "name": "FPL",
+      "progress": 52,
+      "status": "In Progress",
+      "team": ["Ashwatha", "Giri"],
+      "hoursLogged": 231,
+      "startDate": "2024-02-05",
+      "endDate": "2024-07-10",
+      "budget": 125000,
+      "spent": 65000,
+      "tasks": {
+        "total": 84,
+        "completed": 44,
+        "inProgress": 28,
+        "blocked": 12
+      }
+    },
+    {
+      "id": "ardentmills",
+      "name": "ArdentMills",
+      "progress": 28,
+      "status": "In Progress",
+      "team": ["Neha"],
+      "hoursLogged": 142,
+      "startDate": "2024-04-01",
+      "endDate": "2024-10-20",
+      "budget": 105000,
+      "spent": 29000,
+      "tasks": {
+        "total": 78,
+        "completed": 22,
+        "inProgress": 42,
+        "blocked": 14
+      }
+    },
+    {
+      "id": "paramount",
+      "name": "Paramount",
+      "progress": 15,
+      "status": "Just Started",
+      "team": ["Niyaz"],
+      "hoursLogged": 68,
+      "startDate": "2024-04-15",
+      "endDate": "2024-11-10",
+      "budget": 115000,
+      "spent": 17000,
+      "tasks": {
+        "total": 84,
+        "completed": 13,
+        "inProgress": 35,
+        "blocked": 36
+      }
+    },
+    {
+      "id": "sharedpod",
+      "name": "SharedPod Dashboard",
+      "progress": 95,
+      "status": "Near Completion",
+      "team": ["Balaji"],
+      "hoursLogged": 124,
+      "startDate": "2024-03-01",
+      "endDate": "2024-05-01",
+      "budget": 45000,
+      "spent": 42750,
+      "tasks": {
+        "total": 56,
+        "completed": 53,
+        "inProgress": 3,
+        "blocked": 0
+      }
+    }
+  ],
+  "tickets": [
+    {
+      "id": "TICK-001",
+      "title": "API Integration Issue",
+      "description": "The third-party API integration is failing with 403 errors intermittently",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": "Balaji",
+      "project": "USHG",
+      "createdAt": "2024-04-10T09:30:00.000Z",
+      "updatedAt": "2024-04-15T14:23:00.000Z",
+      "timeSpent": 6.5,
+      "timeEstimate": 8,
+      "comments": [
+        {
+          "author": "Ashiq",
+          "text": "I've noticed this too. Might be an auth token refresh issue.",
+          "timestamp": "2024-04-11T10:12:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "TICK-002",
+      "title": "Dashboard Performance",
+      "description": "Dashboard is loading slowly when there are more than 100 records",
+      "status": "qa",
+      "priority": "medium",
+      "assignee": "Neha",
+      "project": "ArdentMills",
+      "createdAt": "2024-04-08T11:15:00.000Z",
+      "updatedAt": "2024-04-16T09:45:00.000Z",
+      "timeSpent": 9,
+      "timeEstimate": 12,
+      "comments": []
+    },
+    {
+      "id": "TICK-003",
+      "title": "Authentication Flow Bug",
+      "description": "Users are sometimes redirected to login page even when session is valid",
+      "status": "dev",
+      "priority": "high",
+      "assignee": "Souvrao",
+      "project": "DN",
+      "createdAt": "2024-04-12T13:25:00.000Z",
+      "updatedAt": "2024-04-12T13:25:00.000Z",
+      "timeSpent": 0,
+      "timeEstimate": 6,
+      "comments": []
+    },
+    {
+      "id": "TICK-004",
+      "title": "Missing Data in Reports",
+      "description": "Some data points are missing in the weekly generated reports",
+      "status": "blocked",
+      "priority": "high",
+      "assignee": "Pooja",
+      "project": "PIMA",
+      "createdAt": "2024-04-05T15:10:00.000Z",
+      "updatedAt": "2024-04-14T11:35:00.000Z",
+      "timeSpent": 7.5,
+      "timeEstimate": 5,
+      "comments": [
+        {
+          "author": "Raja I",
+          "text": "Blocked on data source access. I've raised a request with the client.",
+          "timestamp": "2024-04-14T11:35:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "TICK-005",
+      "title": "Mobile Responsive Layout",
+      "description": "The dashboard doesn't render correctly on mobile devices",
+      "status": "completed",
+      "priority": "medium",
+      "assignee": "Ashiq",
+      "project": "USHG",
+      "createdAt": "2024-04-02T10:20:00.000Z",
+      "updatedAt": "2024-04-09T16:40:00.000Z",
+      "timeSpent": 8,
+      "timeEstimate": 10,
+      "comments": [
+        {
+          "author": "Manasvini",
+          "text": "Great work! All test cases are passing now.",
+          "timestamp": "2024-04-09T16:40:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "TICK-006",
+      "title": "Infrastructure Scaling",
+      "description": "Need to scale up the infrastructure to handle increased load",
+      "status": "uat",
+      "priority": "high",
+      "assignee": "Ajjai",
+      "project": "Metiren",
+      "createdAt": "2024-04-11T09:15:00.000Z",
+      "updatedAt": "2024-04-15T17:20:00.000Z",
+      "timeSpent": 12,
+      "timeEstimate": 16,
+      "comments": [
+        {
+          "author": "Giri",
+          "text": "I've prepared the CloudFormation templates. Ready for review.",
+          "timestamp": "2024-04-15T17:20:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "TICK-007",
+      "title": "Missing Documentation",
+      "description": "API documentation is incomplete for new endpoints",
+      "status": "done",
+      "priority": "low",
+      "assignee": "Yeswanth",
+      "project": "PIMA",
+      "createdAt": "2024-04-03T14:30:00.000Z",
+      "updatedAt": "2024-04-10T11:25:00.000Z",
+      "timeSpent": 4,
+      "timeEstimate": 4,
+      "comments": []
+    },
+    {
+      "id": "TICK-008",
+      "title": "Security Vulnerability",
+      "description": "Potential XSS vulnerability identified in search feature",
+      "status": "in-progress",
+      "priority": "critical",
+      "assignee": "Shangamesh",
+      "project": "Octapharma",
+      "createdAt": "2024-04-14T08:45:00.000Z",
+      "updatedAt": "2024-04-16T10:30:00.000Z",
+      "timeSpent": 5.5,
+      "timeEstimate": 8,
+      "comments": [
+        {
+          "author": "Ashwatha",
+          "text": "I've identified the vulnerable code path, working on a fix.",
+          "timestamp": "2024-04-16T10:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "TICK-009",
+      "title": "Feature Request: Export Data",
+      "description": "Users need ability to export dashboard data as CSV",
+      "status": "dev",
+      "priority": "medium",
+      "assignee": "Niyaz",
+      "project": "Paramount",
+      "createdAt": "2024-04-09T16:20:00.000Z",
+      "updatedAt": "2024-04-09T16:20:00.000Z",
+      "timeSpent": 0,
+      "timeEstimate": 6,
+      "comments": []
+    },
+    {
+      "id": "TICK-010",
+      "title": "Pipeline Failure",
+      "description": "CI/CD pipeline is failing on deployment to production",
+      "status": "blocked",
+      "priority": "critical",
+      "assignee": "Giri",
+      "project": "FPL",
+      "createdAt": "2024-04-15T13:10:00.000Z",
+      "updatedAt": "2024-04-16T09:05:00.000Z",
+      "timeSpent": 3.5,
+      "timeEstimate": 4,
+      "comments": [
+        {
+          "author": "Giri",
+          "text": "Issue appears to be with the client's network restrictions. Working with their IT team.",
+          "timestamp": "2024-04-16T09:05:00.000Z"
+        }
+      ]
+    }
+  ],
+  "holidays": [
+    {
+      "date": "2024-01-01",
+      "name": "New Year's Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-01-15",
+      "name": "Martin Luther King Jr. Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-02-19",
+      "name": "Presidents' Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-04-15",
+      "name": "Tax Day",
+      "type": "observance"
+    },
+    {
+      "date": "2024-05-27",
+      "name": "Memorial Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-06-19",
+      "name": "Juneteenth",
+      "type": "public"
+    },
+    {
+      "date": "2024-07-04",
+      "name": "Independence Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-09-02",
+      "name": "Labor Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-10-14",
+      "name": "Columbus Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-11-11",
+      "name": "Veterans Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-11-28",
+      "name": "Thanksgiving Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-12-25",
+      "name": "Christmas Day",
+      "type": "public"
+    },
+    {
+      "date": "2024-12-31",
+      "name": "New Year's Eve",
+      "type": "observance"
+    }
+  ]
+}
