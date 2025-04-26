@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { format, differenceInDays } from "date-fns";
 import { Calendar, Clock, CheckCircle, AlertCircle, BarChart2 } from "lucide-react";
 import ProjectModal from "@/components/projects/ProjectModal";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 const Projects = () => {
   const { projects, teamMembers } = useApp();
@@ -179,11 +180,18 @@ const Projects = () => {
                   <div className="text-sm font-medium">Team Members</div>
                   <div className="flex -space-x-2">
                     {project.team.map((member, i) => (
-                      <Avatar key={i} className="border-2 border-background h-8 w-8">
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
-                          {getInitials(member)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <HoverCard key={i}>
+                        <HoverCardTrigger>
+                          <Avatar className="border-2 border-background h-8 w-8">
+                            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
+                              {getInitials(member)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="text-sm">
+                          {member}
+                        </HoverCardContent>
+                      </HoverCard>
                     ))}
                   </div>
                 </div>
