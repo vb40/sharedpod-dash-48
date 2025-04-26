@@ -68,6 +68,7 @@ interface AppContextType {
   updateCertification: (certification: any) => void;
   updateTeamMember: (memberId: number, updatedMember: any) => void;
   updateProject: (projectId: string, updatedProject: any) => void;
+  addTeamMember: (member: any) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -87,6 +88,7 @@ export const AppContext = createContext<AppContextType>({
   updateCertification: () => {},
   updateTeamMember: () => {},
   updateProject: () => {},
+  addTeamMember: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -176,6 +178,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     ));
   };
 
+  const addTeamMember = (member: any) => {
+    setTeamMembers(prev => [...prev, member]);
+  };
+
   const holidays = data.holidays || [
     {
       date: "2025-05-01",
@@ -218,6 +224,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         updateCertification,
         updateTeamMember,
         updateProject,
+        addTeamMember,
       }}
     >
       {children}

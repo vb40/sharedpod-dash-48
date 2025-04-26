@@ -1,17 +1,19 @@
-
 import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Check, Clock, Calendar, Briefcase, Star, TrendingUp } from "lucide-react";
+import { Check, Clock, Calendar, Briefcase, Star, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TeamMemberModal from "@/components/team/TeamMemberModal";
+import AddTeamMemberModal from "@/components/team/AddTeamMemberModal";
 
 const Team = () => {
   const { teamMembers } = useApp();
   const [selectedMember, setSelectedMember] = useState<any | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -41,9 +43,14 @@ const Team = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-medium tracking-tight">Team</h1>
-        <p className="text-muted-foreground">Manage your team members and their performance.</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-medium tracking-tight">Team</h1>
+          <p className="text-muted-foreground">Manage your team members and their performance.</p>
+        </div>
+        <Button onClick={() => setIsAddModalOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Add Team Member
+        </Button>
       </div>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -161,6 +168,11 @@ const Team = () => {
         isOpen={isModalOpen} 
         onClose={handleCloseModal} 
         member={selectedMember} 
+      />
+
+      <AddTeamMemberModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
       />
     </div>
   );

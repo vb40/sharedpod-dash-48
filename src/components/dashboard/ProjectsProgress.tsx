@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -35,45 +36,37 @@ const ProjectsProgress = () => {
               
               <div className="relative flex justify-center items-center h-16">
                 <svg 
-                  className="w-16 h-16" 
-                  viewBox="0 0 100 55" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-16 h-16 transform -rotate-90"
+                  viewBox="0 0 100 100"
                 >
-                  <path 
-                    d="M10,50 A40,40 0 1,1 90,50" 
-                    stroke="#e5e7eb" 
-                    strokeWidth="8" 
-                    strokeLinecap="round"
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
                     fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="10"
+                    strokeLinecap="round"
                   />
-                  <path 
-                    d="M10,50 A40,40 0 1,1 90,50" 
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
                     stroke={
                       project.progress >= 80 ? "#10b981" : 
                       project.progress >= 50 ? "#f59e0b" : 
                       "#ef4444"
                     }
-                    strokeWidth="8" 
+                    strokeWidth="10"
                     strokeLinecap="round"
-                    strokeDasharray="151"
-                    strokeDashoffset={151 - (project.progress / 100 * 151)}
-                    fill="none"
+                    strokeDasharray={`${2 * Math.PI * 45}`}
+                    strokeDashoffset={2 * Math.PI * 45 * (1 - project.progress / 100)}
+                    className="transition-all duration-500 ease-out"
                   />
-                  <line 
-                    x1="50" 
-                    y1="50" 
-                    x2={50 - 30 * Math.cos((project.progress / 100 * Math.PI))} 
-                    y2={50 - 30 * Math.sin((project.progress / 100 * Math.PI))}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <circle cx="50" cy="50" r="3" fill="currentColor" />
                 </svg>
-                <div className="absolute top-[60%] left-1/2 -translate-x-1/2 flex items-center text-xs">
-                  <Gauge className="h-3 w-3 mr-1" />
-                  <span>{project.progress}%</span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-xl font-semibold">{project.progress}%</div>
                 </div>
               </div>
 
