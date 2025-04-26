@@ -39,7 +39,7 @@ export function TicketForm({
   onSelectChange,
   onAddComment,
 }: TicketFormProps) {
-  const { teamMembers } = useApp();
+  const { teamMembers, projects } = useApp();
   const currentUser = teamMembers[0]?.name || "Anonymous";
 
   return (
@@ -48,7 +48,7 @@ export function TicketForm({
         formData={formData}
         errors={errors}
         teamMembers={teamMembers}
-        projects={[]}
+        projects={projects}
         onChange={onChange}
         onSelectChange={onSelectChange}
       />

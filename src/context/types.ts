@@ -9,6 +9,7 @@ export interface TeamMember {
   hoursLogged: number;
   tasksCompleted: number;
   tasks: number;
+  avatar?: string;
 }
 
 export interface Project {
@@ -24,6 +25,8 @@ export interface Project {
   tasks: {
     completed: number;
     total: number;
+    inProgress?: number;
+    blocked?: number;
   };
 }
 
@@ -63,7 +66,7 @@ export interface AppContextType {
   searchTickets: (query: string) => Ticket[];
   addCertification: (certification: any) => void;
   updateCertification: (certification: any) => void;
-  updateTeamMember: (memberId: number, updatedMember: Partial<TeamMember>) => void;
+  updateTeamMember: (memberId: string, updatedMember: Partial<TeamMember>) => void;
   updateProject: (projectId: string, updatedProject: Partial<Project>) => void;
   addTeamMember: (member: TeamMember) => void;
 }

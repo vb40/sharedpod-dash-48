@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Check, Clock, Calendar, Briefcase, Star, Plus } from "lucide-react";
+import { Check, Clock, Calendar, Briefcase, Star, Plus, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TeamMemberModal from "@/components/team/TeamMemberModal";
 import AddTeamMemberModal from "@/components/team/AddTeamMemberModal";

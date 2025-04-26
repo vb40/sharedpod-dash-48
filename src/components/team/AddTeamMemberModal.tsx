@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useApp } from "@/context/AppContext";
 import { useState } from "react";
 import { toast } from "sonner";
+import { TeamMember } from "@/context/types";
 
 interface TeamMemberModalProps {
   isOpen: boolean;
@@ -14,7 +15,7 @@ interface TeamMemberModalProps {
 }
 
 const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
-  const { projects } = useApp();
+  const { projects, addTeamMember } = useApp();
   const [formData, setFormData] = useState({
     name: "",
     role: "",
@@ -40,13 +41,13 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
       return;
     }
 
-    const newMember = {
+    const newMember: TeamMember = {
       id: Math.random().toString(36).substring(2, 9),
       ...formData
     };
 
     // Add the new member to context
-    // updateTeamMembers([...teamMembers, newMember]);
+    addTeamMember(newMember);
     toast.success("Team member added successfully");
     onClose();
   };

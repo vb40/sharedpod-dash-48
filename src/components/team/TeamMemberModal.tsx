@@ -8,11 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useApp } from "@/context/AppContext";
 import { toast } from "sonner";
 import { Check, X, Plus } from "lucide-react";
+import { TeamMember } from "@/context/types";
 
 interface TeamMemberModalProps {
   isOpen: boolean;
   onClose: () => void;
-  member: any | undefined;
+  member: TeamMember | undefined;
 }
 
 const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {

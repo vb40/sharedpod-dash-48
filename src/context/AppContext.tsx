@@ -10,8 +10,8 @@ export const AppContext = createContext<AppContextType>({} as AppContextType);
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme, toggleTheme } = useTheme();
   const [tickets, setTickets] = useState(data.tickets || []);
-  const [teamMembers, setTeamMembers] = useState(data.teamMembers || []);
-  const [projects, setProjects] = useState(data.projects || []);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(data.teamMembers || []);
+  const [projects, setProjects] = useState<Project[]>(data.projects || []);
   const [certifications, setCertifications] = useState(initialCertifications);
 
   const addTicket = (ticket: Ticket) => {
@@ -64,9 +64,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const updateTeamMember = (memberId: number, updatedMember: Partial<TeamMember>) => {
+  const updateTeamMember = (memberId: string, updatedMember: Partial<TeamMember>) => {
     setTeamMembers(teamMembers.map(member => 
-      member.id === memberId.toString() ? { ...member, ...updatedMember } : member
+      member.id === memberId ? { ...member, ...updatedMember } : member
     ));
   };
 
