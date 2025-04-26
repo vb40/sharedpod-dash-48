@@ -1,126 +1,24 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+
+import React, { createContext, useContext, useState, useCallback } from "react";
 import data from "@/data/data.json";
+import { initialCertifications } from "./initialData";
+import { ThemeProvider, useTheme } from "./ThemeContext";
+import type { AppContextType, Ticket, TeamMember, Project } from "./types";
 
-// Mock certifications data
-const initialCertifications = [
-  {
-    id: "cert1",
-    name: "AWS Solutions Architect",
-    provider: "Amazon Web Services",
-    dateObtained: "2024-01-15",
-    expirationDate: "2026-01-15", 
-    skills: ["Cloud Computing", "AWS", "Architecture"],
-    level: "Professional",
-    isCompleted: true
-  },
-  {
-    id: "cert2",
-    name: "Azure Administrator",
-    provider: "Microsoft",
-    dateObtained: "2024-02-10",
-    expirationDate: "2026-02-10",
-    skills: ["Cloud", "Azure", "Administration"],
-    level: "Associate",
-    isCompleted: true
-  },
-  {
-    id: "cert3",
-    name: "Certified Scrum Master",
-    provider: "Scrum Alliance",
-    dateObtained: "2023-11-05",
-    expirationDate: "2025-11-05",
-    skills: ["Agile", "Scrum", "Project Management"],
-    level: "Intermediate",
-    isCompleted: true
-  },
-  {
-    id: "cert4",
-    name: "Google Professional Cloud Architect",
-    provider: "Google Cloud",
-    dateObtained: "2023-09-20",
-    expirationDate: null,
-    skills: ["Cloud", "GCP", "Architecture"],
-    level: "Professional",
-    isCompleted: false
-  }
-];
-
-interface AppContextType {
-  theme: string;
-  toggleTheme: () => void;
-  teamMembers: any[];
-  projects: any[];
-  tickets: any[];
-  certifications: any[];
-  holidays: any[];
-  addTicket: (ticket: any) => void;
-  updateTicket: (ticket: any) => void;
-  deleteTicket: (id: string) => void;
-  filterTickets: (status: string) => any[];
-  searchTickets: (query: string) => any[];
-  addCertification: (certification: any) => void;
-  updateCertification: (certification: any) => void;
-  updateTeamMember: (memberId: number, updatedMember: any) => void;
-  updateProject: (projectId: string, updatedProject: any) => void;
-  addTeamMember: (member: any) => void;
-}
-
-export const AppContext = createContext<AppContextType>({
-  theme: "light",
-  toggleTheme: () => {},
-  teamMembers: [],
-  projects: [],
-  tickets: [],
-  certifications: [],
-  holidays: [],
-  addTicket: () => {},
-  updateTicket: () => {},
-  deleteTicket: () => {},
-  filterTickets: () => [],
-  searchTickets: () => [],
-  addCertification: () => {},
-  updateCertification: () => {},
-  updateTeamMember: () => {},
-  updateProject: () => {},
-  addTeamMember: () => {},
-});
+export const AppContext = createContext<AppContextType>({} as AppContextType);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<string>("light");
+  const { theme, toggleTheme } = useTheme();
   const [tickets, setTickets] = useState(data.tickets || []);
   const [teamMembers, setTeamMembers] = useState(data.teamMembers || []);
   const [projects, setProjects] = useState(data.projects || []);
   const [certifications, setCertifications] = useState(initialCertifications);
 
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    setTheme(storedTheme || "light");
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
-
-  const addTicket = (ticket: any) => {
+  const addTicket = (ticket: Ticket) => {
     setTickets([...tickets, ticket]);
   };
 
-  const updateTicket = (updatedTicket: any) => {
+  const updateTicket = (updatedTicket: Ticket) => {
     setTickets(
       tickets.map((ticket) => (ticket.id === updatedTicket.id ? updatedTicket : ticket))
     );
@@ -166,19 +64,19 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const updateTeamMember = (memberId: number, updatedMember: any) => {
+  const updateTeamMember = (memberId: number, updatedMember: Partial<TeamMember>) => {
     setTeamMembers(teamMembers.map(member => 
-      member.id === memberId ? { ...member, ...updatedMember } : member
+      member.id === memberId.toString() ? { ...member, ...updatedMember } : member
     ));
   };
 
-  const updateProject = (projectId: string, updatedProject: any) => {
+  const updateProject = (projectId: string, updatedProject: Partial<Project>) => {
     setProjects(projects.map(project => 
       project.id === projectId ? { ...project, ...updatedProject } : project
     ));
   };
 
-  const addTeamMember = (member: any) => {
+  const addTeamMember = (member: TeamMember) => {
     setTeamMembers(prev => [...prev, member]);
   };
 
@@ -233,3 +131,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useApp = () => useContext(AppContext);
+
+// Wrap the AppProvider with ThemeProvider
+export const AppContextProvider = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider>
+    <AppProvider>{children}</AppProvider>
+  </ThemeProvider>
+);
