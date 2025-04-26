@@ -1,7 +1,6 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, AlertCircle, XCircle } from "lucide-react";
+import { CheckCircle, Clock, AlertCircle, XCircle, PlayCircle } from "lucide-react";
 import { format, addMonths, isPast, isAfter, isBefore, differenceInDays, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -22,10 +21,9 @@ interface CertificationsListProps {
 }
 
 const CertificationsList = ({ certifications, onEditCertification }: CertificationsListProps) => {
-  // Helpers to determine certification status
   const getCertificationStatus = (cert: Certification) => {
     if (cert.isCompleted) return "completed";
-    if (!cert.expirationDate) return "completed";
+    if (!cert.expirationDate) return "in-progress";
     
     try {
       const expirationDate = parseISO(cert.expirationDate);
@@ -33,38 +31,36 @@ const CertificationsList = ({ certifications, onEditCertification }: Certificati
       
       if (isPast(expirationDate)) return "expired";
       if (isBefore(expirationDate, oneMonthBefore)) return "expiring-soon";
-      return "active";
+      return "in-progress";
     } catch (error) {
       console.error("Date parsing error:", error);
-      return "active"; // Default fallback
+      return "in-progress";
     }
   };
   
-  // Group certifications by status
   const groupedCertifications = {
+    inProgress: certifications.filter(cert => getCertificationStatus(cert) === "in-progress"),
     completed: certifications.filter(cert => getCertificationStatus(cert) === "completed"),
-    active: certifications.filter(cert => getCertificationStatus(cert) === "active"),
     expiringSoon: certifications.filter(cert => getCertificationStatus(cert) === "expiring-soon"),
     expired: certifications.filter(cert => getCertificationStatus(cert) === "expired"),
   };
-  
-  // Render different categories
+
   return (
     <div className="space-y-8">
-      {/* Active Certifications */}
-      {groupedCertifications.active.length > 0 && (
+      {/* In Progress Certifications */}
+      {groupedCertifications.inProgress.length > 0 && (
         <div>
           <h2 className="text-lg font-medium mb-3 flex items-center">
-            <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-            Active Certifications
+            <PlayCircle className="h-5 w-5 text-blue-500 mr-2" />
+            In Progress
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {groupedCertifications.active.map((cert) => (
+            {groupedCertifications.inProgress.map((cert) => (
               <CertificationCard 
                 key={cert.id} 
                 certification={cert} 
                 onEdit={onEditCertification}
-                status="active"
+                status="in-progress"
               />
             ))}
           </div>
@@ -137,11 +133,10 @@ const CertificationsList = ({ certifications, onEditCertification }: Certificati
 interface CertificationCardProps {
   certification: Certification;
   onEdit: (cert: Certification) => void;
-  status: "active" | "completed" | "expiring-soon" | "expired";
+  status: "in-progress" | "completed" | "expiring-soon" | "expired";
 }
 
 const CertificationCard = ({ certification, onEdit, status }: CertificationCardProps) => {
-  // Safely format date with error handling
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A";
     try {
@@ -149,11 +144,10 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
       return format(date, "MMMM d, yyyy");
     } catch (error) {
       console.error("Date formatting error:", error);
-      return dateString; // Return original string if parsing fails
+      return dateString;
     }
   };
 
-  // Get days remaining safely
   const getDaysRemaining = () => {
     if (!certification.expirationDate) return null;
     try {
@@ -172,8 +166,8 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
     <Card 
       className={cn(
         "overflow-hidden hover:shadow-md transition-all border-transparent cursor-pointer",
-        status === "active" && "bg-gradient-to-br from-card to-emerald-50/20 dark:from-card dark:to-emerald-950/20",
-        status === "completed" && "bg-gradient-to-br from-card to-blue-50/20 dark:from-card dark:to-blue-950/20",
+        status === "in-progress" && "bg-gradient-to-br from-card to-blue-50/20 dark:from-card dark:to-blue-950/20",
+        status === "completed" && "bg-gradient-to-br from-card to-emerald-50/20 dark:from-card dark:to-emerald-950/20",
         status === "expiring-soon" && "bg-gradient-to-br from-card to-amber-50/20 dark:from-card dark:to-amber-950/20",
         status === "expired" && "bg-gradient-to-br from-card to-rose-50/20 dark:from-card dark:to-rose-950/20",
       )}
@@ -188,13 +182,13 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
           </div>
           <Badge 
             className={cn(
-              status === "active" && "bg-green-500",
-              status === "completed" && "bg-blue-500",
+              status === "in-progress" && "bg-blue-500",
+              status === "completed" && "bg-emerald-500",
               status === "expiring-soon" && "bg-amber-500",
               status === "expired" && "bg-rose-500",
             )}
           >
-            {status === "active" && "Active"}
+            {status === "in-progress" && "In Progress"}
             {status === "completed" && "Completed"}
             {status === "expiring-soon" && "Expiring Soon"}
             {status === "expired" && "Expired"}
