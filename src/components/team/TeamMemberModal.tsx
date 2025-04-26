@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,8 @@ import { useApp } from "@/context/AppContext";
 import { toast } from "sonner";
 import { Check, X, Plus } from "lucide-react";
 import { TeamMember } from "@/context/types";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 interface TeamMemberModalProps {
   isOpen: boolean;
@@ -28,7 +30,6 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
     tasks: member?.tasks || 0,
     projects: member?.projects || []
   });
-  const [newProject, setNewProject] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,13 +39,14 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
     }));
   };
 
-  const handleAddProject = () => {
-    if (newProject && !formData.projects.includes(newProject)) {
+  const handleProjectSelect = (projectName: string) => {
+    if (formData.projects.includes(projectName)) {
+      handleRemoveProject(projectName);
+    } else {
       setFormData(prev => ({
         ...prev,
-        projects: [...prev.projects, newProject]
+        projects: [...prev.projects, projectName]
       }));
-      setNewProject("");
     }
   };
 
@@ -70,6 +72,9 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Edit Team Member</DialogTitle>
+          <DialogDescription>
+            Update team member details and assignments.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
@@ -99,44 +104,43 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
             <Label>Projects</Label>
             <div className="flex flex-wrap gap-2 mb-2">
               {formData.projects.map((project, index) => (
-                <div key={index} className="bg-muted px-2 py-1 rounded-md flex items-center gap-1">
-                  <span className="text-sm">{project}</span>
+                <Badge key={index} variant="secondary" className="px-2 py-1">
+                  {project}
                   <button 
                     type="button"
                     onClick={() => handleRemoveProject(project)}
-                    className="text-muted-foreground hover:text-destructive"
+                    className="ml-1 hover:text-destructive"
                   >
                     <X className="h-3 w-3" />
                   </button>
-                </div>
+                </Badge>
               ))}
             </div>
-            <div className="flex gap-2">
-              <Select 
-                value={newProject} 
-                onValueChange={setNewProject}
-              >
-                <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Select project" />
-                </SelectTrigger>
-                <SelectContent>
-                  {projects.map(project => (
-                    <SelectItem key={project.id} value={project.name}>
-                      {project.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button 
-                type="button" 
-                size="icon" 
-                variant="outline" 
-                onClick={handleAddProject}
-                disabled={!newProject || formData.projects.includes(newProject)}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="justify-between w-full">
+                  Select Projects
+                  <Plus className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[200px] bg-popover shadow-md">
+                {projects.map(project => (
+                  <DropdownMenuItem
+                    key={project.id}
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      handleProjectSelect(project.name);
+                    }}
+                    className="flex items-center justify-between"
+                  >
+                    {project.name}
+                    {formData.projects.includes(project.name) && (
+                      <Check className="h-4 w-4" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           <div className="grid gap-2">

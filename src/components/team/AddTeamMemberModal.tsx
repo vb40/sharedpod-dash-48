@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { TeamMember } from "@/context/types";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DialogDescription } from "@/components/ui/dialog";
 
 interface TeamMemberModalProps {
   isOpen: boolean;
@@ -74,6 +75,9 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Team Member</DialogTitle>
+          <DialogDescription>
+            Add a new team member to your organization.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
@@ -110,7 +114,7 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
                   />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[200px]">
+              <DropdownMenuContent className="w-[200px] bg-popover shadow-md">
                 {projects.map(project => (
                   <DropdownMenuItem
                     key={project.id}

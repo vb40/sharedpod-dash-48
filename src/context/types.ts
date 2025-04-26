@@ -1,4 +1,3 @@
-
 export interface TeamMember {
   id: string;
   name: string;
@@ -19,7 +18,7 @@ export interface Project {
   progress: number;
   budget: number;
   spent: number;
-  hoursUsed: number;
+  hoursLogged: number;
   endDate: string;
   team: string[];
   tasks: {
@@ -28,6 +27,7 @@ export interface Project {
     inProgress?: number;
     blocked?: number;
   };
+  startDate?: string;
 }
 
 export interface Ticket {

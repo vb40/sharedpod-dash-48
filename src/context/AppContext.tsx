@@ -3,15 +3,30 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 import data from "@/data/data.json";
 import { initialCertifications } from "./initialData";
 import { ThemeProvider, useTheme } from "./ThemeContext";
-import type { AppContextType, Ticket, TeamMember, Project } from "./types";
+import type { AppContextType, Ticket, TeamMember, Project, Holiday } from "./types";
 
 export const AppContext = createContext<AppContextType>({} as AppContextType);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme, toggleTheme } = useTheme();
   const [tickets, setTickets] = useState(data.tickets || []);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(data.teamMembers || []);
-  const [projects, setProjects] = useState<Project[]>(data.projects || []);
+  
+  // Convert team member IDs from number to string to match our TeamMember interface
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(
+    (data.teamMembers || []).map(member => ({
+      ...member,
+      id: String(member.id) // Convert id to string
+    }))
+  );
+  
+  // Make sure project data matches our Project interface
+  const [projects, setProjects] = useState<Project[]>(
+    (data.projects || []).map(project => ({
+      ...project,
+      hoursLogged: project.hoursLogged || 0 // Ensure hoursLogged exists
+    }))
+  );
+  
   const [certifications, setCertifications] = useState(initialCertifications);
 
   const addTicket = (ticket: Ticket) => {
@@ -77,31 +92,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const addTeamMember = (member: TeamMember) => {
+    console.log("Adding team member:", member);
     setTeamMembers(prev => [...prev, member]);
   };
 
-  const holidays = data.holidays || [
-    {
-      date: "2025-05-01",
-      name: "Labor Day",
-      type: "public"
-    },
-    {
-      date: "2025-05-26",
-      name: "Memorial Day",
-      type: "public"
-    },
-    {
-      date: "2025-06-19",
-      name: "Juneteenth",
-      type: "public"
-    },
-    {
-      date: "2025-07-04",
-      name: "Independence Day",
-      type: "public"
-    }
-  ];
+  const holidays = data.holidays || [];
 
   return (
     <AppContext.Provider
