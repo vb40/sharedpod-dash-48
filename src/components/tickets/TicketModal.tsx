@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useApp } from "@/context/AppContext";
-import { TicketFormFields } from "./TicketFormFields";
-import { TicketComments } from "./TicketComments";
+import { TicketHeader } from "./TicketHeader";
+import { TicketForm } from "./TicketForm";
+import { TicketFooter } from "./TicketFooter";
 
 interface Ticket {
   id: string;
@@ -110,7 +110,7 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
 
   const handleAddComment = (text: string) => {
     const newComment = {
-      author: teamMembers[0].name, // Using first team member as current user for demo
+      author: teamMembers[0].name,
       text,
       timestamp: new Date().toISOString(),
     };
@@ -120,8 +120,9 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const handleSubmit = () => {
     if (!validateForm()) return;
     
+    const prefix = formData.project.substring(0, 3).toUpperCase();
     const ticketId = mode === "create" 
-      ? `${formData.project.substring(0, 3).toUpperCase()}-${Math.floor(Math.random() * 1000)}`
+      ? `${prefix}-${Math.floor(Math.random() * 1000)}`
       : ticket?.id;
     
     const updatedTicket = {
@@ -144,32 +145,25 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>{mode === "create" ? "Create New Ticket" : "Edit Ticket"}</DialogTitle>
-        </DialogHeader>
+        <TicketHeader mode={mode} />
         
-        <TicketFormFields
+        <TicketForm
           formData={formData}
           errors={errors}
+          comments={comments}
           teamMembers={teamMembers}
           projects={projects}
           onChange={handleChange}
           onSelectChange={handleSelectChange}
+          onAddComment={handleAddComment}
+          currentUser={teamMembers[0].name}
         />
-
-        <div className="border-t pt-4">
-          <h3 className="font-medium mb-4">Comments</h3>
-          <TicketComments
-            comments={comments}
-            onAddComment={handleAddComment}
-            currentUser={teamMembers[0].name}
-          />
-        </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>{mode === "create" ? "Create" : "Update"}</Button>
-        </DialogFooter>
+        <TicketFooter 
+          mode={mode}
+          onClose={onClose}
+          onSubmit={handleSubmit}
+        />
       </DialogContent>
     </Dialog>
   );
