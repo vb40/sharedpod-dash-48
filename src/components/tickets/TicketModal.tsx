@@ -5,6 +5,7 @@ import { useApp } from "@/context/AppContext";
 import { TicketHeader } from "./TicketHeader";
 import { TicketForm } from "./TicketForm";
 import { TicketFooter } from "./TicketFooter";
+import { useTicketState } from "@/hooks/useTicketState";
 
 interface Ticket {
   id: string;
@@ -29,93 +30,14 @@ interface TicketModalProps {
 }
 
 const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
-  const { teamMembers, projects, addTicket, updateTicket } = useApp();
-  
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    status: "dev",
-    priority: "medium",
-    assignee: "",
-    project: "",
-    timeSpent: 0,
-    timeEstimate: 0,
-  });
-  
-  const [errors, setErrors] = useState({
-    title: "",
-    description: "",
-    assignee: "",
-    project: "",
-    timeEstimate: "",
-  });
-
-  const [comments, setComments] = useState<{ author: string; text: string; timestamp: string }[]>([]);
+  const { addTicket, updateTicket } = useApp();
+  const { formData, errors, comments, handleChange, handleSelectChange, handleAddComment, validateForm, resetForm } = useTicketState(ticket, mode);
 
   useEffect(() => {
-    if (ticket && mode === "edit") {
-      setFormData({
-        title: ticket.title,
-        description: ticket.description,
-        status: ticket.status,
-        priority: ticket.priority,
-        assignee: ticket.assignee,
-        project: ticket.project,
-        timeSpent: ticket.timeSpent,
-        timeEstimate: ticket.timeEstimate,
-      });
-      setComments(ticket.comments);
-    } else {
-      setFormData({
-        title: "",
-        description: "",
-        status: "dev",
-        priority: "medium",
-        assignee: "",
-        project: "",
-        timeSpent: 0,
-        timeEstimate: 0,
-      });
-      setComments([]);
+    if (isOpen) {
+      resetForm(ticket, mode);
     }
-  }, [ticket, mode, isOpen]);
-
-  const validateForm = () => {
-    const newErrors = {
-      title: !formData.title.trim() ? "Title is required" : "",
-      description: !formData.description.trim() ? "Description is required" : "",
-      assignee: !formData.assignee ? "Assignee is required" : "",
-      project: !formData.project ? "Project is required" : "",
-      timeEstimate: formData.timeEstimate <= 0 ? "Time estimate must be greater than 0" : "",
-    };
-    
-    setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === "timeSpent" || name === "timeEstimate" ? parseFloat(value) || 0 : value,
-    }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleAddComment = (text: string) => {
-    const newComment = {
-      author: teamMembers[0].name,
-      text,
-      timestamp: new Date().toISOString(),
-    };
-    setComments([...comments, newComment]);
-  };
+  }, [isOpen, ticket, mode]);
 
   const handleSubmit = () => {
     if (!validateForm()) return;
@@ -151,12 +73,9 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
           formData={formData}
           errors={errors}
           comments={comments}
-          teamMembers={teamMembers}
-          projects={projects}
           onChange={handleChange}
           onSelectChange={handleSelectChange}
           onAddComment={handleAddComment}
-          currentUser={teamMembers[0].name}
         />
         
         <TicketFooter 

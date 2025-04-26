@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -55,8 +54,8 @@ const Projects = () => {
                 </div>
                 <Progress 
                   value={project.progress}
-                  className="h-2"
-                  indicatorClassName={cn(
+                  className={cn(
+                    "h-2",
                     project.progress >= 80 ? "bg-emerald-500" : 
                     project.progress >= 50 ? "bg-amber-500" : 
                     "bg-rose-500"

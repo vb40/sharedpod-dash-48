@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -57,8 +56,10 @@ const Team = () => {
                 </div>
                 <Progress 
                   value={member.performance}
-                  className="h-2"
-                  indicatorClassName={getPerformanceColor(member.performance)}
+                  className={cn(
+                    "h-2",
+                    getPerformanceColor(member.performance)
+                  )}
                 />
               </div>
               
