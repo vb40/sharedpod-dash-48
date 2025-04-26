@@ -20,7 +20,7 @@ interface Certification {
   expirationDate: string | null;
   skills: string[];
   level: string;
-  isCompleted: boolean;
+  isCompleted?: boolean;
 }
 
 interface CertificationModalProps {
@@ -30,7 +30,7 @@ interface CertificationModalProps {
 }
 
 const CertificationModal = ({ isOpen, onClose, certification }: CertificationModalProps) => {
-  const { teamMembers, addCertification } = useApp();
+  const { teamMembers, addCertification, updateCertification } = useApp();
   const [showConfetti, setShowConfetti] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -156,13 +156,23 @@ const CertificationModal = ({ isOpen, onClose, certification }: CertificationMod
       setShowConfetti(true);
       setTimeout(() => {
         setShowConfetti(false);
-        addCertification(newCertification);
-        toast.success("Certification added successfully");
+        if (certification) {
+          updateCertification(newCertification);
+          toast.success("Certification updated successfully");
+        } else {
+          addCertification(newCertification);
+          toast.success("Certification added successfully");
+        }
         onClose();
       }, 3000);
     } else {
-      addCertification(newCertification);
-      toast.success("Certification added successfully");
+      if (certification) {
+        updateCertification(newCertification);
+        toast.success("Certification updated successfully");
+      } else {
+        addCertification(newCertification);
+        toast.success("Certification added successfully");
+      }
       onClose();
     }
   };

@@ -1,4 +1,3 @@
-
 import React, {
   createContext,
   useContext,
@@ -66,6 +65,7 @@ interface AppContextType {
   filterTickets: (status: string) => any[];
   searchTickets: (query: string) => any[];
   addCertification: (certification: any) => void;
+  updateCertification: (certification: any) => void;
   updateTeamMember: (memberId: number, updatedMember: any) => void;
   updateProject: (projectId: string, updatedProject: any) => void;
 }
@@ -84,6 +84,7 @@ export const AppContext = createContext<AppContextType>({
   filterTickets: () => [],
   searchTickets: () => [],
   addCertification: () => {},
+  updateCertification: () => {},
   updateTeamMember: () => {},
   updateProject: () => {},
 });
@@ -155,6 +156,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setCertifications([...certifications, certification]);
   };
 
+  const updateCertification = (updatedCertification: any) => {
+    setCertifications(
+      certifications.map((cert) => 
+        cert.id === updatedCertification.id ? updatedCertification : cert
+      )
+    );
+  };
+
   const updateTeamMember = (memberId: number, updatedMember: any) => {
     setTeamMembers(teamMembers.map(member => 
       member.id === memberId ? { ...member, ...updatedMember } : member
@@ -167,7 +176,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     ));
   };
 
-  // Create a mock holidays array if data.holidays doesn't exist
   const holidays = data.holidays || [
     {
       date: "2025-05-01",
@@ -207,6 +215,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         filterTickets,
         searchTickets,
         addCertification,
+        updateCertification,
         updateTeamMember,
         updateProject,
       }}

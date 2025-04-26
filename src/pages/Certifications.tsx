@@ -20,10 +20,10 @@ interface Certification {
 const Certifications = () => {
   const { certifications } = useApp();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCertification, setSelectedCertification] = useState<Certification | undefined>(undefined);
+  const [selectedCertification, setSelectedCertification] = useState<Certification | null>(null);
   
   const handleOpenModal = () => {
-    setSelectedCertification(undefined);
+    setSelectedCertification(null);
     setIsModalOpen(true);
   };
   
@@ -70,7 +70,7 @@ const Certifications = () => {
       <CertificationModal 
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        certification={selectedCertification}
+        certification={selectedCertification || undefined}
       />
     </div>
   );
