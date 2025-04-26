@@ -29,6 +29,22 @@ interface TicketModalProps {
   mode: "create" | "edit";
 }
 
+// Function to generate project code
+const generateProjectCode = (projectName: string) => {
+  const projectCodes: { [key: string]: string } = {
+    "User Experience Portal": "USP",
+    "Payment Processing System": "PSP",
+    "Octapharma Dashboard": "ODP",
+    "Customer Feedback System": "CFS",
+    "Employee Portal": "EMP",
+    "Learning Management System": "LMS",
+    "Inventory System": "INV",
+  };
+  
+  // Return project code or use first 3 characters of project name
+  return projectCodes[projectName] || projectName.substring(0, 3).toUpperCase();
+};
+
 const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const { addTicket, updateTicket } = useApp();
   const { formData, errors, comments, handleChange, handleSelectChange, handleAddComment, validateForm, resetForm } = useTicketState(ticket, mode);
@@ -42,9 +58,9 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const handleSubmit = () => {
     if (!validateForm()) return;
     
-    const prefix = formData.project.substring(0, 3).toUpperCase();
+    const projectCode = generateProjectCode(formData.project);
     const ticketId = mode === "create" 
-      ? `${prefix}-${Math.floor(Math.random() * 1000)}`
+      ? `${projectCode}-${Math.floor(Math.random() * 1000)}`
       : ticket?.id;
     
     const updatedTicket = {

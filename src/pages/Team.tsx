@@ -1,13 +1,17 @@
 
+import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Check, Clock, Calendar, Briefcase, Star, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import TeamMemberModal from "@/components/team/TeamMemberModal";
 
 const Team = () => {
   const { teamMembers } = useApp();
+  const [selectedMember, setSelectedMember] = useState<any | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -25,22 +29,34 @@ const Team = () => {
     return "text-rose-500";
   };
 
+  const handleMemberClick = (member: any) => {
+    setSelectedMember(member);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMember(undefined);
+  };
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Team</h1>
+        <h1 className="text-3xl font-medium tracking-tight">Team</h1>
         <p className="text-muted-foreground">Manage your team members and their performance.</p>
       </div>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {teamMembers.map((member) => (
-          <Card key={member.id} className="overflow-hidden border-none shadow-lg bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-50"></div>
-            
+          <Card 
+            key={member.id} 
+            className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border-transparent"
+            onClick={() => handleMemberClick(member)}
+          >
             <div className="relative p-6">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <Avatar className="h-16 w-16 border-4 border-background">
+                  <Avatar className="h-16 w-16 border-4 border-background shadow-md">
                     <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg">
                       {getInitials(member.name)}
                     </AvatarFallback>
@@ -62,7 +78,7 @@ const Team = () => {
               </div>
               
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3">
+                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
                   <div className="rounded-full bg-primary/10 p-2">
                     <TrendingUp className="h-4 w-4 text-primary" />
                   </div>
@@ -74,7 +90,7 @@ const Team = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3">
+                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
                   <div className="rounded-full bg-secondary/10 p-2">
                     <Clock className="h-4 w-4 text-secondary" />
                   </div>
@@ -84,7 +100,7 @@ const Team = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3">
+                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
                   <div className="rounded-full bg-accent/10 p-2">
                     <Check className="h-4 w-4 text-accent" />
                   </div>
@@ -94,7 +110,7 @@ const Team = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3">
+                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
                   <div className="rounded-full bg-primary/10 p-2">
                     <Calendar className="h-4 w-4 text-primary" />
                   </div>
@@ -116,7 +132,7 @@ const Team = () => {
                     <span className="text-sm text-muted-foreground">No projects assigned</span>
                   )}
                   {member.projects.map((project, i) => (
-                    <Badge key={i} variant="outline" className="bg-background">
+                    <Badge key={i} variant="outline" className="bg-background shadow-sm">
                       <Briefcase className="h-3 w-3 mr-1" /> {project}
                     </Badge>
                   ))}
@@ -140,6 +156,12 @@ const Team = () => {
           </Card>
         ))}
       </div>
+      
+      <TeamMemberModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        member={selectedMember} 
+      />
     </div>
   );
 };

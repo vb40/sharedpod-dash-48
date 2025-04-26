@@ -21,7 +21,9 @@ interface AppContextType {
   deleteTicket: (id: string) => void;
   filterTickets: (status: string) => any[];
   searchTickets: (query: string) => any[];
-  addCertification?: (certification: any) => void;
+  addCertification: (certification: any) => void;
+  updateTeamMember: (memberId: number, updatedMember: any) => void;
+  updateProject: (projectId: string, updatedProject: any) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -37,11 +39,16 @@ export const AppContext = createContext<AppContextType>({
   deleteTicket: () => {},
   filterTickets: () => [],
   searchTickets: () => [],
+  addCertification: () => {},
+  updateTeamMember: () => {},
+  updateProject: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<string>("light");
   const [tickets, setTickets] = useState(data.tickets || []);
+  const [teamMembers, setTeamMembers] = useState(data.teamMembers || []);
+  const [projects, setProjects] = useState(data.projects || []);
   const [certifications, setCertifications] = useState(data.certifications || []);
 
   useEffect(() => {
@@ -51,6 +58,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
 
   const toggleTheme = () => {
@@ -99,6 +111,18 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setCertifications([...certifications, certification]);
   };
 
+  const updateTeamMember = (memberId: number, updatedMember: any) => {
+    setTeamMembers(teamMembers.map(member => 
+      member.id === memberId ? { ...member, ...updatedMember } : member
+    ));
+  };
+
+  const updateProject = (projectId: string, updatedProject: any) => {
+    setProjects(projects.map(project => 
+      project.id === projectId ? { ...project, ...updatedProject } : project
+    ));
+  };
+
   // Create a mock holidays array if data.holidays doesn't exist
   const holidays = data.holidays || [
     {
@@ -128,8 +152,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         theme,
         toggleTheme,
-        teamMembers: data.teamMembers,
-        projects: data.projects,
+        teamMembers,
+        projects,
         tickets,
         certifications,
         holidays,
@@ -139,6 +163,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         filterTickets,
         searchTickets,
         addCertification,
+        updateTeamMember,
+        updateProject,
       }}
     >
       {children}

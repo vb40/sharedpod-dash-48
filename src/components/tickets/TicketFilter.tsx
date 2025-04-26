@@ -12,7 +12,7 @@ interface TicketFilterProps {
 }
 
 const statusOptions = [
-  { value: null, label: "All Statuses" },
+  { value: null, label: "All Status" },
   { value: "dev", label: "Development" },
   { value: "in-progress", label: "In Progress" },
   { value: "qa", label: "QA Testing" },

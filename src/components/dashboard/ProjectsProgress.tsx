@@ -15,7 +15,7 @@ const ProjectsProgress = () => {
   return (
     <Card className="col-span-3 lg:col-span-2">
       <CardHeader>
-        <CardTitle>Project Progress</CardTitle>
+        <CardTitle className="font-medium">Project Progress</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
@@ -33,16 +33,23 @@ const ProjectsProgress = () => {
                   {project.progress}%
                 </Badge>
               </div>
-              <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
+              <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-0.5 w-full bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                </div>
                 <Progress 
                   value={project.progress}
                   className={cn(
-                    "h-full transition-all",
+                    "h-full transition-all relative",
                     project.progress >= 80 ? "bg-emerald-500" : 
                     project.progress >= 50 ? "bg-amber-500" : 
                     "bg-rose-500"
                   )}
-                />
+                >
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="h-0.5 bg-white/30 animate-pulse" style={{ width: `${project.progress}%` }} />
+                  </span>
+                </Progress>
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>Team: {project.team.length} members</span>

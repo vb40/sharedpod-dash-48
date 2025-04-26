@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,9 +7,12 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { format, differenceInDays } from "date-fns";
 import { Calendar, Clock, CheckCircle, AlertCircle, BarChart2 } from "lucide-react";
+import ProjectModal from "@/components/projects/ProjectModal";
 
 const Projects = () => {
   const { projects, teamMembers } = useApp();
+  const [selectedProject, setSelectedProject] = useState<any | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -41,21 +45,41 @@ const Projects = () => {
     );
   };
 
+  const handleProjectClick = (project: any) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(undefined);
+  };
+
+  // Calculate hours used (mocked data, 80 hours per month)
+  const getHoursUsed = (project: any) => {
+    // Let's generate a random number here for demo purposes
+    // This would normally come from the project data
+    return project.hoursUsed || Math.floor(Math.random() * 80);
+  };
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
+        <h1 className="text-3xl font-medium tracking-tight">Projects</h1>
         <p className="text-muted-foreground">Track and manage all projects.</p>
       </div>
       
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project) => {
           const daysRemaining = getDaysRemaining(project.endDate);
+          const hoursUsed = getHoursUsed(project);
+          const hoursRemaining = Math.max(0, 80 - hoursUsed);
           
           return (
             <Card 
               key={project.id} 
-              className="overflow-hidden group hover:shadow-md transition-all duration-300 border-transparent bg-gradient-to-br from-card via-card to-muted/30"
+              className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md"
+              onClick={() => handleProjectClick(project)}
             >
               <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
               
@@ -107,6 +131,33 @@ const Projects = () => {
                   </div>
                 </div>
                 
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-medium">Hours (80h/month)</span>
+                    </div>
+                    <span className="font-medium">{hoursUsed}h used</span>
+                  </div>
+                  
+                  <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className={cn(
+                        "h-full rounded-full transition-all duration-500 relative",
+                        hoursUsed > 70 ? "bg-rose-500" : 
+                        hoursUsed > 50 ? "bg-amber-500" : 
+                        "bg-emerald-500"
+                      )}
+                      style={{ width: `${Math.min(100, (hoursUsed / 80) * 100)}%` }}
+                    >
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span>{hoursUsed}h used</span>
+                    <span>{hoursRemaining}h remaining</span>
+                  </div>
+                </div>
+                
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center gap-2 rounded-lg bg-background p-3">
                     <div className="rounded-full bg-primary/10 p-1.5">
@@ -134,7 +185,7 @@ const Projects = () => {
                   <div className="flex -space-x-2">
                     {project.team.map((member, i) => (
                       <Avatar key={i} className="border-2 border-background h-8 w-8">
-                        <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
                           {getInitials(member)}
                         </AvatarFallback>
                       </Avatar>
@@ -157,6 +208,12 @@ const Projects = () => {
           );
         })}
       </div>
+      
+      <ProjectModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        project={selectedProject}
+      />
     </div>
   );
 };
