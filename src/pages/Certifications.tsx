@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -7,85 +8,11 @@ import { Button } from "@/components/ui/button";
 import { useApp } from "@/context/AppContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format, addMonths } from "date-fns";
-
-// Sample certification data
-const certifications = [
-  {
-    id: 1,
-    name: "AWS Solutions Architect",
-    provider: "Amazon Web Services",
-    assignedTo: "Ajjai",
-    expiryDate: format(addMonths(new Date(), 18), "yyyy-MM-dd"),
-    progress: 100,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Azure DevOps Engineer",
-    provider: "Microsoft",
-    assignedTo: "Shangamesh",
-    expiryDate: format(addMonths(new Date(), 24), "yyyy-MM-dd"),
-    progress: 100,
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "Certified Kubernetes Administrator",
-    provider: "Cloud Native Computing Foundation",
-    assignedTo: "Ashwatha",
-    expiryDate: format(addMonths(new Date(), 12), "yyyy-MM-dd"),
-    progress: 100,
-    status: "expiring-soon",
-  },
-  {
-    id: 4,
-    name: "Oracle Cloud Infrastructure Architect",
-    provider: "Oracle",
-    assignedTo: "Giri",
-    expiryDate: format(addMonths(new Date(), 9), "yyyy-MM-dd"),
-    progress: 100,
-    status: "expiring-soon",
-  },
-  {
-    id: 5,
-    name: "Mulesoft Developer",
-    provider: "Salesforce",
-    assignedTo: "Yeswanth",
-    expiryDate: format(addMonths(new Date(), 20), "yyyy-MM-dd"),
-    progress: 100,
-    status: "active",
-  },
-  {
-    id: 6,
-    name: "React Native Developer",
-    provider: "Meta",
-    assignedTo: "Pooja",
-    expiryDate: format(addMonths(new Date(), -2), "yyyy-MM-dd"),
-    progress: 60,
-    status: "in-progress",
-  },
-  {
-    id: 7,
-    name: "GCP Data Engineer",
-    provider: "Google Cloud",
-    assignedTo: "Balaji",
-    expiryDate: "",
-    progress: 45,
-    status: "in-progress",
-  },
-  {
-    id: 8,
-    name: "MongoDB Developer",
-    provider: "MongoDB University",
-    assignedTo: "Neha",
-    expiryDate: "",
-    progress: 80,
-    status: "in-progress",
-  },
-];
+import CertificationModal from "@/components/certifications/CertificationModal";
 
 const Certifications = () => {
-  const { teamMembers } = useApp();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { teamMembers, certifications = [] } = useApp();
 
   const getInitials = (name: string) => {
     return name
@@ -118,11 +45,11 @@ const Certifications = () => {
       </div>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {certifications.map((cert) => {
+        {certifications.map((cert: any) => {
           const member = teamMembers.find(m => m.name === cert.assignedTo);
 
           return (
-            <Card key={cert.id} className="overflow-hidden">
+            <Card key={cert.id} className="overflow-hidden transform transition-all hover:scale-[1.02] bg-gradient-to-r from-card to-muted/30">
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-start">
                   <div>
@@ -148,7 +75,12 @@ const Certifications = () => {
                       <span>Progress</span>
                       <span>{cert.progress}%</span>
                     </div>
-                    <Progress value={cert.progress} />
+                    <div className="relative h-2 w-full bg-secondary rounded-full overflow-hidden">
+                      <div 
+                        className="absolute h-full left-0 top-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all"
+                        style={{ width: `${cert.progress}%` }}
+                      />
+                    </div>
                   </div>
                 )}
                 
@@ -164,16 +96,19 @@ const Certifications = () => {
                   </div>
                 )}
                 
-                <Button variant="outline" className="w-full flex items-center justify-between">
+                <Button variant="outline" className="w-full flex items-center justify-between group">
                   <span>View Details</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </CardContent>
             </Card>
           );
         })}
         
-        <Card className="overflow-hidden border-dashed flex flex-col items-center justify-center p-6 h-full">
+        <Card 
+          onClick={() => setIsModalOpen(true)}
+          className="overflow-hidden border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer transition-all hover:bg-muted/20"
+        >
           <Award className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">Add New Certification</h3>
           <p className="text-muted-foreground text-center mb-4">
@@ -185,6 +120,11 @@ const Certifications = () => {
           </Button>
         </Card>
       </div>
+
+      <CertificationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

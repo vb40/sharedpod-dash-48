@@ -1,8 +1,10 @@
 
-import React from "react";
-import { Menu, X, Moon, Sun, Bell } from "lucide-react";
+import React, { useState } from "react";
+import { Menu, X, Moon, Sun, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useApp } from "@/context/AppContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   isMobileOpen: boolean;
@@ -11,6 +13,16 @@ type HeaderProps = {
 
 const Header = ({ isMobileOpen, toggleMobileSidebar }: HeaderProps) => {
   const { theme, toggleTheme } = useApp();
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim() && location.pathname !== "/") {
+      navigate("/", { state: { searchQuery } });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center border-b bg-background px-4 md:px-6">
@@ -29,7 +41,20 @@ const Header = ({ isMobileOpen, toggleMobileSidebar }: HeaderProps) => {
         </Button>
       </div>
       
-      <div className="flex flex-1 items-center justify-end gap-4">
+      <div className="flex-1 flex justify-center">
+        <form onSubmit={handleSearch} className="relative w-full max-w-md">
+          <Input
+            type="search"
+            placeholder="Search..."
+            className="pl-10 pr-4"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        </form>
+      </div>
+      
+      <div className="flex items-center gap-4">
         <Button
           variant="ghost"
           size="icon"

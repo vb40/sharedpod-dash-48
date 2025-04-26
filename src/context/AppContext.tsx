@@ -1,176 +1,121 @@
-
-import React, { createContext, useContext, useEffect, useState } from "react";
-import data from "../data/data.json";
-
-interface TeamMember {
-  id: number;
-  name: string;
-  role: string;
-  projects: string[];
-  performance: number;
-  hoursLogged: number;
-  avatar: string;
-  tasks: number;
-  tasksCompleted: number;
-  attendance: number;
-}
-
-interface Project {
-  id: string;
-  name: string;
-  progress: number;
-  status: string;
-  team: string[];
-  hoursLogged: number;
-  startDate: string;
-  endDate: string;
-  budget: number;
-  spent: number;
-  tasks: {
-    total: number;
-    completed: number;
-    inProgress: number;
-    blocked: number;
-  };
-}
-
-interface Comment {
-  author: string;
-  text: string;
-  timestamp: string;
-}
-
-interface Ticket {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  assignee: string;
-  project: string;
-  createdAt: string;
-  updatedAt: string;
-  timeSpent: number;
-  timeEstimate: number;
-  comments: Comment[];
-}
-
-interface Holiday {
-  date: string;
-  name: string;
-  type: string;
-}
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import data from "@/data/data.json";
 
 interface AppContextType {
-  teamMembers: TeamMember[];
-  projects: Project[];
-  tickets: Ticket[];
-  holidays: Holiday[];
-  theme: "light" | "dark";
+  theme: string;
   toggleTheme: () => void;
-  addTicket: (ticket: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "comments">) => void;
-  updateTicket: (ticket: Ticket) => void;
-  filterTickets: (status: string | null) => Ticket[];
-  searchTickets: (query: string) => Ticket[];
+  teamMembers: any[];
+  projects: any[];
+  tickets: any[];
+  certifications: any[];
+  addTicket: (ticket: any) => void;
+  updateTicket: (ticket: any) => void;
+  deleteTicket: (id: string) => void;
+  filterTickets: (status: string) => any[];
+  searchTickets: (query: string) => any[];
+  addCertification?: (certification: any) => void;
 }
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType>({
+  theme: "light",
+  toggleTheme: () => {},
+  teamMembers: [],
+  projects: [],
+  tickets: [],
+  certifications: [],
+  addTicket: () => {},
+  updateTicket: () => {},
+  deleteTicket: () => {},
+  filterTickets: () => [],
+  searchTickets: () => [],
+});
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(data.teamMembers);
-  const [projects, setProjects] = useState<Project[]>(data.projects);
-  const [tickets, setTickets] = useState<Ticket[]>(data.tickets);
-  const [holidays, setHolidays] = useState<Holiday[]>(data.holidays);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+  const [theme, setTheme] = useState<string>("light");
+  const [tickets, setTickets] = useState(data.tickets || []);
+  const [certifications, setCertifications] = useState(data.certifications || []);
 
-  // Initialize theme from localStorage or system preference
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark" || (!storedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    } else {
-      setTheme("light");
-      document.documentElement.classList.remove("dark");
-    }
+    setTheme(storedTheme || "light");
   }, []);
 
-  // Toggle theme
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  // Add a new ticket
-  const addTicket = (ticket: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "comments">) => {
-    const newTicket: Ticket = {
-      ...ticket,
-      id: `TICK-${String(tickets.length + 1).padStart(3, "0")}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      comments: []
-    };
-    
-    setTickets([...tickets, newTicket]);
+  const addTicket = (ticket: any) => {
+    setTickets([...tickets, ticket]);
   };
 
-  // Update an existing ticket
-  const updateTicket = (updatedTicket: Ticket) => {
-    const updatedTickets = tickets.map(ticket => 
-      ticket.id === updatedTicket.id 
-        ? { ...updatedTicket, updatedAt: new Date().toISOString() } 
-        : ticket
-    );
-    
-    setTickets(updatedTickets);
-  };
-
-  // Filter tickets by status
-  const filterTickets = (status: string | null) => {
-    if (!status) return tickets;
-    return tickets.filter(ticket => ticket.status === status);
-  };
-
-  // Search tickets
-  const searchTickets = (query: string) => {
-    const lowercaseQuery = query.toLowerCase();
-    return tickets.filter(
-      ticket => 
-        ticket.title.toLowerCase().includes(lowercaseQuery) ||
-        ticket.description.toLowerCase().includes(lowercaseQuery) ||
-        ticket.assignee.toLowerCase().includes(lowercaseQuery) ||
-        ticket.project.toLowerCase().includes(lowercaseQuery) ||
-        ticket.id.toLowerCase().includes(lowercaseQuery)
+  const updateTicket = (updatedTicket: any) => {
+    setTickets(
+      tickets.map((ticket) => (ticket.id === updatedTicket.id ? updatedTicket : ticket))
     );
   };
 
-  const value = {
-    teamMembers,
-    projects,
-    tickets,
-    holidays,
-    theme,
-    toggleTheme,
-    addTicket,
-    updateTicket,
-    filterTickets,
-    searchTickets
+  const deleteTicket = (id: string) => {
+    setTickets(tickets.filter((ticket) => ticket.id !== id));
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  const filterTickets = useCallback(
+    (status: string) => {
+      return tickets.filter((ticket) => ticket.status === status);
+    },
+    [tickets]
+  );
+
+  const searchTickets = useCallback(
+    (query: string) => {
+      const searchTerm = query.toLowerCase();
+      return tickets.filter((ticket) => {
+        return (
+          ticket.title.toLowerCase().includes(searchTerm) ||
+          ticket.description.toLowerCase().includes(searchTerm) ||
+          ticket.assignee.toLowerCase().includes(searchTerm) ||
+          ticket.project.toLowerCase().includes(searchTerm) ||
+          ticket.status.toLowerCase().includes(searchTerm) ||
+          ticket.priority.toLowerCase().includes(searchTerm)
+        );
+      });
+    },
+    [tickets]
+  );
+
+  const addCertification = (certification: any) => {
+    setCertifications([...certifications, certification]);
+  };
+
+  return (
+    <AppContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+        teamMembers: data.teamMembers,
+        projects: data.projects,
+        tickets,
+        certifications,
+        addTicket,
+        updateTicket,
+        deleteTicket,
+        filterTickets,
+        searchTickets,
+        addCertification,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };
 
-export const useApp = (): AppContextType => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error("useApp must be used within an AppProvider");
-  }
-  return context;
-};
+export const useApp = () => useContext(AppContext);
