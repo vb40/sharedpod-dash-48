@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 interface Comment {
   author: string;
@@ -14,9 +15,10 @@ interface TicketCommentsProps {
   comments: Comment[];
   onAddComment: (text: string) => void;
   currentUser: string;
+  onUpdate?: () => void;
 }
 
-export function TicketComments({ comments, onAddComment, currentUser }: TicketCommentsProps) {
+export function TicketComments({ comments, onAddComment, currentUser, onUpdate }: TicketCommentsProps) {
   const [newComment, setNewComment] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,6 +26,13 @@ export function TicketComments({ comments, onAddComment, currentUser }: TicketCo
     if (newComment.trim()) {
       onAddComment(newComment);
       setNewComment("");
+    }
+  };
+
+  const handleUpdate = () => {
+    if (onUpdate) {
+      onUpdate();
+      toast.success("Ticket updated successfully");
     }
   };
 
@@ -50,9 +59,14 @@ export function TicketComments({ comments, onAddComment, currentUser }: TicketCo
           placeholder="Add a comment..."
           className="min-h-[80px]"
         />
-        <Button type="submit" disabled={!newComment.trim()}>
-          Add Comment
-        </Button>
+        <div className="flex gap-2">
+          <Button type="submit" disabled={!newComment.trim()}>
+            Add Comment
+          </Button>
+          <Button type="button" variant="secondary" onClick={handleUpdate}>
+            Update Ticket
+          </Button>
+        </div>
       </form>
     </div>
   );
