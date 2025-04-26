@@ -1,3 +1,4 @@
+
 import React, {
   createContext,
   useContext,
@@ -14,6 +15,7 @@ interface AppContextType {
   projects: any[];
   tickets: any[];
   certifications: any[];
+  holidays: any[];
   addTicket: (ticket: any) => void;
   updateTicket: (ticket: any) => void;
   deleteTicket: (id: string) => void;
@@ -29,6 +31,7 @@ export const AppContext = createContext<AppContextType>({
   projects: [],
   tickets: [],
   certifications: [],
+  holidays: [],
   addTicket: () => {},
   updateTicket: () => {},
   deleteTicket: () => {},
@@ -96,6 +99,30 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setCertifications([...certifications, certification]);
   };
 
+  // Create a mock holidays array if data.holidays doesn't exist
+  const holidays = data.holidays || [
+    {
+      date: "2025-05-01",
+      name: "Labor Day",
+      type: "public"
+    },
+    {
+      date: "2025-05-26",
+      name: "Memorial Day",
+      type: "public"
+    },
+    {
+      date: "2025-06-19",
+      name: "Juneteenth",
+      type: "public"
+    },
+    {
+      date: "2025-07-04",
+      name: "Independence Day",
+      type: "public"
+    }
+  ];
+
   return (
     <AppContext.Provider
       value={{
@@ -105,6 +132,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         projects: data.projects,
         tickets,
         certifications,
+        holidays,
         addTicket,
         updateTicket,
         deleteTicket,
