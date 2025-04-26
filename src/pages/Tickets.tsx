@@ -1,12 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
-import TicketCard from "@/components/tickets/TicketCard";
-import TicketModal from "@/components/tickets/TicketModal";
 import TicketFilter from "@/components/tickets/TicketFilter";
-import { Button } from "@/components/ui/button";
+import TicketModal from "@/components/tickets/TicketModal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface Ticket {
   id: string;
@@ -67,11 +65,6 @@ const Tickets = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    if (modalMode === "create") {
-      toast.success("Ticket created successfully");
-    } else if (modalMode === "edit") {
-      toast.success("Ticket updated successfully");
-    }
   };
 
   const handleStatusChange = (status: string | null) => {
@@ -85,7 +78,7 @@ const Tickets = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Tickets</h1>
+        <h1 className="text-2xl font-medium tracking-tight">Tickets</h1>
         <p className="text-muted-foreground">Manage and track team tickets.</p>
       </div>
 
@@ -115,7 +108,8 @@ const Tickets = () => {
               {filteredTickets.map((ticket) => (
                 <div 
                   key={ticket.id} 
-                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card"
+                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card cursor-pointer"
+                  onClick={() => handleEditTicket(ticket)}
                 >
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
@@ -137,7 +131,7 @@ const Tickets = () => {
                           {ticket.priority}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold mb-1">{ticket.title}</h3>
+                      <h3 className="text-lg font-medium mb-1">{ticket.title}</h3>
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{ticket.description}</p>
                     </div>
                     
@@ -160,14 +154,11 @@ const Tickets = () => {
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center mt-2">
+                      <div className="flex items-center mt-2">
                         <div className="text-sm">
                           <div className="font-medium">Assignee</div>
                           <div className="text-muted-foreground">{ticket.assignee}</div>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleEditTicket(ticket)}>
-                          Edit
-                        </Button>
                       </div>
                     </div>
                   </div>
@@ -184,6 +175,7 @@ const Tickets = () => {
             onCreateTicket={handleCreateTicket}
           />
           
+          {/* Same structure for the active tab */}
           {filteredTickets.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No active tickets found</p>
@@ -191,12 +183,13 @@ const Tickets = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Same structure as "all" tab */}
               {filteredTickets.map((ticket) => (
                 <div 
                   key={ticket.id} 
-                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card"
+                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card cursor-pointer"
+                  onClick={() => handleEditTicket(ticket)}
                 >
+                  {/* Same content as "all" tab */}
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -217,7 +210,7 @@ const Tickets = () => {
                           {ticket.priority}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold mb-1">{ticket.title}</h3>
+                      <h3 className="text-lg font-medium mb-1">{ticket.title}</h3>
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{ticket.description}</p>
                     </div>
                     
@@ -240,14 +233,11 @@ const Tickets = () => {
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center mt-2">
+                      <div className="flex items-center mt-2">
                         <div className="text-sm">
                           <div className="font-medium">Assignee</div>
                           <div className="text-muted-foreground">{ticket.assignee}</div>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleEditTicket(ticket)}>
-                          Edit
-                        </Button>
                       </div>
                     </div>
                   </div>
@@ -270,12 +260,13 @@ const Tickets = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Same structure as "all" tab */}
               {filteredTickets.map((ticket) => (
                 <div 
                   key={ticket.id} 
-                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card"
+                  className="border rounded-lg p-4 animate-fade-in hover:shadow-md transition-all bg-white dark:bg-card cursor-pointer"
+                  onClick={() => handleEditTicket(ticket)}
                 >
+                  {/* Same content as "all" tab */}
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -296,7 +287,7 @@ const Tickets = () => {
                           {ticket.priority}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold mb-1">{ticket.title}</h3>
+                      <h3 className="text-lg font-medium mb-1">{ticket.title}</h3>
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{ticket.description}</p>
                     </div>
                     
@@ -319,14 +310,11 @@ const Tickets = () => {
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center mt-2">
+                      <div className="flex items-center mt-2">
                         <div className="text-sm">
                           <div className="font-medium">Assignee</div>
                           <div className="text-muted-foreground">{ticket.assignee}</div>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleEditTicket(ticket)}>
-                          Edit
-                        </Button>
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,8 @@ import { TicketHeader } from "./TicketHeader";
 import { TicketForm } from "./TicketForm";
 import { TicketFooter } from "./TicketFooter";
 import { useTicketState } from "@/hooks/useTicketState";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Ticket {
   id: string;
@@ -32,13 +34,17 @@ interface TicketModalProps {
 // Function to generate project code
 const generateProjectCode = (projectName: string) => {
   const projectCodes: { [key: string]: string } = {
-    "User Experience Portal": "USP",
-    "Payment Processing System": "PSP",
-    "Octapharma Dashboard": "ODP",
-    "Customer Feedback System": "CFS",
-    "Employee Portal": "EMP",
-    "Learning Management System": "LMS",
-    "Inventory System": "INV",
+    "USHG": "USP",
+    "P2P": "PSP",
+    "PIMA": "PIM",
+    "Metiren": "MET",
+    "DN": "DNS",
+    "Octapharma": "ODP",
+    "FPL": "FPL",
+    "ArdentMills": "ARM",
+    "Paramount": "PAR",
+    "SharedPod Dashboard": "SPD",
+    // Add more mappings as needed
   };
   
   // Return project code or use first 3 characters of project name
@@ -48,15 +54,20 @@ const generateProjectCode = (projectName: string) => {
 const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const { addTicket, updateTicket } = useApp();
   const { formData, errors, comments, handleChange, handleSelectChange, handleAddComment, validateForm, resetForm } = useTicketState(ticket, mode);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
       resetForm(ticket, mode);
+      setIsSubmitted(false);
     }
   }, [isOpen, ticket, mode, resetForm]);
 
   const handleSubmit = () => {
     if (!validateForm()) return;
+    
+    setIsSubmitting(true);
     
     const projectCode = generateProjectCode(formData.project);
     const ticketId = mode === "create" 
@@ -77,7 +88,10 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
       updateTicket(updatedTicket);
     }
     
-    onClose();
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    
+    toast.success(`Ticket ${mode === "create" ? "created" : "updated"} successfully!`);
   };
 
   return (
@@ -96,11 +110,15 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
           onAddComment={handleAddComment}
         />
         
-        <TicketFooter 
-          mode={mode}
-          onClose={onClose}
-          onSubmit={handleSubmit}
-        />
+        <div className="flex justify-end mt-6">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isSubmitting}
+            className="ml-auto"
+          >
+            {isSubmitting ? "Processing..." : mode === "create" ? "Create Ticket" : "Update Ticket"}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

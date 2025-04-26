@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, AlertCircle, XCircle } from "lucide-react";
-import { format, addMonths, isPast, isAfter, isBefore, differenceInDays } from "date-fns";
+import { format, addMonths, isPast, isAfter, isBefore, differenceInDays, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface Certification {
@@ -13,6 +13,7 @@ interface Certification {
   expirationDate: string | null;
   skills: string[];
   level: string;
+  isCompleted?: boolean;
 }
 
 interface CertificationsListProps {
@@ -23,14 +24,20 @@ interface CertificationsListProps {
 const CertificationsList = ({ certifications, onEditCertification }: CertificationsListProps) => {
   // Helpers to determine certification status
   const getCertificationStatus = (cert: Certification) => {
+    if (cert.isCompleted) return "completed";
     if (!cert.expirationDate) return "completed";
     
-    const expirationDate = new Date(cert.expirationDate);
-    const oneMonthBefore = addMonths(new Date(), 1);
-    
-    if (isPast(expirationDate)) return "expired";
-    if (isBefore(expirationDate, oneMonthBefore)) return "expiring-soon";
-    return "active";
+    try {
+      const expirationDate = parseISO(cert.expirationDate);
+      const oneMonthBefore = addMonths(new Date(), 1);
+      
+      if (isPast(expirationDate)) return "expired";
+      if (isBefore(expirationDate, oneMonthBefore)) return "expiring-soon";
+      return "active";
+    } catch (error) {
+      console.error("Date parsing error:", error);
+      return "active"; // Default fallback
+    }
   };
   
   // Group certifications by status
@@ -64,7 +71,7 @@ const CertificationsList = ({ certifications, onEditCertification }: Certificati
         </div>
       )}
       
-      {/* In Progress Certifications */}
+      {/* Completed Certifications */}
       {groupedCertifications.completed.length > 0 && (
         <div>
           <h2 className="text-lg font-medium mb-3 flex items-center">
@@ -134,9 +141,32 @@ interface CertificationCardProps {
 }
 
 const CertificationCard = ({ certification, onEdit, status }: CertificationCardProps) => {
-  const daysRemaining = certification.expirationDate
-    ? differenceInDays(new Date(certification.expirationDate), new Date())
-    : null;
+  // Safely format date with error handling
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = parseISO(dateString);
+      return format(date, "MMMM d, yyyy");
+    } catch (error) {
+      console.error("Date formatting error:", error);
+      return dateString; // Return original string if parsing fails
+    }
+  };
+
+  // Get days remaining safely
+  const getDaysRemaining = () => {
+    if (!certification.expirationDate) return null;
+    try {
+      const expirationDate = parseISO(certification.expirationDate);
+      if (isPast(expirationDate)) return null;
+      return differenceInDays(expirationDate, new Date());
+    } catch (error) {
+      console.error("Days remaining calculation error:", error);
+      return null;
+    }
+  };
+  
+  const daysRemaining = getDaysRemaining();
   
   return (
     <Card 
@@ -174,7 +204,7 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
       <CardContent className="space-y-3">
         <div>
           <div className="text-sm font-medium mb-1">Date Obtained</div>
-          <div className="text-sm">{format(new Date(certification.dateObtained), "MMMM d, yyyy")}</div>
+          <div className="text-sm">{formatDate(certification.dateObtained)}</div>
         </div>
         
         {certification.expirationDate && (
@@ -187,8 +217,8 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
               status === "expired" && "text-rose-600 dark:text-rose-400",
               status === "expiring-soon" && "text-amber-600 dark:text-amber-400"
             )}>
-              {format(new Date(certification.expirationDate), "MMMM d, yyyy")}
-              {daysRemaining && daysRemaining > 0 && (
+              {formatDate(certification.expirationDate)}
+              {daysRemaining !== null && daysRemaining > 0 && (
                 <span className="ml-1 text-xs">
                   ({daysRemaining} days remaining)
                 </span>
@@ -200,17 +230,27 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
         <div>
           <div className="text-sm font-medium mb-1">Skills</div>
           <div className="flex flex-wrap gap-1">
-            {certification.skills.map((skill, index) => (
+            {certification.skills && certification.skills.map((skill, index) => (
               <Badge key={index} variant="outline" className="text-xs">
                 {skill}
               </Badge>
             ))}
+            {(!certification.skills || certification.skills.length === 0) && (
+              <span className="text-xs text-muted-foreground">No skills listed</span>
+            )}
           </div>
         </div>
         
         <div>
           <div className="text-sm font-medium mb-1">Level</div>
-          <div className="text-sm">{certification.level}</div>
+          <div className="text-sm">{certification.level || "Not specified"}</div>
+        </div>
+        
+        <div>
+          <div className="text-sm font-medium mb-1">Status</div>
+          <div className="text-sm">
+            {certification.isCompleted ? "Completed" : "In Progress"}
+          </div>
         </div>
       </CardContent>
     </Card>

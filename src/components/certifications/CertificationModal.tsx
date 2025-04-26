@@ -1,29 +1,78 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/context/AppContext";
+import { format, addYears } from "date-fns";
 import { toast } from "sonner";
-import { format } from "date-fns";
+
+interface Certification {
+  id: string;
+  name: string;
+  provider: string;
+  dateObtained: string;
+  expirationDate: string | null;
+  skills: string[];
+  level: string;
+  isCompleted: boolean;
+}
 
 interface CertificationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  certification?: Certification;
 }
 
-const CertificationModal = ({ isOpen, onClose }: CertificationModalProps) => {
+const CertificationModal = ({ isOpen, onClose, certification }: CertificationModalProps) => {
   const { teamMembers, addCertification } = useApp();
   const [formData, setFormData] = useState({
     name: "",
     provider: "",
     assignedTo: "",
-    expiryDate: format(new Date(Date.now() + 12 * 30 * 24 * 60 * 60 * 1000), "yyyy-MM-dd"), // Default to 12 months from now
+    dateObtained: format(new Date(), "yyyy-MM-dd"),
+    expirationDate: format(addYears(new Date(), 1), "yyyy-MM-dd"),
     progress: 0,
-    status: "in-progress"
+    status: "in-progress",
+    level: "Beginner",
+    skills: [""],
+    isCompleted: false
   });
+  
+  useEffect(() => {
+    if (certification) {
+      setFormData({
+        name: certification.name,
+        provider: certification.provider,
+        assignedTo: "",
+        dateObtained: certification.dateObtained,
+        expirationDate: certification.expirationDate || format(addYears(new Date(), 1), "yyyy-MM-dd"),
+        progress: 0,
+        status: "completed",
+        level: certification.level,
+        skills: certification.skills,
+        isCompleted: certification.isCompleted || false
+      });
+    } else {
+      // Reset form for new certification
+      setFormData({
+        name: "",
+        provider: "",
+        assignedTo: "",
+        dateObtained: format(new Date(), "yyyy-MM-dd"),
+        expirationDate: format(addYears(new Date(), 1), "yyyy-MM-dd"),
+        progress: 0,
+        status: "in-progress",
+        level: "Beginner",
+        skills: [""],
+        isCompleted: false
+      });
+    }
+  }, [certification, isOpen]);
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   
@@ -45,11 +94,44 @@ const CertificationModal = ({ isOpen, onClose }: CertificationModalProps) => {
       [name]: value
     }));
   };
+
+  const handleSkillChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newSkills = [...formData.skills];
+    newSkills[index] = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      skills: newSkills
+    }));
+  };
+
+  const addSkill = () => {
+    setFormData(prev => ({
+      ...prev,
+      skills: [...prev.skills, ""]
+    }));
+  };
+
+  const removeSkill = (index: number) => {
+    const newSkills = [...formData.skills];
+    newSkills.splice(index, 1);
+    setFormData(prev => ({
+      ...prev,
+      skills: newSkills
+    }));
+  };
   
   const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleCompletedChange = (checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      isCompleted: checked,
+      progress: checked ? 100 : prev.progress
     }));
   };
   
@@ -58,11 +140,20 @@ const CertificationModal = ({ isOpen, onClose }: CertificationModalProps) => {
     
     // Add the certification
     if (addCertification) {
-      addCertification({
-        id: Math.floor(Math.random() * 1000),
-        ...formData
-      });
+      const newCertification = {
+        id: Math.random().toString(36).substring(2, 9),
+        name: formData.name,
+        provider: formData.provider,
+        dateObtained: formData.dateObtained,
+        expirationDate: formData.isCompleted ? null : formData.expirationDate,
+        skills: formData.skills.filter(skill => skill.trim() !== ""),
+        level: formData.level,
+        isCompleted: formData.isCompleted,
+        assignedTo: formData.assignedTo,
+        progress: formData.progress
+      };
       
+      addCertification(newCertification);
       toast.success("Certification added successfully");
       onClose();
     } else {
@@ -75,7 +166,7 @@ const CertificationModal = ({ isOpen, onClose }: CertificationModalProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Add New Certification</DialogTitle>
+          <DialogTitle>{certification ? "Edit Certification" : "Add New Certification"}</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
@@ -122,35 +213,112 @@ const CertificationModal = ({ isOpen, onClose }: CertificationModalProps) => {
             </Select>
             {errors.assignedTo && <p className="text-sm text-red-500">{errors.assignedTo}</p>}
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="level">Level</Label>
+            <Select 
+              value={formData.level} 
+              onValueChange={(value) => handleSelectChange("level", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Beginner">Beginner</SelectItem>
+                <SelectItem value="Intermediate">Intermediate</SelectItem>
+                <SelectItem value="Advanced">Advanced</SelectItem>
+                <SelectItem value="Expert">Expert</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           
           <div className="space-y-2">
-            <Label htmlFor="expiryDate">Target Completion Date</Label>
+            <Label htmlFor="dateObtained">Date Obtained</Label>
             <Input 
-              id="expiryDate"
-              name="expiryDate"
+              id="dateObtained"
+              name="dateObtained"
               type="date"
-              value={formData.expiryDate}
+              value={formData.dateObtained}
               onChange={handleInputChange}
             />
           </div>
           
+          <div className="flex items-center justify-between py-2">
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="isCompleted">Completed</Label>
+              <Switch 
+                id="isCompleted" 
+                checked={formData.isCompleted}
+                onCheckedChange={handleCompletedChange}
+              />
+            </div>
+          </div>
+
+          {!formData.isCompleted && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="expirationDate">Target Completion Date</Label>
+                <Input 
+                  id="expirationDate"
+                  name="expirationDate"
+                  type="date"
+                  value={formData.expirationDate}
+                  onChange={handleInputChange}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <Label htmlFor="progress">Current Progress</Label>
+                  <span className="text-sm font-medium">{formData.progress}%</span>
+                </div>
+                <Slider 
+                  id="progress" 
+                  value={[formData.progress]} 
+                  min={0} 
+                  max={100} 
+                  step={1}
+                  onValueChange={(value) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      progress: value[0]
+                    }));
+                  }}
+                />
+              </div>
+            </>
+          )}
+
           <div className="space-y-2">
-            <Label htmlFor="progress">Current Progress (%)</Label>
-            <Input 
-              id="progress"
-              name="progress"
-              type="number"
-              min="0"
-              max="100"
-              value={formData.progress.toString()}
-              onChange={(e) => handleInputChange({
-                ...e,
-                target: {
-                  ...e.target,
-                  value: Math.max(0, Math.min(100, parseInt(e.target.value) || 0)).toString()
-                }
-              })}
-            />
+            <Label>Skills</Label>
+            {formData.skills.map((skill, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder="e.g. Cloud Computing"
+                  value={skill}
+                  onChange={(e) => handleSkillChange(e, index)}
+                />
+                {formData.skills.length > 1 && (
+                  <Button 
+                    type="button" 
+                    variant="destructive" 
+                    size="icon" 
+                    onClick={() => removeSkill(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addSkill}
+              className="w-full"
+            >
+              Add Skill
+            </Button>
           </div>
         </div>
         
