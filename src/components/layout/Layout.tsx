@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
@@ -9,6 +9,7 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const toggleMobileSidebar = () => {
     setIsMobileOpen(!isMobileOpen);
@@ -18,9 +19,24 @@ const Layout = ({ children }: LayoutProps) => {
     setIsMobileOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        closeMobileSidebar();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
+      <div ref={sidebarRef}>
+        <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
+      </div>
       
       <div className="flex flex-col flex-1 w-full">
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />

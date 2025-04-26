@@ -13,6 +13,7 @@ interface Certification {
   skills: string[];
   level: string;
   isCompleted?: boolean;
+  assignedTo?: string;
 }
 
 interface CertificationsListProps {
@@ -196,6 +197,13 @@ const CertificationCard = ({ certification, onEdit, status }: CertificationCardP
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
+        {certification.assignedTo && (
+          <div>
+            <div className="text-sm font-medium mb-1">Assigned To</div>
+            <div className="text-sm">{certification.assignedTo}</div>
+          </div>
+        )}
+        
         <div>
           <div className="text-sm font-medium mb-1">Date Obtained</div>
           <div className="text-sm">{formatDate(certification.dateObtained)}</div>
