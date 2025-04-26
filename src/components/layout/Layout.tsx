@@ -30,10 +30,6 @@ const Layout = ({ children }: LayoutProps) => {
             {children}
           </div>
         </main>
-        
-        <footer className="py-4 px-6 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 SharedPod. All rights reserved.</p>
-        </footer>
       </div>
     </div>
   );

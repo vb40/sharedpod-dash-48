@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
   LayoutDashboard, 
@@ -8,6 +7,7 @@ import {
   FolderKanban, 
   Users, 
   Award,
+  LogOut
 } from "lucide-react";
 
 const navItems = [
@@ -45,8 +45,12 @@ type SidebarProps = {
 
 const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   
-  // Close sidebar on navigation when on mobile
+  const handleSignOut = () => {
+    navigate('/thank-you');
+  };
+
   const handleLinkClick = () => {
     if (isMobileOpen) {
       closeMobileSidebar();
@@ -61,7 +65,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
       )}
     >
       <div className="flex h-16 items-center border-b border-sidebar-border px-6">
-        <Link to="/" className="flex items-center gap-2 font-semibold" onClick={handleLinkClick}>
+        <Link to="/" className="flex items-center gap-2 font-semibold" onClick={() => window.location.reload()}>
           <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold text-lg">
             S
           </div>
@@ -89,7 +93,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
       </div>
       
       <div className="border-t border-sidebar-border p-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={handleSignOut}>
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
             RI
           </div>
@@ -101,6 +105,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
               Manager Delivery
             </p>
           </div>
+          <LogOut className="h-5 w-5 text-muted-foreground" />
         </div>
       </div>
     </aside>

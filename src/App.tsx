@@ -11,6 +11,7 @@ import Tickets from "./pages/Tickets";
 import Projects from "./pages/Projects";
 import Team from "./pages/Team";
 import Certifications from "./pages/Certifications";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
                 <Certifications />
               </Layout>
             } />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

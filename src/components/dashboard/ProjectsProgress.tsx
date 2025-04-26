@@ -8,10 +8,9 @@ import { cn } from "@/lib/utils";
 const ProjectsProgress = () => {
   const { projects } = useApp();
   
-  // Sort projects by progress for better visualization
   const sortedProjects = [...projects]
     .sort((a, b) => b.progress - a.progress)
-    .slice(0, 5); // Show top 5 projects
+    .slice(0, 5);
 
   return (
     <Card className="col-span-3 lg:col-span-2">
@@ -34,18 +33,20 @@ const ProjectsProgress = () => {
                   {project.progress}%
                 </Badge>
               </div>
-              <Progress 
-                value={project.progress}
-                className="h-2"
-                indicatorClassName={cn(
-                  project.progress >= 80 ? "bg-emerald-500" : 
-                  project.progress >= 50 ? "bg-amber-500" : 
-                  "bg-rose-500"
-                )}
-              />
+              <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
+                <Progress 
+                  value={project.progress}
+                  className={cn(
+                    "h-full transition-all",
+                    project.progress >= 80 ? "bg-emerald-500" : 
+                    project.progress >= 50 ? "bg-amber-500" : 
+                    "bg-rose-500"
+                  )}
+                />
+              </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>Budget: ${project.budget.toLocaleString()}</span>
-                <span>Spent: ${project.spent.toLocaleString()} ({Math.round((project.spent/project.budget)*100)}%)</span>
+                <span>Team: {project.team.length} members</span>
+                <span>Tasks: {project.tasks.completed}/{project.tasks.total}</span>
               </div>
             </div>
           ))}
