@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -8,8 +7,7 @@ import {
   FolderKanban, 
   Users, 
   Award,
-  LogOut,
-  User
+  LogOut
 } from "lucide-react";
 
 const navItems = [
@@ -95,8 +93,8 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
       
       <div className="border-t border-gray-200 p-4 mt-auto">
         <div className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50" onClick={handleSignOut}>
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <User className="h-4 w-4 text-gray-600" />
+          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-black text-sm font-medium">
+            RI
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
