@@ -6,32 +6,22 @@ import ProjectAnalyticsChart from "@/components/dashboard/ProjectAnalyticsChart"
 import AttendanceTracker from "@/components/dashboard/AttendanceTracker";
 import HolidaysCard from "@/components/dashboard/HolidaysCard";
 import { useApp } from "@/context/AppContext";
-import { Clock, Briefcase, Users, BarChart2 } from "lucide-react";
+import { Briefcase, Users, TrendingUp, Target } from "lucide-react";
 import { useState } from "react";
 
 const Dashboard = () => {
   const { tickets, projects, teamMembers } = useApp();
 
   // Calculate stats for statcards
-  const completedTickets = tickets.filter(ticket => 
-    ticket.status === "completed" || ticket.status === "done"
-  ).length;
-  
-  const totalTickets = tickets.length;
-  const completionRate = totalTickets > 0 
-    ? Math.round((completedTickets / totalTickets) * 100) 
-    : 0;
-
   const activeProjects = projects.filter(project => 
-    project.status === "Active"
+    project.status === "Active" || project.status === "In Progress"
   ).length;
   
   const totalTeamMembers = teamMembers.length;
 
-  // Calculate average team performance
-  const avgPerformance = teamMembers.length > 0
-    ? Math.round(teamMembers.reduce((acc, member) => acc + member.performance, 0) / teamMembers.length)
-    : 0;
+  // Mock utilization data - in a real app this would come from backend
+  const actualUtilization = 78; // percentage
+  const plannedUtilization = 85; // percentage
 
   return (
     <div className="space-y-6">
@@ -44,14 +34,7 @@ const Dashboard = () => {
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard 
-          title="Ticket Completion"
-          value={`${completionRate}%`}
-          description={`${completedTickets} / ${totalTickets} tickets`}
-          icon={<Clock className="h-5 w-5" />}
-          trend={{ value: 5.2, isPositive: completionRate > 50 }}
-        />
-        <StatCard 
-          title="Active Projects"
+          title="Active Projects / Pipelines"
           value={activeProjects}
           description={`Out of ${projects.length} total projects`}
           icon={<Briefcase className="h-5 w-5" />}
@@ -65,11 +48,18 @@ const Dashboard = () => {
           trend={{ value: 0, isPositive: true }}
         />
         <StatCard 
-          title="Team Performance"
-          value={`${avgPerformance}%`}
-          description="Average performance score"
-          icon={<BarChart2 className="h-5 w-5" />}
-          trend={{ value: 3.1, isPositive: avgPerformance > 75 }}
+          title="Actual Utilisation"
+          value={`${actualUtilization}%`}
+          description="Current resource utilization"
+          icon={<TrendingUp className="h-5 w-5" />}
+          trend={{ value: 3.2, isPositive: actualUtilization > 75 }}
+        />
+        <StatCard 
+          title="Planned Utilisation"
+          value={`${plannedUtilization}%`}
+          description="Target resource utilization"
+          icon={<Target className="h-5 w-5" />}
+          trend={{ value: 1.5, isPositive: true }}
         />
       </div>
       
