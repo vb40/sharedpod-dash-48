@@ -8,7 +8,8 @@ import {
   FolderKanban, 
   Users, 
   Award,
-  LogOut
+  LogOut,
+  User
 } from "lucide-react";
 
 const navItems = [
@@ -67,10 +68,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
     >
       <div className="flex h-16 items-center border-b border-gray-200 px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold" onClick={() => window.location.reload()}>
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-orange-500 rounded-md flex items-center justify-center text-white font-bold text-lg">
-            S
-          </div>
-          <span className="text-gray-900 text-lg">SharedPod</span>
+          <span className="text-blue-600 text-lg font-bold">SharedPod</span>
         </Link>
       </div>
       
@@ -97,8 +95,8 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
       
       <div className="border-t border-gray-200 p-4 mt-auto">
         <div className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50" onClick={handleSignOut}>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-orange-500 flex items-center justify-center text-white text-sm font-medium">
-            RI
+          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+            <User className="h-4 w-4 text-gray-600" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
