@@ -67,7 +67,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
     >
       <div className="flex h-16 items-center border-b border-gray-200 px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold" onClick={() => window.location.reload()}>
-          <span className="text-blue-600 text-lg font-bold">SharedPod</span>
+          <span className="text-lg font-bold" style={{ color: '#0066CC' }}>SharedPod</span>
         </Link>
       </div>
       
@@ -82,9 +82,14 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                   location.pathname === item.href 
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700" 
+                    ? "border-r-2" 
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
+                style={location.pathname === item.href ? {
+                  backgroundColor: '#E6F3FF',
+                  color: '#0066CC',
+                  borderRightColor: '#0066CC'
+                } : {}}
               >
                 <item.icon className="h-5 w-5" />
                 <span>{item.title}</span>
@@ -95,7 +100,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
         
         <div className="border-t border-gray-200 p-4">
           <div className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50" onClick={handleSignOut}>
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-black text-sm font-medium">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-black text-sm font-medium" style={{ backgroundColor: '#0066CC' }}>
               RI
             </div>
             <div className="flex-1 min-w-0">
