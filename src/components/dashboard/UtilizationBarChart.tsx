@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
 
 // Dropdown options
@@ -86,6 +86,12 @@ const mockUtilizationData = {
   // Add more projects/members/timeframes as needed
 };
 
+const getBarColor = (value: number) => {
+  if (value >= 80) return '#22c55e'; // green for high utilization
+  if (value >= 60) return '#004499'; // presidio blue for medium utilization
+  return '#f59e0b'; // amber for low utilization
+};
+
 const UtilizationBarChart = () => {
   const [selectedProject, setSelectedProject] = useState('USHG');
   const [selectedTime, setSelectedTime] = useState('Week');
@@ -135,20 +141,26 @@ const UtilizationBarChart = () => {
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <BarChart data={data} barCategoryGap="20%">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis domain={[0, 100]} allowDecimals={false} />
-              <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="utilization" 
-                stroke="#004499" 
-                strokeWidth={3}
-                dot={{ fill: '#004499', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: '#004499' }}
+              <Tooltip 
+                formatter={(value) => [`${value}%`, 'Utilization']}
+                labelFormatter={(label) => `Day: ${label}`}
+                contentStyle={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '6px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
               />
-            </LineChart>
+              <Bar dataKey="utilization" radius={[4, 4, 0, 0]}>
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getBarColor(entry.utilization)} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
