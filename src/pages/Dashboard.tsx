@@ -1,8 +1,7 @@
 
 import StatCard from "@/components/dashboard/StatCard";
 import ProjectsProgress from "@/components/dashboard/ProjectsProgress";
-import AttendanceTracker from "@/components/dashboard/AttendanceTracker";
-import HolidaysCard from "@/components/dashboard/HolidaysCard";
+import AttendanceHolidaysCard from "@/components/dashboard/AttendanceHolidaysCard";
 import UtilizationBarChart from "@/components/dashboard/UtilizationBarChart";
 import { useApp } from "@/context/AppContext";
 import { Briefcase, Users, TrendingUp, Target } from "lucide-react";
@@ -63,7 +62,6 @@ const Dashboard = () => {
       
       <div className="grid gap-6 grid-cols-3">
         <ProjectsProgress />
-        <HolidaysCard />
       </div>
       
       <div className="grid gap-6 grid-cols-3">
@@ -71,7 +69,7 @@ const Dashboard = () => {
       </div>
       
       <div className="grid gap-6 grid-cols-3">
-        <AttendanceTracker />
+        <AttendanceHolidaysCard />
       </div>
     </div>
   );
