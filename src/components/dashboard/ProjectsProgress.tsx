@@ -4,7 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { Clock, Users, CheckCircle2, Calendar, BarChart2, Star } from "lucide-react";
+import { Clock, CheckCircle2, Calendar, BarChart2 } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format, differenceInDays } from "date-fns";
@@ -193,17 +193,6 @@ const ProjectsProgress = () => {
                       ))}
                     </div>
                   </div>
-                  
-                  <div className="flex justify-between text-sm pt-2 border-t">
-                    <div>
-                      <span className="text-muted-foreground mr-1">Budget:</span>
-                      <span className="font-medium">${project.budget.toLocaleString()}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground mr-1">Spent:</span>
-                      <span className="font-medium">${project.spent.toLocaleString()}</span>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             );
@@ -263,23 +252,13 @@ const ProjectsProgress = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900">Budget</h4>
-                  <div className="text-lg font-semibold">${selectedProject.budget.toLocaleString()}</div>
-                  <div className="text-sm text-gray-500">
-                    Spent: ${selectedProject.spent.toLocaleString()}
-                  </div>
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900">Tasks</h4>
+                <div className="text-lg font-semibold">
+                  {selectedProject.tasks.completed}/{selectedProject.tasks.total}
                 </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900">Tasks</h4>
-                  <div className="text-lg font-semibold">
-                    {selectedProject.tasks.completed}/{selectedProject.tasks.total}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {Math.round((selectedProject.tasks.completed / selectedProject.tasks.total) * 100)}% Complete
-                  </div>
+                <div className="text-sm text-gray-500">
+                  {Math.round((selectedProject.tasks.completed / selectedProject.tasks.total) * 100)}% Complete
                 </div>
               </div>
             </div>

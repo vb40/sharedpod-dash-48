@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 
 // Dropdown options
@@ -135,13 +135,20 @@ const UtilizationBarChart = () => {
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
+            <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis domain={[0, 100]} allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="utilization" fill="#0066CC" />
-            </BarChart>
+              <Line 
+                type="monotone" 
+                dataKey="utilization" 
+                stroke="#004499" 
+                strokeWidth={3}
+                dot={{ fill: '#004499', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, fill: '#004499' }}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
