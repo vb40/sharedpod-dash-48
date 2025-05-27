@@ -67,7 +67,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
     >
       <div className="flex h-16 items-center border-b border-gray-200 px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold" onClick={() => window.location.reload()}>
-          <span className="text-lg font-bold" style={{ color: '#0066CC' }}>SharedPod</span>
+          <span className="text-lg font-bold" style={{ color: '#0066CC' }}>Shared POD</span>
         </Link>
       </div>
       

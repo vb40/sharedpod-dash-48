@@ -1,16 +1,14 @@
 
 import StatCard from "@/components/dashboard/StatCard";
-import TeamPerformanceChart from "@/components/dashboard/TeamPerformanceChart";
 import ProjectsProgress from "@/components/dashboard/ProjectsProgress";
-import ProjectAnalyticsChart from "@/components/dashboard/ProjectAnalyticsChart";
 import AttendanceTracker from "@/components/dashboard/AttendanceTracker";
 import HolidaysCard from "@/components/dashboard/HolidaysCard";
+import UtilizationBarChart from "@/components/dashboard/UtilizationBarChart";
 import { useApp } from "@/context/AppContext";
 import { Briefcase, Users, TrendingUp, Target } from "lucide-react";
-import { useState } from "react";
 
 const Dashboard = () => {
-  const { tickets, projects, teamMembers } = useApp();
+  const { projects, teamMembers } = useApp();
 
   // Calculate stats for statcards
   const activeProjects = projects.filter(project => 
@@ -34,7 +32,7 @@ const Dashboard = () => {
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard 
-          title="Active Projects / Pipelines"
+          title="Active Projects"
           value={activeProjects}
           description={`Out of ${projects.length} total projects`}
           icon={<Briefcase className="h-5 w-5" />}
@@ -69,11 +67,10 @@ const Dashboard = () => {
       </div>
       
       <div className="grid gap-6 grid-cols-3">
-        <ProjectAnalyticsChart />
+        <UtilizationBarChart />
       </div>
       
       <div className="grid gap-6 grid-cols-3">
-        <TeamPerformanceChart />
         <AttendanceTracker />
       </div>
     </div>
