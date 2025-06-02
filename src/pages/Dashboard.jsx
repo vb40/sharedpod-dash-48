@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useAppContext } from "@/context/AppContext";
+import { useApp } from "@/context/AppContext";
 import StatCard from "@/components/dashboard/StatCard";
 import ProjectsProgress from "@/components/dashboard/ProjectsProgress";
 import TeamPerformanceChart from "@/components/dashboard/TeamPerformanceChart";
@@ -10,8 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Dashboard = () => {
-  const { state } = useAppContext();
-  const { projects, teamMembers } = state;
+  const { projects, teamMembers } = useApp();
 
   const activeProjects = projects.filter(p => p.status === 'In Progress').length;
   const totalTeamMembers = teamMembers.length;
