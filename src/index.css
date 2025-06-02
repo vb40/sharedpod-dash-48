@@ -1,4 +1,5 @@
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,81 +8,56 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 246 84% 59%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
-
-    --secondary: 160 84% 39%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 29 100% 55%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 246 84% 59%;
-
+    --ring: 221.2 83.2% 53.3%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-
-    --sidebar-background: 246 84% 98%;
-    --sidebar-foreground: 246 84% 20%;
-    --sidebar-primary: 246 84% 59%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 246 84% 95%;
-    --sidebar-accent-foreground: 246 84% 20%;
-    --sidebar-border: 246 84% 90%;
-    --sidebar-ring: 246 84% 59%;
   }
 
   .dark {
-    --background: 0 0% 14.3%;
+    --background: 224 16% 14%;
     --foreground: 210 40% 98%;
-
-    --card: 0 0% 14.3%;
-    --card-foreground: 213 31% 91%;
-
-    --popover: 0 0% 14.3%;
-    --popover-foreground: 215 20.2% 65.1%;
-
-    --primary: 246 84% 59%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 160 84% 39%;
+    --card: 224 16% 14%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 16% 14%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-
-    --accent: 29 100% 55%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-    --ring: 246 84% 59%;
-
-    --sidebar-background: 0 0% 14.3%;
-    --sidebar-foreground: 213 31% 91%;
-    --sidebar-primary: 246 84% 59%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 17%;
-    --sidebar-accent-foreground: 213 31% 91%;
-    --sidebar-border: 0 0% 17%;
-    --sidebar-ring: 246 84% 59%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -89,38 +65,59 @@
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: "Inter", sans-serif;
   }
 
-  html {
-    @apply bg-background;
+  html, body, #root {
+    height: 100%;
+    overflow-x: hidden;
   }
 
-  html.dark {
+  /* Ensure proper dark mode application */
+  .dark {
     background-color: #242023;
+    color: white;
   }
 
-  html.dark body {
-    background-color: #242023;
+  .dark * {
+    border-color: rgb(55, 65, 81);
   }
 
-  #root {
-    @apply min-h-screen bg-background;
+  /* Fix any layout collapse issues */
+  .grid {
+    display: grid;
   }
 
-  .dark #root {
-    background-color: #242023;
-  }
-}
-
-@layer components {
-  .sidebar-item {
-    @apply flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50;
+  .flex {
+    display: flex;
   }
 
-  .sidebar-item.active {
-    @apply bg-sidebar-accent text-sidebar-accent-foreground;
+  /* Ensure cards have proper spacing */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+
+  .space-y-6 > * + * {
+    margin-top: 1.5rem;
+  }
+
+  /* Responsive grid fixes */
+  @media (min-width: 768px) {
+    .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .lg\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    
+    .lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }

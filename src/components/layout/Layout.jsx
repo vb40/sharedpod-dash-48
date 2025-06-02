@@ -30,14 +30,18 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
       <div ref={sidebarRef}>
         <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
       </div>
       
-      <div className="flex flex-col flex-1 w-full min-w-0">
+      {/* Main Content Area */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Header */}
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />
         
-        <main className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">
+        {/* Main Content */}
+        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto bg-background">
           <div className="mx-auto max-w-7xl w-full">
             {children}
           </div>
