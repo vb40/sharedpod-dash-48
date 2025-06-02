@@ -101,14 +101,14 @@ const UtilizationBarChart = () => {
     mockUtilizationData[selectedProject]?.[selectedMember]?.[selectedTime] || [];
 
   return (
-    <Card className="h-full w-full">
+    <Card className="h-full w-full bg-white dark:bg-[#242023] border border-gray-200 dark:border-gray-700 shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="font-medium text-lg md:text-xl">Resource Utilization</CardTitle>
-        <div className="space-y-2">
+        <CardTitle className="font-medium text-lg md:text-xl text-gray-900 dark:text-white">Resource Utilization</CardTitle>
+        <div className="flex flex-wrap gap-2">
           <select
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
+            className="w-auto min-w-[120px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {projectOptions.map((project) => (
               <option key={project} value={project}>{project}</option>
@@ -118,7 +118,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
+            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {timeOptions.map((range) => (
               <option key={range} value={range}>{range}</option>
@@ -128,7 +128,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedMember}
             onChange={(e) => setSelectedMember(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
+            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {memberOptions.map((member) => (
               <option key={member} value={member}>{member}</option>
@@ -140,26 +140,29 @@ const UtilizationBarChart = () => {
         <div className="h-[200px] md:h-[250px] lg:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:stroke-gray-600" />
               <XAxis 
                 dataKey="name" 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                className="dark:fill-gray-300"
                 interval={0}
               />
               <YAxis 
                 domain={[0, 100]} 
                 allowDecimals={false} 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                className="dark:fill-gray-300"
               />
               <Tooltip 
                 formatter={(value) => [`${value}%`, 'Utilization']}
                 labelFormatter={(label) => `Day: ${label}`}
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--background)',
+                  border: '1px solid var(--border)',
                   borderRadius: '6px',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                  fontSize: '12px'
+                  fontSize: '12px',
+                  color: 'var(--foreground)'
                 }}
               />
               <Bar dataKey="utilization" radius={[4, 4, 0, 0]}>

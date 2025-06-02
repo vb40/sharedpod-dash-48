@@ -13,13 +13,14 @@ const Header = ({ isMobileOpen, toggleMobileSidebar }: HeaderProps) => {
   const { theme, toggleTheme } = useApp();
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center border-b bg-white px-4 md:px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center border-b bg-white dark:bg-[#242023] border-gray-200 dark:border-gray-700 px-4 md:px-6">
       <div className="mr-4 lg:hidden">
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleMobileSidebar}
           aria-label="Toggle Menu"
+          className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
           {isMobileOpen ? (
             <X className="h-5 w-5" />
@@ -37,7 +38,7 @@ const Header = ({ isMobileOpen, toggleMobileSidebar }: HeaderProps) => {
           size="icon"
           onClick={toggleTheme}
           aria-label="Toggle Theme"
-          className="text-gray-600 hover:text-gray-900"
+          className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
           {theme === "dark" ? (
             <Sun className="h-5 w-5" />
