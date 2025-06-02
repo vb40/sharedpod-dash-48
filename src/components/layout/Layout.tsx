@@ -3,9 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
-const Layout = ({ children }) => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const toggleMobileSidebar = () => {
     setIsMobileOpen(!isMobileOpen);
@@ -16,8 +20,8 @@ const Layout = ({ children }) => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         closeMobileSidebar();
       }
     };
@@ -30,18 +34,14 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
       <div ref={sidebarRef}>
         <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
       </div>
       
-      {/* Main Content Area */}
-      <div className="flex flex-col flex-1 min-w-0">
-        {/* Header */}
+      <div className="flex flex-col flex-1 w-full min-w-0">
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />
         
-        {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto bg-background">
+        <main className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">
           <div className="mx-auto max-w-7xl w-full">
             {children}
           </div>
