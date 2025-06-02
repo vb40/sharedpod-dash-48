@@ -20,50 +20,50 @@ const Dashboard = () => {
   const plannedUtilization = 85; // percentage
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-3xl font-medium tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-medium tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground text-sm md:text-base">
           Welcome back to your project management dashboard
         </p>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard 
           title="Active Projects"
           value={activeProjects}
           description={`Out of ${projects.length} total projects`}
-          icon={<Briefcase className="h-5 w-5" />}
+          icon={<Briefcase className="h-4 w-4 md:h-5 md:w-5" />}
           trend={{ value: 2, isPositive: true }}
         />
         <StatCard 
           title="Team Members"
           value={totalTeamMembers}
           description="Active team members"
-          icon={<Users className="h-5 w-5" />}
+          icon={<Users className="h-4 w-4 md:h-5 md:w-5" />}
           trend={{ value: 0, isPositive: true }}
         />
         <StatCard 
           title="Actual Utilisation"
           value={`${actualUtilization}%`}
           description="Current resource utilization"
-          icon={<TrendingUp className="h-5 w-5" />}
+          icon={<TrendingUp className="h-4 w-4 md:h-5 md:w-5" />}
           trend={{ value: 3.2, isPositive: actualUtilization > 75 }}
         />
         <StatCard 
           title="Planned Utilisation"
           value={`${plannedUtilization}%`}
           description="Target resource utilization"
-          icon={<Target className="h-5 w-5" />}
+          icon={<Target className="h-4 w-4 md:h-5 md:w-5" />}
           trend={{ value: 1.5, isPositive: true }}
         />
       </div>
       
-      <div className="grid gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-3">
+      <div className="space-y-4 md:space-y-6">
+        <div className="w-full">
           <ProjectsProgress />
         </div>
-        <div className="lg:col-span-2">
+        <div className="w-full">
           <UtilizationBarChart />
         </div>
       </div>

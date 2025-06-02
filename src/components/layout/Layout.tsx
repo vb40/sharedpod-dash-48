@@ -38,11 +38,11 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
       </div>
       
-      <div className="flex flex-col flex-1 w-full">
+      <div className="flex flex-col flex-1 w-full min-w-0">
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
-          <div className="mx-auto max-w-7xl">
+        <main className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">
+          <div className="mx-auto max-w-7xl w-full">
             {children}
           </div>
         </main>

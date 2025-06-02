@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -65,12 +66,12 @@ const ProjectsProgress = () => {
 
   return (
     <>
-      <Card className="h-full">
+      <Card className="h-full w-full">
         <CardHeader>
-          <CardTitle className="font-medium">Project Progress</CardTitle>
+          <CardTitle className="font-medium text-lg md:text-xl">Project Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-1 xl:grid-cols-2">
+          <div className="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
             {sortedProjects.map((project) => {
               const hoursUsed = getHoursUsed(project);
               const hoursRemaining = Math.max(0, 80 - hoursUsed);
@@ -79,19 +80,19 @@ const ProjectsProgress = () => {
               return (
                 <Card 
                   key={project.id} 
-                  className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md"
+                  className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md w-full"
                   onClick={() => handleProjectClick(project)}
                 >
                   <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
                   
-                  <CardHeader className="pb-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">{project.name}</CardTitle>
+                  <CardHeader className="pb-2 md:pb-3">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
                       </div>
                       <Badge
                         className={cn(
-                          "transition-all group-hover:scale-110",
+                          "transition-all group-hover:scale-110 text-xs shrink-0",
                           project.status === "Active" ? "bg-green-500" : 
                           project.status === "Planning" ? "bg-blue-500" : 
                           project.status === "On Hold" ? "bg-amber-500" : 
@@ -103,13 +104,13 @@ const ProjectsProgress = () => {
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3 md:space-y-4">
                     {getProjectStatusIndicator(project.progress, daysRemaining)}
                     
                     <div className="space-y-2">
-                      <div className="flex justify-between items-center text-sm">
+                      <div className="flex justify-between items-center text-xs md:text-sm">
                         <div className="flex items-center gap-1">
-                          <BarChart2 className="h-4 w-4 text-muted-foreground" />
+                          <BarChart2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                           <span className="font-medium">Progress</span>
                         </div>
                         <span className="font-medium">{project.progress}%</span>
@@ -124,12 +125,13 @@ const ProjectsProgress = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <div className="flex justify-between items-center text-sm">
+                      <div className="flex justify-between items-center text-xs md:text-sm">
                         <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">Hours (80h/month)</span>
+                          <Clock className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                          <span className="font-medium hidden sm:inline">Hours (80h/month)</span>
+                          <span className="font-medium sm:hidden">Hours</span>
                         </div>
-                        <span className="font-medium">{hoursUsed}/80 hours</span>
+                        <span className="font-medium">{hoursUsed}/80h</span>
                       </div>
                       
                       <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
@@ -145,39 +147,39 @@ const ProjectsProgress = () => {
                       </div>
                       <div className="flex justify-between text-xs">
                         <span>{hoursUsed}h used</span>
-                        <span>{hoursRemaining}h remaining</span>
+                        <span>{hoursRemaining}h left</span>
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="flex items-center gap-2 rounded-lg bg-background p-3">
-                        <div className="rounded-full bg-primary/10 p-1.5">
-                          <Calendar className="h-4 w-4 text-primary" />
+                    <div className="grid grid-cols-2 gap-2 md:gap-3">
+                      <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
+                        <div className="rounded-full bg-primary/10 p-1 md:p-1.5">
+                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-xs text-muted-foreground">Deadline</p>
-                          <p className="text-sm font-medium">{format(new Date(project.endDate), "MMM dd")}</p>
+                          <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-2 rounded-lg bg-background p-3">
-                        <div className="rounded-full bg-secondary/10 p-1.5">
-                          <Clock className="h-4 w-4 text-secondary" />
+                      <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
+                        <div className="rounded-full bg-secondary/10 p-1 md:p-1.5">
+                          <Clock className="h-3 w-3 md:h-4 md:w-4 text-secondary" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-xs text-muted-foreground">Days Left</p>
-                          <p className="text-sm font-medium">{daysRemaining}</p>
+                          <p className="text-xs md:text-sm font-medium">{daysRemaining}</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="space-y-2">
-                      <div className="text-sm font-medium">Team Members</div>
-                      <div className="flex -space-x-2">
+                      <div className="text-xs md:text-sm font-medium">Team Members</div>
+                      <div className="flex -space-x-1 md:-space-x-2">
                         {project.team.map((member, i) => (
                           <HoverCard key={i}>
                             <HoverCardTrigger>
-                              <Avatar className="border-2 border-background h-8 w-8">
+                              <Avatar className="border-2 border-background h-6 w-6 md:h-8 md:w-8">
                                 <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
                                   {getInitials(member)}
                                 </AvatarFallback>

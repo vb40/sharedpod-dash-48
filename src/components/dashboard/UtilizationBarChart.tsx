@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -100,14 +101,14 @@ const UtilizationBarChart = () => {
     mockUtilizationData[selectedProject]?.[selectedMember]?.[selectedTime] || [];
 
   return (
-    <Card className="h-full">
+    <Card className="h-full w-full">
       <CardHeader className="pb-3">
-        <CardTitle className="font-medium text-lg">Resource Utilization</CardTitle>
+        <CardTitle className="font-medium text-lg md:text-xl">Resource Utilization</CardTitle>
         <div className="space-y-2">
           <select
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
           >
             {projectOptions.map((project) => (
               <option key={project} value={project}>{project}</option>
@@ -117,7 +118,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
           >
             {timeOptions.map((range) => (
               <option key={range} value={range}>{range}</option>
@@ -127,7 +128,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedMember}
             onChange={(e) => setSelectedMember(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-white"
           >
             {memberOptions.map((member) => (
               <option key={member} value={member}>{member}</option>
@@ -136,12 +137,20 @@ const UtilizationBarChart = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[250px]">
+        <div className="h-[200px] md:h-[250px] lg:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} barCategoryGap="20%">
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis domain={[0, 100]} allowDecimals={false} />
+              <XAxis 
+                dataKey="name" 
+                tick={{ fontSize: 12 }}
+                interval={0}
+              />
+              <YAxis 
+                domain={[0, 100]} 
+                allowDecimals={false} 
+                tick={{ fontSize: 12 }}
+              />
               <Tooltip 
                 formatter={(value) => [`${value}%`, 'Utilization']}
                 labelFormatter={(label) => `Day: ${label}`}
@@ -149,7 +158,8 @@ const UtilizationBarChart = () => {
                   backgroundColor: '#fff',
                   border: '1px solid #e2e8f0',
                   borderRadius: '6px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  fontSize: '12px'
                 }}
               />
               <Bar dataKey="utilization" radius={[4, 4, 0, 0]}>
