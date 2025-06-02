@@ -23,7 +23,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 24 94% 53%;
+    --accent: 29 100% 55%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -46,13 +46,13 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 0 0% 14.3%;
     --foreground: 210 40% 98%;
 
-    --card: 224 71% 4%;
+    --card: 0 0% 14.3%;
     --card-foreground: 213 31% 91%;
 
-    --popover: 224 71% 4%;
+    --popover: 0 0% 14.3%;
     --popover-foreground: 215 20.2% 65.1%;
 
     --primary: 246 84% 59%;
@@ -64,7 +64,7 @@
     --muted: 223 47% 11%;
     --muted-foreground: 215.4 16.3% 56.9%;
 
-    --accent: 24 94% 53%;
+    --accent: 29 100% 55%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -74,13 +74,13 @@
     --input: 216 34% 17%;
     --ring: 246 84% 59%;
 
-    --sidebar-background: 224 71% 4%;
+    --sidebar-background: 0 0% 14.3%;
     --sidebar-foreground: 213 31% 91%;
     --sidebar-primary: 246 84% 59%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 224 71% 8%;
+    --sidebar-accent: 0 0% 17%;
     --sidebar-accent-foreground: 213 31% 91%;
-    --sidebar-border: 224 71% 8%;
+    --sidebar-border: 0 0% 17%;
     --sidebar-ring: 246 84% 59%;
   }
 }
@@ -92,6 +92,26 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply bg-background;
+  }
+
+  html.dark {
+    background-color: #242023;
+  }
+
+  html.dark body {
+    background-color: #242023;
+  }
+
+  #root {
+    @apply min-h-screen bg-background;
+  }
+
+  .dark #root {
+    background-color: #242023;
   }
 }
 

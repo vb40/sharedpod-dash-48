@@ -235,22 +235,17 @@ const ProjectsProgress = ({ searchQuery, statusFilter, memberFilter }: ProjectsP
                 </div>
                 
                 <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900">Progress</h4>
-                  <div className="text-2xl font-bold">{selectedProject.progress}%</div>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="font-medium text-gray-900">Hours Utilization</h4>
-                <div className="flex justify-between text-sm">
-                  <span>Used: {getHoursUsed(selectedProject)}/80 hours</span>
-                  <span>Remaining: {Math.max(0, 80 - getHoursUsed(selectedProject))} hours</span>
-                </div>
-                <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-blue-500 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, (getHoursUsed(selectedProject) / 80) * 100)}%` }}
-                  />
+                  <h4 className="font-medium text-gray-900">Hours Utilization</h4>
+                  <div className="flex justify-between text-sm">
+                    <span>Used: {getHoursUsed(selectedProject)}/80 hours</span>
+                    <span>Remaining: {Math.max(0, 80 - getHoursUsed(selectedProject))} hours</span>
+                  </div>
+                  <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (getHoursUsed(selectedProject) / 80) * 100)}%` }}
+                    />
+                  </div>
                 </div>
               </div>
               
@@ -262,16 +257,6 @@ const ProjectsProgress = ({ searchQuery, statusFilter, memberFilter }: ProjectsP
                       {member}
                     </span>
                   ))}
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="font-medium text-gray-900">Tasks</h4>
-                <div className="text-lg font-semibold">
-                  {selectedProject.tasks.completed}/{selectedProject.tasks.total}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {Math.round((selectedProject.tasks.completed / selectedProject.tasks.total) * 100)}% Complete
                 </div>
               </div>
             </div>

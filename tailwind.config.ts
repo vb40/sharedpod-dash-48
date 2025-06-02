@@ -64,8 +64,9 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				presidio: {
-					blue: '#0066CC'
-				}
+					blue: '#0081bc'
+				},
+				orange: '#ff9e16'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
