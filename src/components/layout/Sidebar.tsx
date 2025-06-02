@@ -71,8 +71,8 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
         </Link>
       </div>
       
-      <div className="flex-1 flex flex-col min-h-0">
-        <nav className="flex-1 overflow-auto py-6 px-4">
+      <div className="flex flex-col flex-1 min-h-0">
+        <nav className="flex-1 py-6 px-4">
           <div className="space-y-1">
             {navItems.map((item) => (
               <Link
@@ -98,7 +98,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
           </div>
         </nav>
         
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4 mt-auto">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
           <div 
             className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 w-full" 
             onClick={handleSignOut}
