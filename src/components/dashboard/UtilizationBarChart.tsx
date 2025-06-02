@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -101,45 +100,43 @@ const UtilizationBarChart = () => {
     mockUtilizationData[selectedProject]?.[selectedMember]?.[selectedTime] || [];
 
   return (
-    <Card className="col-span-3">
-      <CardHeader>
-        <div className="flex flex-wrap gap-2 justify-between items-center">
-          <CardTitle className="font-medium">Resource Utilization</CardTitle>
-          <div className="flex gap-2">
-            <select
-              value={selectedProject}
-              onChange={(e) => setSelectedProject(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-            >
-              {projectOptions.map((project) => (
-                <option key={project} value={project}>{project}</option>
-              ))}
-            </select>
+    <Card className="h-full">
+      <CardHeader className="pb-3">
+        <CardTitle className="font-medium text-lg">Resource Utilization</CardTitle>
+        <div className="space-y-2">
+          <select
+            value={selectedProject}
+            onChange={(e) => setSelectedProject(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+          >
+            {projectOptions.map((project) => (
+              <option key={project} value={project}>{project}</option>
+            ))}
+          </select>
 
-            <select
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-            >
-              {timeOptions.map((range) => (
-                <option key={range} value={range}>{range}</option>
-              ))}
-            </select>
+          <select
+            value={selectedTime}
+            onChange={(e) => setSelectedTime(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+          >
+            {timeOptions.map((range) => (
+              <option key={range} value={range}>{range}</option>
+            ))}
+          </select>
 
-            <select
-              value={selectedMember}
-              onChange={(e) => setSelectedMember(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-            >
-              {memberOptions.map((member) => (
-                <option key={member} value={member}>{member}</option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={selectedMember}
+            onChange={(e) => setSelectedMember(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+          >
+            {memberOptions.map((member) => (
+              <option key={member} value={member}>{member}</option>
+            ))}
+          </select>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
+        <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} barCategoryGap="20%">
               <CartesianGrid strokeDasharray="3 3" />

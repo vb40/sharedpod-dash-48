@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -66,139 +65,138 @@ const ProjectsProgress = () => {
 
   return (
     <>
-      <div className="col-span-3 lg:col-span-2">
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="font-medium">Project Progress</CardTitle>
-          </CardHeader>
-        </Card>
-        
-        <div className="grid gap-6 md:grid-cols-1 xl:grid-cols-2">
-          {sortedProjects.map((project) => {
-            const hoursUsed = getHoursUsed(project);
-            const hoursRemaining = Math.max(0, 80 - hoursUsed);
-            const daysRemaining = getDaysRemaining(project.endDate);
-            
-            return (
-              <Card 
-                key={project.id} 
-                className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md"
-                onClick={() => handleProjectClick(project)}
-              >
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
-                
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-lg">{project.name}</CardTitle>
-                    </div>
-                    <Badge
-                      className={cn(
-                        "transition-all group-hover:scale-110",
-                        project.status === "Active" ? "bg-green-500" : 
-                        project.status === "Planning" ? "bg-blue-500" : 
-                        project.status === "On Hold" ? "bg-amber-500" : 
-                        "bg-rose-500"
-                      )}
-                    >
-                      {project.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  {getProjectStatusIndicator(project.progress, daysRemaining)}
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="font-medium">Project Progress</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-1 xl:grid-cols-2">
+            {sortedProjects.map((project) => {
+              const hoursUsed = getHoursUsed(project);
+              const hoursRemaining = Math.max(0, 80 - hoursUsed);
+              const daysRemaining = getDaysRemaining(project.endDate);
+              
+              return (
+                <Card 
+                  key={project.id} 
+                  className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md"
+                  onClick={() => handleProjectClick(project)}
+                >
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
                   
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex items-center gap-1">
-                        <BarChart2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">Progress</span>
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-lg">{project.name}</CardTitle>
                       </div>
-                      <span className="font-medium">{project.progress}%</span>
-                    </div>
-                    
-                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full rounded-full bg-gradient-to-r from-blue-500 via-primary to-secondary transition-all duration-500"
-                        style={{ width: `${project.progress}%` }}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">Hours (80h/month)</span>
-                      </div>
-                      <span className="font-medium">{hoursUsed}/80 hours</span>
-                    </div>
-                    
-                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                      <div 
+                      <Badge
                         className={cn(
-                          "h-full rounded-full transition-all duration-500",
-                          hoursUsed > 70 ? "bg-rose-500" : 
-                          hoursUsed > 50 ? "bg-amber-500" : 
-                          "bg-emerald-500"
+                          "transition-all group-hover:scale-110",
+                          project.status === "Active" ? "bg-green-500" : 
+                          project.status === "Planning" ? "bg-blue-500" : 
+                          project.status === "On Hold" ? "bg-amber-500" : 
+                          "bg-rose-500"
                         )}
-                        style={{ width: `${Math.min(100, (hoursUsed / 80) * 100)}%` }}
-                      />
+                      >
+                        {project.status}
+                      </Badge>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span>{hoursUsed}h used</span>
-                      <span>{hoursRemaining}h remaining</span>
-                    </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 rounded-lg bg-background p-3">
-                      <div className="rounded-full bg-primary/10 p-1.5">
-                        <Calendar className="h-4 w-4 text-primary" />
+                  <CardContent className="space-y-4">
+                    {getProjectStatusIndicator(project.progress, daysRemaining)}
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-1">
+                          <BarChart2 className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-medium">Progress</span>
+                        </div>
+                        <span className="font-medium">{project.progress}%</span>
                       </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Deadline</p>
-                        <p className="text-sm font-medium">{format(new Date(project.endDate), "MMM dd")}</p>
+                      
+                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full rounded-full bg-gradient-to-r from-blue-500 via-primary to-secondary transition-all duration-500"
+                          style={{ width: `${project.progress}%` }}
+                        />
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 rounded-lg bg-background p-3">
-                      <div className="rounded-full bg-secondary/10 p-1.5">
-                        <Clock className="h-4 w-4 text-secondary" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-medium">Hours (80h/month)</span>
+                        </div>
+                        <span className="font-medium">{hoursUsed}/80 hours</span>
                       </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Days Left</p>
-                        <p className="text-sm font-medium">{daysRemaining}</p>
+                      
+                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className={cn(
+                            "h-full rounded-full transition-all duration-500",
+                            hoursUsed > 70 ? "bg-rose-500" : 
+                            hoursUsed > 50 ? "bg-amber-500" : 
+                            "bg-emerald-500"
+                          )}
+                          style={{ width: `${Math.min(100, (hoursUsed / 80) * 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span>{hoursUsed}h used</span>
+                        <span>{hoursRemaining}h remaining</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Team Members</div>
-                    <div className="flex -space-x-2">
-                      {project.team.map((member, i) => (
-                        <HoverCard key={i}>
-                          <HoverCardTrigger>
-                            <Avatar className="border-2 border-background h-8 w-8">
-                              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
-                                {getInitials(member)}
-                              </AvatarFallback>
-                            </Avatar>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="text-sm">
-                            {member}
-                          </HoverCardContent>
-                        </HoverCard>
-                      ))}
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2 rounded-lg bg-background p-3">
+                        <div className="rounded-full bg-primary/10 p-1.5">
+                          <Calendar className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Deadline</p>
+                          <p className="text-sm font-medium">{format(new Date(project.endDate), "MMM dd")}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 rounded-lg bg-background p-3">
+                        <div className="rounded-full bg-secondary/10 p-1.5">
+                          <Clock className="h-4 w-4 text-secondary" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Days Left</p>
+                          <p className="text-sm font-medium">{daysRemaining}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
+                    
+                    <div className="space-y-2">
+                      <div className="text-sm font-medium">Team Members</div>
+                      <div className="flex -space-x-2">
+                        {project.team.map((member, i) => (
+                          <HoverCard key={i}>
+                            <HoverCardTrigger>
+                              <Avatar className="border-2 border-background h-8 w-8">
+                                <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
+                                  {getInitials(member)}
+                                </AvatarFallback>
+                              </Avatar>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="text-sm">
+                              {member}
+                            </HoverCardContent>
+                          </HoverCard>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
         <DialogContent className="max-w-2xl">
