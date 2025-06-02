@@ -39,12 +39,7 @@ const navItems = [
   },
 ];
 
-type SidebarProps = {
-  isMobileOpen: boolean;
-  closeMobileSidebar: () => void;
-};
-
-const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
+const Sidebar = ({ isMobileOpen, closeMobileSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -98,7 +93,7 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
           </div>
         </nav>
         
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4 mt-auto">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
           <div 
             className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 w-full" 
             onClick={handleSignOut}

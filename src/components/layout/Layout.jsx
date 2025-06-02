@@ -3,13 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef(null);
 
   const toggleMobileSidebar = () => {
     setIsMobileOpen(!isMobileOpen);
@@ -20,8 +16,8 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         closeMobileSidebar();
       }
     };
