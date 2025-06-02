@@ -4,20 +4,50 @@ import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { Clock, CheckCircle2, Calendar, BarChart2 } from "lucide-react";
+import { Calendar, BarChart2 } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { format, differenceInDays } from "date-fns";
+import { format } from "date-fns";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
-const ProjectsProgress = () => {
+type ProjectsProgressProps = {
+  searchQuery: string;
+  statusFilter: string;
+  memberFilter: string;
+};
+
+const ProjectsProgress = ({ searchQuery, statusFilter, memberFilter }: ProjectsProgressProps) => {
   const { projects } = useApp();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const sortedProjects = [...projects]
-    .sort((a, b) => b.progress - a.progress)
-    .slice(0, 5);
+  // Normalize project status to only allowed values
+  const normalizeStatus = (status: string) => {
+    if (status === "Active" || status === "Planning") return "In Progress";
+    if (status === "Completed") return "Completed";
+    return "On Hold";
+  };
+
+  // Filter and sort projects
+  const filteredProjects = projects
+    .map(project => ({
+      ...project,
+      status: normalizeStatus(project.status)
+    }))
+    .filter(project => {
+      const matchesSearch = !searchQuery || 
+        project.name.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesStatus = statusFilter === "all" || 
+        project.status === statusFilter;
+      
+      const matchesMember = memberFilter === "all" || 
+        project.team.some((member: string) => member === memberFilter);
+      
+      return matchesSearch && matchesStatus && matchesMember;
+    })
+    .sort((a, b) => b.progress - a.progress);
 
   const getHoursUsed = (project: any) => {
     return project.hoursUsed || Math.floor(Math.random() * 80);
@@ -29,29 +59,6 @@ const ProjectsProgress = () => {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-  };
-
-  const getDaysRemaining = (endDate: string) => {
-    const remaining = differenceInDays(new Date(endDate), new Date());
-    return remaining > 0 ? remaining : 0;
-  };
-
-  const getProjectStatusIndicator = (progress: number, daysRemaining: number) => {
-    const onSchedule = (progress >= 30 && daysRemaining > 15) || 
-                      (progress >= 60 && daysRemaining > 5) || 
-                      progress >= 90;
-                      
-    return onSchedule ? (
-      <div className="flex items-center text-green-500 gap-1 text-sm">
-        <CheckCircle2 className="h-4 w-4" />
-        <span>On Schedule</span>
-      </div>
-    ) : (
-      <div className="flex items-center text-amber-500 gap-1 text-sm">
-        <Clock className="h-4 w-4" />
-        <span>Attention Needed</span>
-      </div>
-    );
   };
 
   const handleProjectClick = (project: any) => {
@@ -71,132 +78,139 @@ const ProjectsProgress = () => {
           <CardTitle className="font-medium text-lg md:text-xl">Project Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
-            {sortedProjects.map((project) => {
-              const hoursUsed = getHoursUsed(project);
-              const hoursRemaining = Math.max(0, 80 - hoursUsed);
-              const daysRemaining = getDaysRemaining(project.endDate);
-              
-              return (
-                <Card 
-                  key={project.id} 
-                  className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md w-full"
-                  onClick={() => handleProjectClick(project)}
-                >
-                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
-                  
-                  <CardHeader className="pb-2 md:pb-3">
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="min-w-0 flex-1">
-                        <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
-                      </div>
-                      <Badge
-                        className={cn(
-                          "transition-all group-hover:scale-110 text-xs shrink-0",
-                          project.status === "Active" ? "bg-green-500" : 
-                          project.status === "Planning" ? "bg-blue-500" : 
-                          project.status === "On Hold" ? "bg-amber-500" : 
-                          "bg-rose-500"
-                        )}
-                      >
-                        {project.status}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-3 md:space-y-4">
-                    {getProjectStatusIndicator(project.progress, daysRemaining)}
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-xs md:text-sm">
-                        <div className="flex items-center gap-1">
-                          <BarChart2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
-                          <span className="font-medium">Progress</span>
-                        </div>
-                        <span className="font-medium">{project.progress}%</span>
-                      </div>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: false,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {filteredProjects.map((project) => {
+                const hoursUsed = getHoursUsed(project);
+                const hoursRemaining = Math.max(0, 80 - hoursUsed);
+                
+                return (
+                  <CarouselItem key={project.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                    <Card 
+                      className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md w-full h-full"
+                      onClick={() => handleProjectClick(project)}
+                    >
+                      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
                       
-                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className="h-full rounded-full bg-gradient-to-r from-blue-500 via-primary to-secondary transition-all duration-500"
-                          style={{ width: `${project.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-xs md:text-sm">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
-                          <span className="font-medium hidden sm:inline">Hours (80h/month)</span>
-                          <span className="font-medium sm:hidden">Hours</span>
+                      <CardHeader className="pb-2 md:pb-3">
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="min-w-0 flex-1">
+                            <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
+                          </div>
+                          <Badge
+                            className={cn(
+                              "transition-all group-hover:scale-110 text-xs shrink-0",
+                              project.status === "In Progress" ? "bg-blue-500" : 
+                              project.status === "On Hold" ? "bg-amber-500" : 
+                              "bg-green-500"
+                            )}
+                          >
+                            {project.status}
+                          </Badge>
                         </div>
-                        <span className="font-medium">{hoursUsed}/80h</span>
-                      </div>
+                      </CardHeader>
                       
-                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className={cn(
-                            "h-full rounded-full transition-all duration-500",
-                            hoursUsed > 70 ? "bg-rose-500" : 
-                            hoursUsed > 50 ? "bg-amber-500" : 
-                            "bg-emerald-500"
-                          )}
-                          style={{ width: `${Math.min(100, (hoursUsed / 80) * 100)}%` }}
-                        />
-                      </div>
-                      <div className="flex justify-between text-xs">
-                        <span>{hoursUsed}h used</span>
-                        <span>{hoursRemaining}h left</span>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2 md:gap-3">
-                      <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
-                        <div className="rounded-full bg-primary/10 p-1 md:p-1.5">
-                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-primary" />
+                      <CardContent className="space-y-3 md:space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center text-xs md:text-sm">
+                            <div className="flex items-center gap-1">
+                              <BarChart2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                              <span className="font-medium">Progress</span>
+                            </div>
+                            <span className="font-medium">{project.progress}%</span>
+                          </div>
+                          
+                          <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div 
+                              className="h-full rounded-full bg-gradient-to-r from-blue-500 via-primary to-secondary transition-all duration-500"
+                              style={{ width: `${project.progress}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-xs text-muted-foreground">Deadline</p>
-                          <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center text-xs md:text-sm">
+                            <div className="flex items-center gap-1">
+                              <BarChart2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                              <span className="font-medium hidden sm:inline">Hours (80h/month)</span>
+                              <span className="font-medium sm:hidden">Hours</span>
+                            </div>
+                            <span className="font-medium">{hoursUsed}/80h</span>
+                          </div>
+                          
+                          <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div 
+                              className={cn(
+                                "h-full rounded-full transition-all duration-500",
+                                hoursUsed > 70 ? "bg-rose-500" : 
+                                hoursUsed > 50 ? "bg-amber-500" : 
+                                "bg-emerald-500"
+                              )}
+                              style={{ width: `${Math.min(100, (hoursUsed / 80) * 100)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-xs">
+                            <span>{hoursUsed}h used</span>
+                            <span>{hoursRemaining}h left</span>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
-                        <div className="rounded-full bg-secondary/10 p-1 md:p-1.5">
-                          <Clock className="h-3 w-3 md:h-4 md:w-4 text-secondary" />
+                        
+                        <div className="grid grid-cols-2 gap-2 md:gap-3">
+                          <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
+                            <div className="rounded-full bg-primary/10 p-1 md:p-1.5">
+                              <Calendar className="h-3 w-3 md:h-4 md:w-4 text-primary" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs text-muted-foreground">Start Date</p>
+                              <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.startDate), "MMM dd")}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 rounded-lg bg-background p-2 md:p-3">
+                            <div className="rounded-full bg-secondary/10 p-1 md:p-1.5">
+                              <Calendar className="h-3 w-3 md:h-4 md:w-4 text-secondary" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs text-muted-foreground">End Date</p>
+                              <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-xs text-muted-foreground">Days Left</p>
-                          <p className="text-xs md:text-sm font-medium">{daysRemaining}</p>
+                        
+                        <div className="space-y-2">
+                          <div className="text-xs md:text-sm font-medium">Team Members</div>
+                          <div className="flex -space-x-1 md:-space-x-2">
+                            {project.team.map((member, i) => (
+                              <HoverCard key={i}>
+                                <HoverCardTrigger>
+                                  <Avatar className="border-2 border-background h-6 w-6 md:h-8 md:w-8">
+                                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
+                                      {getInitials(member)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </HoverCardTrigger>
+                                <HoverCardContent className="text-sm">
+                                  {member}
+                                </HoverCardContent>
+                              </HoverCard>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="text-xs md:text-sm font-medium">Team Members</div>
-                      <div className="flex -space-x-1 md:-space-x-2">
-                        {project.team.map((member, i) => (
-                          <HoverCard key={i}>
-                            <HoverCardTrigger>
-                              <Avatar className="border-2 border-background h-6 w-6 md:h-8 md:w-8">
-                                <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
-                                  {getInitials(member)}
-                                </AvatarFallback>
-                              </Avatar>
-                            </HoverCardTrigger>
-                            <HoverCardContent className="text-sm">
-                              {member}
-                            </HoverCardContent>
-                          </HoverCard>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
+          </Carousel>
         </CardContent>
       </Card>
 
@@ -212,10 +226,9 @@ const ProjectsProgress = () => {
                 <div className="space-y-2">
                   <h4 className="font-medium text-gray-900">Project Status</h4>
                   <Badge className={cn(
-                    selectedProject.status === "Active" ? "bg-green-500" : 
-                    selectedProject.status === "Planning" ? "bg-blue-500" : 
+                    selectedProject.status === "In Progress" ? "bg-blue-500" : 
                     selectedProject.status === "On Hold" ? "bg-amber-500" : 
-                    "bg-rose-500"
+                    "bg-green-500"
                   )}>
                     {selectedProject.status}
                   </Badge>
