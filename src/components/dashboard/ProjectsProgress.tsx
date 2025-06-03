@@ -1,5 +1,3 @@
-
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +26,7 @@ const ProjectsProgress = () => {
   const normalizeStatus = (status: string) => {
     if (status === "Active" || status === "Planning") return "In Progress";
     if (status === "Completed") return "Completed";
-    return "On Hold";
+    return "OnHold";
   };
 
   // Filter and sort projects
@@ -78,8 +76,6 @@ const ProjectsProgress = () => {
       <Card className="h-full w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <CardTitle className="font-medium text-lg md:text-xl">Project Progress</CardTitle>
-            
             <div className="flex items-center gap-2">
               <Input
                 placeholder="Search projects..."
@@ -95,7 +91,7 @@ const ProjectsProgress = () => {
                 <SelectContent>
                   <SelectItem value="all" className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">All Status</SelectItem>
                   <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="On Hold">On Hold</SelectItem>
+                  <SelectItem value="OnHold">OnHold</SelectItem>
                   <SelectItem value="Completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
@@ -122,7 +118,7 @@ const ProjectsProgress = () => {
               align: "start",
               loop: false,
             }}
-            className="w-full"
+            className="w-full relative"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {filteredProjects.map((project) => {
@@ -146,7 +142,7 @@ const ProjectsProgress = () => {
                             className={cn(
                               "transition-all group-hover:scale-110 text-xs shrink-0",
                               project.status === "In Progress" ? "bg-blue-500" : 
-                              project.status === "On Hold" ? "bg-amber-500" : 
+                              project.status === "OnHold" ? "bg-amber-500" : 
                               "bg-green-500"
                             )}
                           >
@@ -225,8 +221,8 @@ const ProjectsProgress = () => {
                         <div className="space-y-2">
                           <div className="text-xs md:text-sm font-medium">Team Members</div>
                           <div className="flex -space-x-1 md:-space-x-2">
-                            {project.team.map((member, i) => (
-                              <HoverCard key={i}>
+                            {project.team.map((member: string, index: number) => (
+                              <HoverCard key={index}>
                                 <HoverCardTrigger>
                                   <Avatar className="border-2 border-background h-6 w-6 md:h-8 md:w-8">
                                     <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs">
@@ -247,8 +243,10 @@ const ProjectsProgress = () => {
                 );
               })}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
+            
+            {/* Custom styled navigation buttons like the screenshot */}
+            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
+            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
           </Carousel>
         </CardContent>
       </Card>
@@ -266,7 +264,7 @@ const ProjectsProgress = () => {
                   <h4 className="font-medium text-gray-900">Project Status</h4>
                   <Badge className={cn(
                     selectedProject.status === "In Progress" ? "bg-blue-500" : 
-                    selectedProject.status === "On Hold" ? "bg-amber-500" : 
+                    selectedProject.status === "OnHold" ? "bg-amber-500" : 
                     "bg-green-500"
                   )}>
                     {selectedProject.status}
@@ -307,4 +305,3 @@ const ProjectsProgress = () => {
 };
 
 export default ProjectsProgress;
-
