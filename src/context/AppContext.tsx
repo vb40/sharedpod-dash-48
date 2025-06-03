@@ -100,6 +100,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const deleteProject = (projectId: string) => {
+    setProjects(projects => projects.filter(project => project.id !== projectId));
+  };
+
   const addTeamMember = (member: TeamMember) => {
     console.log("Adding team member:", member);
     setTeamMembers(prev => [...prev, member]);
@@ -126,6 +130,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         updateCertification,
         updateTeamMember,
         updateProject,
+        deleteProject,
         addTeamMember,
       }}
     >

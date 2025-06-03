@@ -68,5 +68,6 @@ export interface AppContextType {
   updateCertification: (certification: any) => void;
   updateTeamMember: (memberId: string, updatedMember: Partial<TeamMember>) => void;
   updateProject: (projectId: string, updatedProject: Partial<Project>) => void;
+  deleteProject: (projectId: string) => void;
   addTeamMember: (member: TeamMember) => void;
 }
