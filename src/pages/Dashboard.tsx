@@ -4,12 +4,9 @@ import ProjectsProgress from "@/components/dashboard/ProjectsProgress";
 import UtilizationBarChart from "@/components/dashboard/UtilizationBarChart";
 import { useApp } from "@/context/AppContext";
 import { Briefcase, Users, TrendingUp, Target } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { projects, teamMembers } = useApp();
-  const navigate = useNavigate();
 
   // Calculate stats for statcards
   const activeProjects = projects.filter(project => 
@@ -21,10 +18,6 @@ const Dashboard = () => {
   // Mock utilization data - in a real app this would come from backend
   const actualUtilization = 78; // percentage
   const plannedUtilization = 85; // percentage
-
-  const handleViewAllProjects = () => {
-    navigate("/projects");
-  };
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -70,16 +63,8 @@ const Dashboard = () => {
       
       <div className="space-y-4 md:space-y-6">
         <div className="w-full">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h2 className="text-xl font-medium">Projects Progress</h2>
-            </div>
-            <Button 
-              onClick={handleViewAllProjects}
-              className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
-            >
-              View All Projects
-            </Button>
+          <div className="mb-4">
+            <h2 className="text-xl font-medium">Projects Progress</h2>
           </div>
           <ProjectsProgress />
         </div>

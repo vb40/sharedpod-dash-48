@@ -12,15 +12,16 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const ProjectsProgress = () => {
   const { projects, teamMembers } = useApp();
+  const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [memberFilter, setMemberFilter] = useState("all");
-  const [showSearch, setShowSearch] = useState(false);
   
   // Normalize project status to only allowed values
   const normalizeStatus = (status: string) => {
@@ -71,6 +72,10 @@ const ProjectsProgress = () => {
     setSelectedProject(null);
   };
 
+  const handleViewAllProjects = () => {
+    navigate("/projects");
+  };
+
   return (
     <>
       <Card className="h-full w-full">
@@ -109,6 +114,13 @@ const ProjectsProgress = () => {
                   ))}
                 </SelectContent>
               </Select>
+              
+              <Button 
+                onClick={handleViewAllProjects}
+                className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
+              >
+                View All Projects
+              </Button>
             </div>
           </div>
 
