@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
@@ -105,35 +106,44 @@ const UtilizationBarChart = () => {
       <CardHeader className="pb-3">
         <CardTitle className="font-medium text-lg md:text-xl text-gray-900 dark:text-white">Resource Utilization</CardTitle>
         <div className="flex flex-wrap gap-2">
-          <select
-            value={selectedProject}
-            onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-auto min-w-[120px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
-          >
-            {projectOptions.map((project) => (
-              <option key={project} value={project}>{project}</option>
-            ))}
-          </select>
+          <Select value={selectedProject} onValueChange={setSelectedProject}>
+            <SelectTrigger className="w-auto min-w-[120px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+              <SelectValue placeholder="Project" />
+            </SelectTrigger>
+            <SelectContent>
+              {projectOptions.map((project) => (
+                <SelectItem key={project} value={project} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                  {project}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-          <select
-            value={selectedTime}
-            onChange={(e) => setSelectedTime(e.target.value)}
-            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
-          >
-            {timeOptions.map((range) => (
-              <option key={range} value={range}>{range}</option>
-            ))}
-          </select>
+          <Select value={selectedTime} onValueChange={setSelectedTime}>
+            <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+              <SelectValue placeholder="Time Range" />
+            </SelectTrigger>
+            <SelectContent>
+              {timeOptions.map((range) => (
+                <SelectItem key={range} value={range} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                  {range}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-          <select
-            value={selectedMember}
-            onChange={(e) => setSelectedMember(e.target.value)}
-            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
-          >
-            {memberOptions.map((member) => (
-              <option key={member} value={member}>{member}</option>
-            ))}
-          </select>
+          <Select value={selectedMember} onValueChange={setSelectedMember}>
+            <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+              <SelectValue placeholder="Member" />
+            </SelectTrigger>
+            <SelectContent>
+              {memberOptions.map((member) => (
+                <SelectItem key={member} value={member} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                  {member}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </CardHeader>
       <CardContent>
