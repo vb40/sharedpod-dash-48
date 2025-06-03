@@ -4,16 +4,19 @@ import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { format, differenceInDays } from "date-fns";
-import { Calendar, BarChart2, CheckCircle, AlertCircle } from "lucide-react";
+import { Calendar, BarChart2, Plus } from "lucide-react";
 import ProjectModal from "@/components/projects/ProjectModal";
+import AddProjectModal from "@/components/projects/AddProjectModal";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 const Projects = () => {
   const { projects, teamMembers } = useApp();
   const [selectedProject, setSelectedProject] = useState<any | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -28,24 +31,6 @@ const Projects = () => {
     return remaining > 0 ? remaining : 0;
   };
 
-  const getProjectStatusIndicator = (progress: number, daysRemaining: number) => {
-    const onSchedule = (progress >= 30 && daysRemaining > 15) || 
-                      (progress >= 60 && daysRemaining > 5) || 
-                      progress >= 90;
-                      
-    return onSchedule ? (
-      <div className="flex items-center text-green-500 gap-1 text-sm">
-        <CheckCircle className="h-4 w-4" />
-        <span>On Schedule</span>
-      </div>
-    ) : (
-      <div className="flex items-center text-amber-500 gap-1 text-sm">
-        <AlertCircle className="h-4 w-4" />
-        <span>Attention Needed</span>
-      </div>
-    );
-  };
-
   const handleProjectClick = (project: any) => {
     setSelectedProject(project);
     setIsModalOpen(true);
@@ -56,15 +41,29 @@ const Projects = () => {
     setSelectedProject(undefined);
   };
 
+  const handleAddProject = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
   const getHoursUsed = (project: any) => {
     return project.hoursUsed || Math.floor(Math.random() * 80);
   };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-medium tracking-tight">Projects</h1>
-        <p className="text-muted-foreground">Track and manage all projects.</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-medium tracking-tight">Projects</h1>
+          <p className="text-muted-foreground">Track and manage all projects.</p>
+        </div>
+        <Button onClick={handleAddProject} className="flex items-center gap-2">
+          <Plus className="h-4 w-4" />
+          Project
+        </Button>
       </div>
       
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -89,10 +88,9 @@ const Projects = () => {
                   <Badge
                     className={cn(
                       "transition-all group-hover:scale-110 text-xs shrink-0",
-                      project.status === "Active" ? "bg-green-500" : 
-                      project.status === "Planning" ? "bg-blue-500" : 
-                      project.status === "On Hold" ? "bg-amber-500" : 
-                      "bg-rose-500"
+                      project.status === "In Progress" ? "bg-blue-500" : 
+                      project.status === "OnHold" ? "bg-amber-500" : 
+                      "bg-green-500"
                     )}
                   >
                     {project.status}
@@ -101,8 +99,6 @@ const Projects = () => {
               </CardHeader>
               
               <CardContent className="space-y-3 md:space-y-4">
-                {getProjectStatusIndicator(project.progress, daysRemaining)}
-                
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs md:text-sm">
                     <div className="flex items-center gap-1">
@@ -162,7 +158,7 @@ const Projects = () => {
                       <Calendar className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">Deadline</p>
+                      <p className="text-xs text-muted-foreground">End Date</p>
                       <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
                     </div>
                   </div>
@@ -197,17 +193,6 @@ const Projects = () => {
                     ))}
                   </div>
                 </div>
-                
-                <div className="flex justify-between text-sm pt-2 border-t">
-                  <div>
-                    <span className="text-muted-foreground mr-1">Budget:</span>
-                    <span className="font-medium">${project.budget.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground mr-1">Spent:</span>
-                    <span className="font-medium">${project.spent.toLocaleString()}</span>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           );
@@ -218,6 +203,11 @@ const Projects = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         project={selectedProject}
+      />
+      
+      <AddProjectModal 
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
       />
     </div>
   );

@@ -86,9 +86,18 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateProject = (projectId: string, updatedProject: Partial<Project>) => {
-    setProjects(projects.map(project => 
-      project.id === projectId ? { ...project, ...updatedProject } : project
-    ));
+    setProjects(projects => {
+      const existingProject = projects.find(p => p.id === projectId);
+      if (existingProject) {
+        // Update existing project
+        return projects.map(project => 
+          project.id === projectId ? { ...project, ...updatedProject } : project
+        );
+      } else {
+        // Add new project
+        return [...projects, updatedProject as Project];
+      }
+    });
   };
 
   const addTeamMember = (member: TeamMember) => {
