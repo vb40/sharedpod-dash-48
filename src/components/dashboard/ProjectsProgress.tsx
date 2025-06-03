@@ -87,7 +87,7 @@ const ProjectsProgress = () => {
               />
               
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-32">
+                <SelectTrigger className="w-32 focus:ring-[#ff9e16] focus:border-[#ff9e16]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -99,7 +99,7 @@ const ProjectsProgress = () => {
               </Select>
               
               <Select value={memberFilter} onValueChange={setMemberFilter}>
-                <SelectTrigger className="w-32">
+                <SelectTrigger className="w-32 focus:ring-[#ff9e16] focus:border-[#ff9e16]">
                   <SelectValue placeholder="Member" />
                 </SelectTrigger>
                 <SelectContent>
