@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -92,7 +91,7 @@ const ProjectsProgress = () => {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="all" className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">All Status</SelectItem>
                   <SelectItem value="In Progress">In Progress</SelectItem>
                   <SelectItem value="On Hold">On Hold</SelectItem>
                   <SelectItem value="Completed">Completed</SelectItem>
@@ -104,7 +103,7 @@ const ProjectsProgress = () => {
                   <SelectValue placeholder="Member" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Members</SelectItem>
+                  <SelectItem value="all" className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">All Members</SelectItem>
                   {teamMembers.map(member => (
                     <SelectItem key={member.id} value={member.name}>
                       {member.name}
