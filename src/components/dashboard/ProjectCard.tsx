@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Calendar, BarChart2 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { getHoursUsed, getInitials } from "./utils/projectUtils";
 
@@ -16,6 +16,16 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   const hoursUsed = getHoursUsed(project);
   const hoursRemaining = Math.max(0, 80 - hoursUsed);
+
+  // Helper function to safely format dates
+  const formatDate = (dateValue: any, fallback: string = "Not set") => {
+    if (!dateValue) return fallback;
+    
+    const date = new Date(dateValue);
+    if (!isValid(date)) return fallback;
+    
+    return format(date, "MMM dd");
+  };
 
   return (
     <Card 
@@ -94,7 +104,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
             </div>
             <div className="min-w-0">
               <p className="text-xs text-muted-foreground">Start Date</p>
-              <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.startDate), "MMM dd")}</p>
+              <p className="text-xs md:text-sm font-medium truncate">{formatDate(project.startDate)}</p>
             </div>
           </div>
           
@@ -104,7 +114,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
             </div>
             <div className="min-w-0">
               <p className="text-xs text-muted-foreground">End Date</p>
-              <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
+              <p className="text-xs md:text-sm font-medium truncate">{formatDate(project.endDate)}</p>
             </div>
           </div>
         </div>
