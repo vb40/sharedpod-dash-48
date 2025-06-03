@@ -108,7 +108,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-auto min-w-[120px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-auto min-w-[120px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
           >
             {projectOptions.map((project) => (
               <option key={project} value={project}>{project}</option>
@@ -118,7 +118,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
-            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
           >
             {timeOptions.map((range) => (
               <option key={range} value={range}>{range}</option>
@@ -128,7 +128,7 @@ const UtilizationBarChart = () => {
           <select
             value={selectedMember}
             onChange={(e) => setSelectedMember(e.target.value)}
-            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-auto min-w-[100px] border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 text-sm bg-white dark:bg-[#242023] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
           >
             {memberOptions.map((member) => (
               <option key={member} value={member}>{member}</option>
