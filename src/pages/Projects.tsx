@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { format, differenceInDays } from "date-fns";
+import { format } from "date-fns";
 import { Calendar, BarChart2, Plus } from "lucide-react";
 import ProjectModal from "@/components/projects/ProjectModal";
 import AddProjectModal from "@/components/projects/AddProjectModal";
@@ -24,11 +24,6 @@ const Projects = () => {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-  };
-
-  const getDaysRemaining = (endDate: string) => {
-    const remaining = differenceInDays(new Date(endDate), new Date());
-    return remaining > 0 ? remaining : 0;
   };
 
   const handleProjectClick = (project: any) => {
@@ -68,7 +63,6 @@ const Projects = () => {
       
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project) => {
-          const daysRemaining = getDaysRemaining(project.endDate);
           const hoursUsed = getHoursUsed(project);
           const hoursRemaining = Math.max(0, 80 - hoursUsed);
           
@@ -158,8 +152,10 @@ const Projects = () => {
                       <Calendar className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">End Date</p>
-                      <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
+                      <p className="text-xs text-muted-foreground">Start Date</p>
+                      <p className="text-xs md:text-sm font-medium truncate">
+                        {project.startDate ? format(new Date(project.startDate), "MMM dd") : "Not set"}
+                      </p>
                     </div>
                   </div>
                   
@@ -168,8 +164,8 @@ const Projects = () => {
                       <Calendar className="h-3 w-3 md:h-4 md:w-4 text-secondary" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">Days Left</p>
-                      <p className="text-xs md:text-sm font-medium">{daysRemaining}</p>
+                      <p className="text-xs text-muted-foreground">End Date</p>
+                      <p className="text-xs md:text-sm font-medium truncate">{format(new Date(project.endDate), "MMM dd")}</p>
                     </div>
                   </div>
                 </div>
