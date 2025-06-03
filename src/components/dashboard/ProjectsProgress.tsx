@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -75,11 +74,8 @@ const ProjectsProgress = () => {
   return (
     <>
       <Card className="h-full w-full">
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <CardTitle className="text-xl font-medium">Projects Progress</CardTitle>
-            </div>
+        <CardContent className="pt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex items-center gap-2">
               <Input
                 placeholder="Search projects..."
@@ -115,8 +111,7 @@ const ProjectsProgress = () => {
               </Select>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
+
           <Carousel
             opts={{
               align: "start",
