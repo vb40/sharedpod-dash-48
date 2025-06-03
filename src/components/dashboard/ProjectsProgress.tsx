@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -221,7 +222,7 @@ const ProjectsProgress = () => {
                           </div>
                         </div>
                         
-                        <div className="space-y-2 relative pb-12">
+                        <div className="space-y-2">
                           <div className="text-xs md:text-sm font-medium">Team Members</div>
                           <div className="flex -space-x-1 md:-space-x-2">
                             {project.team.map((member: string, index: number) => (
@@ -239,10 +240,6 @@ const ProjectsProgress = () => {
                               </HoverCard>
                             ))}
                           </div>
-                          
-                          {/* Navigation buttons positioned below team members */}
-                          <CarouselPrevious className="absolute left-4 bottom-0 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
-                          <CarouselNext className="absolute right-4 bottom-0 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
                         </div>
                       </CardContent>
                     </Card>
@@ -250,6 +247,8 @@ const ProjectsProgress = () => {
                 );
               })}
             </CarouselContent>
+            <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg z-10" />
+            <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg z-10" />
           </Carousel>
         </CardContent>
       </Card>

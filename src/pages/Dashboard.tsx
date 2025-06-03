@@ -76,8 +76,7 @@ const Dashboard = () => {
             </div>
             <Button 
               onClick={handleViewAllProjects}
-              variant="outline"
-              className="border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+              className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
             >
               View All Projects
             </Button>

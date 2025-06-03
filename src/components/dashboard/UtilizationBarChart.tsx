@@ -104,46 +104,50 @@ const UtilizationBarChart = () => {
   return (
     <Card className="h-full w-full bg-white dark:bg-[#242023] border border-gray-200 dark:border-gray-700 shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="font-medium text-lg md:text-xl text-gray-900 dark:text-white">Resource Utilization</CardTitle>
-        <div className="flex flex-wrap gap-2">
-          <Select value={selectedProject} onValueChange={setSelectedProject}>
-            <SelectTrigger className="w-auto min-w-[120px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
-              <SelectValue placeholder="Project" />
-            </SelectTrigger>
-            <SelectContent>
-              {projectOptions.map((project) => (
-                <SelectItem key={project} value={project} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
-                  {project}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle className="font-medium text-lg md:text-xl text-gray-900 dark:text-white">Resource Utilization</CardTitle>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Select value={selectedProject} onValueChange={setSelectedProject}>
+              <SelectTrigger className="w-auto min-w-[120px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+                <SelectValue placeholder="Project" />
+              </SelectTrigger>
+              <SelectContent>
+                {projectOptions.map((project) => (
+                  <SelectItem key={project} value={project} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                    {project}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select value={selectedTime} onValueChange={setSelectedTime}>
-            <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
-              <SelectValue placeholder="Time Range" />
-            </SelectTrigger>
-            <SelectContent>
-              {timeOptions.map((range) => (
-                <SelectItem key={range} value={range} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
-                  {range}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select value={selectedTime} onValueChange={setSelectedTime}>
+              <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+                <SelectValue placeholder="Time Range" />
+              </SelectTrigger>
+              <SelectContent>
+                {timeOptions.map((range) => (
+                  <SelectItem key={range} value={range} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                    {range}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select value={selectedMember} onValueChange={setSelectedMember}>
-            <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
-              <SelectValue placeholder="Member" />
-            </SelectTrigger>
-            <SelectContent>
-              {memberOptions.map((member) => (
-                <SelectItem key={member} value={member} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
-                  {member}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select value={selectedMember} onValueChange={setSelectedMember}>
+              <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
+                <SelectValue placeholder="Member" />
+              </SelectTrigger>
+              <SelectContent>
+                {memberOptions.map((member) => (
+                  <SelectItem key={member} value={member} className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">
+                    {member}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
