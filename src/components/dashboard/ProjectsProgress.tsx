@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
@@ -83,7 +84,7 @@ const ProjectsProgress = () => {
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48"
+                className="w-48 focus:ring-[#ff9e16] focus:border-[#ff9e16]"
               />
               
               <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -113,7 +114,6 @@ const ProjectsProgress = () => {
               </Select>
             </div>
           </div>
-          <div className="w-full h-0.5" style={{ backgroundColor: '#ff9e16' }}></div>
         </CardHeader>
         <CardContent>
           <Carousel
