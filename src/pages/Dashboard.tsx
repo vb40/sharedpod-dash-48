@@ -64,7 +64,7 @@ const Dashboard = () => {
       <div className="space-y-4 md:space-y-6">
         <div className="w-full">
           <div className="mb-4">
-            <h2 className="text-xl font-medium">Projects Progress</h2>
+            <h2 className="text-xl font-medium">Project Information</h2>
           </div>
           <ProjectsProgress />
         </div>

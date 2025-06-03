@@ -46,7 +46,7 @@ const Team = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-medium tracking-tight">Team</h1>
+          <h1 className="text-3xl font-medium tracking-tight">Members</h1>
           <p className="text-muted-foreground">Manage your team members and their performance.</p>
         </div>
         <Button onClick={() => setIsAddModalOpen(true)}>
