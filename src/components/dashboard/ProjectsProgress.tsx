@@ -4,23 +4,24 @@ import { useApp } from "@/context/AppContext";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { Calendar, BarChart2 } from "lucide-react";
+import { Calendar, BarChart2, Search } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
-type ProjectsProgressProps = {
-  searchQuery: string;
-  statusFilter: string;
-  memberFilter: string;
-};
-
-const ProjectsProgress = ({ searchQuery, statusFilter, memberFilter }: ProjectsProgressProps) => {
-  const { projects } = useApp();
+const ProjectsProgress = () => {
+  const { projects, teamMembers } = useApp();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [memberFilter, setMemberFilter] = useState("all");
+  const [showSearch, setShowSearch] = useState(false);
   
   // Normalize project status to only allowed values
   const normalizeStatus = (status: string) => {
@@ -75,7 +76,45 @@ const ProjectsProgress = ({ searchQuery, statusFilter, memberFilter }: ProjectsP
     <>
       <Card className="h-full w-full">
         <CardHeader>
-          <CardTitle className="font-medium text-lg md:text-xl">Project Progress</CardTitle>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <CardTitle className="font-medium text-lg md:text-xl">Project Progress</CardTitle>
+            
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-48"
+              />
+              
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="On Hold">On Hold</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={memberFilter} onValueChange={setMemberFilter}>
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Member" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Members</SelectItem>
+                  {teamMembers.map(member => (
+                    <SelectItem key={member.id} value={member.name}>
+                      {member.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="w-full h-0.5" style={{ backgroundColor: '#ff9e16' }}></div>
         </CardHeader>
         <CardContent>
           <Carousel
