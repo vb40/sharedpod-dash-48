@@ -76,6 +76,9 @@ const ProjectsProgress = () => {
       <Card className="h-full w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <CardTitle className="text-xl font-medium">Projects Progress</CardTitle>
+            </div>
             <div className="flex items-center gap-2">
               <Input
                 placeholder="Search projects..."
@@ -236,6 +239,10 @@ const ProjectsProgress = () => {
                               </HoverCard>
                             ))}
                           </div>
+                          
+                          {/* Navigation buttons positioned below team members */}
+                          <CarouselPrevious className="absolute left-4 bottom-0 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
+                          <CarouselNext className="absolute right-4 bottom-0 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
                         </div>
                       </CardContent>
                     </Card>
@@ -243,10 +250,6 @@ const ProjectsProgress = () => {
                 );
               })}
             </CarouselContent>
-            
-            {/* Navigation buttons positioned below team members but inside Carousel */}
-            <CarouselPrevious className="absolute left-4 bottom-4 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
-            <CarouselNext className="absolute right-4 bottom-4 w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white border-0 shadow-lg" />
           </Carousel>
         </CardContent>
       </Card>
