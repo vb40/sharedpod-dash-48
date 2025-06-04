@@ -64,14 +64,14 @@ const ProjectFilters = ({
             ))}
           </SelectContent>
         </Select>
-        
-        <Button 
-          onClick={handleViewAllProjects}
-          className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
-        >
-          View All Projects
-        </Button>
       </div>
+      
+      <Button 
+        onClick={handleViewAllProjects}
+        className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
+      >
+        View All
+      </Button>
     </div>
   );
 };
