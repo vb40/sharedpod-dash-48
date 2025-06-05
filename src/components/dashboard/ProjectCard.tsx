@@ -29,10 +29,11 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
 
   return (
     <Card 
-      className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md w-full h-full"
+      className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md w-full h-full bg-white dark:bg-[#242023]"
       onClick={() => onClick(project)}
     >
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
+      
+      {/* <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div> */}
       
       <CardHeader className="pb-2 md:pb-3">
         <div className="flex justify-between items-start gap-2">
