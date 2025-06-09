@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -15,26 +16,31 @@ const navItems = [
     title: "Dashboard",
     icon: LayoutDashboard,
     href: "/",
+    disabled: false,
   },
   {
     title: "Tickets",
     icon: Ticket,
     href: "/tickets",
+    disabled: true,
   },
   {
     title: "Projects",
     icon: FolderKanban,
     href: "/projects",
+    disabled: true,
   },
   {
     title: "Members",
     icon: Users,
     href: "/team",
+    disabled: true,
   },
   {
     title: "Certifications",
     icon: Award,
     href: "/certifications",
+    disabled: true,
   },
 ];
 
@@ -51,7 +57,11 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
     navigate('/thank-you');
   };
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (item: any) => {
+    if (item.disabled) {
+      return; // Do nothing if disabled
+    }
+    
     if (isMobileOpen) {
       closeMobileSidebar();
     }
@@ -74,27 +84,44 @@ const Sidebar = ({ isMobileOpen, closeMobileSidebar }: SidebarProps) => {
         <div className="flex flex-col flex-1 h-full">
           <nav className="flex-1 py-6 px-4 overflow-y-auto">
             <div className="space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={handleLinkClick}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    location.pathname === item.href 
-                      ? "border-r-2" 
-                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
-                  )}
-                  style={location.pathname === item.href ? {
-                    backgroundColor: '#E6F3FF',
-                    color: '#0081bc',
-                    borderRightColor: '#0081bc'
-                  } : {}}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                if (item.disabled) {
+                  return (
+                    <div
+                      key={item.href}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium cursor-not-allowed opacity-50",
+                        "text-gray-400 dark:text-gray-500"
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.title}</span>
+                    </div>
+                  );
+                }
+                
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => handleLinkClick(item)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                      location.pathname === item.href 
+                        ? "border-r-2" 
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                    )}
+                    style={location.pathname === item.href ? {
+                      backgroundColor: '#E6F3FF',
+                      color: '#0081bc',
+                      borderRightColor: '#0081bc'
+                    } : {}}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.title}</span>
+                  </Link>
+                );
+              })}
             </div>
           </nav>
         </div>
