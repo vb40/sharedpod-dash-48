@@ -22,25 +22,25 @@ const navItems = [
     title: "Tickets",
     icon: Ticket,
     href: "/tickets",
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Projects",
     icon: FolderKanban,
     href: "/projects",
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Members",
     icon: Users,
     href: "/team",
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Certifications",
     icon: Award,
     href: "/certifications",
-    disabled: true,
+    disabled: false,
   },
 ];
 
