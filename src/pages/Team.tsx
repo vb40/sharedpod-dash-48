@@ -60,10 +60,10 @@ const Team = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-medium tracking-tight">Members</h1>
-          <p className="text-muted-foreground">Manage your team members and their performance.</p>
+          <h1 className="text-xl font-medium tracking-tight">Members</h1>
+          <p className="text-sm text-muted-foreground">Manage your team members and their performance.</p>
         </div>
-        <Button onClick={() => setIsAddModalOpen(true)}>
+        <Button onClick={() => setIsAddModalOpen(true)} className="text-sm">
           <Plus className="mr-2 h-4 w-4" /> Add Team Member
         </Button>
       </div>
@@ -77,11 +77,12 @@ const Team = () => {
           >
             <div className="relative p-6">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    className="absolute top-2 right-2 h-8 w-8 z-10"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <MoreVertical className="h-4 w-4" />
                   </Button>
@@ -116,8 +117,8 @@ const Team = () => {
                 </div>
                 
                 <div>
-                  <h3 className="text-base md:text-lg font-semibold">{member.name}</h3>
-                  <p className="text-sm text-muted-foreground">{member.role}</p>
+                  <h3 className="text-sm font-semibold">{member.name}</h3>
+                  <p className="text-xs text-muted-foreground">{member.role}</p>
                 </div>
               </div>
               
@@ -128,7 +129,7 @@ const Team = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Performance</p>
-                    <p className={cn("font-semibold", getPerformanceColor(member.performance))}>
+                    <p className={cn("font-semibold text-xs", getPerformanceColor(member.performance))}>
                       {member.performance}%
                     </p>
                   </div>
@@ -140,7 +141,7 @@ const Team = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Actual Hours</p>
-                    <p className="font-semibold">{member.actualHours || 0}h</p>
+                    <p className="font-semibold text-xs">{member.actualHours || 0}h</p>
                   </div>
                 </div>
                 
@@ -150,7 +151,7 @@ const Team = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-xs text-muted-foreground">Planned Hours (80h/month)</p>
-                    <p className="font-semibold">{member.plannedHours || 0}/80h</p>
+                    <p className="font-semibold text-xs">{member.plannedHours || 0}/80h</p>
                     <div className="mt-1 h-2 w-full bg-muted rounded-full overflow-hidden">
                       <div 
                         className={cn(
@@ -168,13 +169,13 @@ const Team = () => {
               
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium">Projects</p>
+                  <p className="text-xs font-medium">Projects</p>
                   <p className="text-xs text-muted-foreground">{member.projects.length}</p>
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
                   {member.projects.length === 0 && (
-                    <span className="text-sm text-muted-foreground">No projects assigned</span>
+                    <span className="text-xs text-muted-foreground">No projects assigned</span>
                   )}
                   {member.projects.map((project, i) => (
                     <Badge key={i} variant="outline" className="bg-background shadow-sm text-xs">

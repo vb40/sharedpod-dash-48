@@ -60,7 +60,7 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                      className="h-8 w-8 z-10"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <MoreVertical className="h-4 w-4" />

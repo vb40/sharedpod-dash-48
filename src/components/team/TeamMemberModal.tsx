@@ -68,8 +68,8 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Edit Team Member</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-lg">Edit Team Member</DialogTitle>
+          <DialogDescription className="text-sm">
             Update team member details and assignments.
           </DialogDescription>
         </DialogHeader>
@@ -77,31 +77,33 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name" className="text-xs">Name</Label>
               <Input 
                 id="name" 
                 name="name" 
                 value={formData.name} 
                 onChange={handleChange}
+                className="text-xs"
               />
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="role">Role</Label>
+              <Label htmlFor="role" className="text-xs">Role</Label>
               <Input 
                 id="role" 
                 name="role" 
                 value={formData.role} 
                 onChange={handleChange}
+                className="text-xs"
               />
             </div>
           </div>
           
           <div className="grid gap-2">
-            <Label>Projects</Label>
+            <Label className="text-xs">Projects</Label>
             <div className="flex flex-wrap gap-2 mb-2">
               {formData.projects.map((project, index) => (
-                <Badge key={index} variant="secondary" className="px-2 py-1">
+                <Badge key={index} variant="secondary" className="px-2 py-1 text-xs">
                   {project}
                   <button 
                     type="button"
@@ -115,7 +117,7 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="justify-between w-full">
+                <Button variant="outline" className="justify-between w-full text-xs">
                   Select Projects
                   <Plus className="ml-2 h-4 w-4" />
                 </Button>
@@ -128,7 +130,7 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
                       e.preventDefault();
                       handleProjectSelect(project.name);
                     }}
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between text-xs"
                   >
                     {project.name}
                     {formData.projects.includes(project.name) && (
@@ -141,7 +143,7 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
           </div>
           
           <div className="grid gap-2">
-            <Label htmlFor="performance">Performance (%)</Label>
+            <Label htmlFor="performance" className="text-xs">Performance (%)</Label>
             <Input 
               id="performance" 
               name="performance" 
@@ -150,12 +152,13 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
               max="100" 
               value={formData.performance} 
               onChange={handleChange}
+              className="text-xs"
             />
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="actualHours">Actual Hours</Label>
+              <Label htmlFor="actualHours" className="text-xs">Actual Hours</Label>
               <Input 
                 id="actualHours" 
                 name="actualHours" 
@@ -163,11 +166,12 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
                 min="0" 
                 value={formData.actualHours} 
                 onChange={handleChange}
+                className="text-xs"
               />
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="plannedHours">Planned Hours (80h/month)</Label>
+              <Label htmlFor="plannedHours" className="text-xs">Planned Hours (80h/month)</Label>
               <Input 
                 id="plannedHours" 
                 name="plannedHours" 
@@ -176,14 +180,15 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
                 max="80"
                 value={formData.plannedHours} 
                 onChange={handleChange}
+                className="text-xs"
               />
             </div>
           </div>
         </div>
         
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Update</Button>
+          <Button variant="outline" onClick={onClose} className="text-sm">Cancel</Button>
+          <Button onClick={handleSubmit} className="text-sm">Update</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

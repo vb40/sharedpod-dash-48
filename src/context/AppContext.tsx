@@ -15,8 +15,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     (data.teamMembers || []).map(member => ({
       ...member,
       id: String(member.id), // Convert id to string
-      actualHours: member.actualHours || 0,
-      plannedHours: member.plannedHours || 0
+      actualHours: (member as any).actualHours || 0,
+      plannedHours: (member as any).plannedHours || 0
     }))
   );
   
