@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useCallback } from "react";
 import data from "@/data/data.json";
 import { initialCertifications } from "./initialData";
@@ -15,7 +14,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(
     (data.teamMembers || []).map(member => ({
       ...member,
-      id: String(member.id) // Convert id to string
+      id: String(member.id), // Convert id to string
+      actualHours: member.actualHours || 0,
+      plannedHours: member.plannedHours || 0
     }))
   );
   
@@ -109,6 +110,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setTeamMembers(prev => [...prev, member]);
   };
 
+  const deleteTeamMember = (memberId: string) => {
+    setTeamMembers(prev => prev.filter(member => member.id !== memberId));
+  };
+
   const holidays = data.holidays || [];
 
   return (
@@ -132,6 +137,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         updateProject,
         deleteProject,
         addTeamMember,
+        deleteTeamMember,
       }}
     >
       {children}

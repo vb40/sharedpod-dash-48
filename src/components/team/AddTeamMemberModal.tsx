@@ -1,4 +1,3 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +52,11 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
 
     const newMember: TeamMember = {
       id: Math.random().toString(36).substring(2, 9),
-      ...formData
+      ...formData,
+      attendance: 0,
+      hoursLogged: 0,
+      tasksCompleted: 0,
+      tasks: 0
     };
 
     addTeamMember(newMember);

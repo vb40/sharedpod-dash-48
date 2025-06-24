@@ -8,6 +8,8 @@ export interface TeamMember {
   hoursLogged: number;
   tasksCompleted: number;
   tasks: number;
+  actualHours: number;
+  plannedHours: number;
   avatar?: string;
 }
 
@@ -70,4 +72,5 @@ export interface AppContextType {
   updateProject: (projectId: string, updatedProject: Partial<Project>) => void;
   deleteProject: (projectId: string) => void;
   addTeamMember: (member: TeamMember) => void;
+  deleteTeamMember: (memberId: string) => void;
 }
