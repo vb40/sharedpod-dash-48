@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useApp } from "@/context/AppContext";
 import { toast } from "sonner";
 import { Check, X, Plus } from "lucide-react";
@@ -24,10 +23,8 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
     name: member?.name || "",
     role: member?.role || "",
     performance: member?.performance || 0,
-    attendance: member?.attendance || 0,
-    hoursLogged: member?.hoursLogged || 0,
-    tasksCompleted: member?.tasksCompleted || 0,
-    tasks: member?.tasks || 0,
+    actualHours: member?.actualHours || 0,
+    plannedHours: member?.plannedHours || 0,
     projects: member?.projects || []
   });
 
@@ -158,52 +155,26 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
           
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="attendance">Attendance (%)</Label>
+              <Label htmlFor="actualHours">Actual Hours</Label>
               <Input 
-                id="attendance" 
-                name="attendance" 
+                id="actualHours" 
+                name="actualHours" 
                 type="number" 
                 min="0" 
-                max="100" 
-                value={formData.attendance} 
+                value={formData.actualHours} 
                 onChange={handleChange}
               />
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="hoursLogged">Hours Logged</Label>
+              <Label htmlFor="plannedHours">Planned Hours (80h/month)</Label>
               <Input 
-                id="hoursLogged" 
-                name="hoursLogged" 
+                id="plannedHours" 
+                name="plannedHours" 
                 type="number" 
                 min="0" 
-                value={formData.hoursLogged} 
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="tasksCompleted">Tasks Completed</Label>
-              <Input 
-                id="tasksCompleted" 
-                name="tasksCompleted" 
-                type="number" 
-                min="0" 
-                value={formData.tasksCompleted} 
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="grid gap-2">
-              <Label htmlFor="tasks">Total Tasks</Label>
-              <Input 
-                id="tasks" 
-                name="tasks" 
-                type="number" 
-                min="0" 
-                value={formData.tasks} 
+                max="80"
+                value={formData.plannedHours} 
                 onChange={handleChange}
               />
             </div>

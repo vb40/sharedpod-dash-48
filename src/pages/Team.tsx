@@ -5,13 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Check, Clock, Calendar, Briefcase, Star, Plus, TrendingUp } from "lucide-react";
+import { Plus, TrendingUp, Clock, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TeamMemberModal from "@/components/team/TeamMemberModal";
 import AddTeamMemberModal from "@/components/team/AddTeamMemberModal";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const Team = () => {
-  const { teamMembers } = useApp();
+  const { teamMembers, deleteTeamMember } = useApp();
   const [selectedMember, setSelectedMember] = useState<any | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -37,6 +38,19 @@ const Team = () => {
     setIsModalOpen(true);
   };
 
+  const handleEditMember = (member: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedMember(member);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteMember = (memberId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this team member?")) {
+      deleteTeamMember(memberId);
+    }
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedMember(undefined);
@@ -46,7 +60,7 @@ const Team = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-medium tracking-tight">Members</h1>
+          <h1 className="text-2xl font-medium tracking-tight">Members</h1>
           <p className="text-muted-foreground">Manage your team members and their performance.</p>
         </div>
         <Button onClick={() => setIsAddModalOpen(true)}>
@@ -58,10 +72,32 @@ const Team = () => {
         {teamMembers.map((member) => (
           <Card 
             key={member.id} 
-            className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border-transparent"
+            className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border-transparent group"
             onClick={() => handleMemberClick(member)}
           >
             <div className="relative p-6">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                  >
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-popover shadow-md">
+                  <DropdownMenuItem onClick={(e) => handleEditMember(member, e)}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => handleDeleteMember(member.id, e)} className="text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <Avatar className="h-16 w-16 border-4 border-background shadow-md">
@@ -80,7 +116,7 @@ const Team = () => {
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-semibold">{member.name}</h3>
+                  <h3 className="text-base md:text-lg font-semibold">{member.name}</h3>
                   <p className="text-sm text-muted-foreground">{member.role}</p>
                 </div>
               </div>
@@ -103,28 +139,29 @@ const Team = () => {
                     <Clock className="h-4 w-4 text-secondary" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Hours</p>
-                    <p className="font-semibold">{member.hoursLogged}</p>
+                    <p className="text-xs text-muted-foreground">Actual Hours</p>
+                    <p className="font-semibold">{member.actualHours || 0}h</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
+                <div className="col-span-2 flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
                   <div className="rounded-full bg-accent/10 p-2">
-                    <Check className="h-4 w-4 text-accent" />
+                    <Clock className="h-4 w-4 text-accent" />
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Tasks</p>
-                    <p className="font-semibold">{member.tasksCompleted}/{member.tasks}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2 rounded-xl bg-background p-3 shadow-sm">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    <Calendar className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Attendance</p>
-                    <p className="font-semibold">{member.attendance}%</p>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Planned Hours (80h/month)</p>
+                    <p className="font-semibold">{member.plannedHours || 0}/80h</p>
+                    <div className="mt-1 h-2 w-full bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className={cn(
+                          "h-full rounded-full transition-all duration-500",
+                          (member.plannedHours || 0) > 70 ? "bg-rose-500" : 
+                          (member.plannedHours || 0) > 50 ? "bg-amber-500" : 
+                          "bg-emerald-500"
+                        )}
+                        style={{ width: `${Math.min(100, ((member.plannedHours || 0) / 80) * 100)}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -140,25 +177,11 @@ const Team = () => {
                     <span className="text-sm text-muted-foreground">No projects assigned</span>
                   )}
                   {member.projects.map((project, i) => (
-                    <Badge key={i} variant="outline" className="bg-background shadow-sm">
-                      <Briefcase className="h-3 w-3 mr-1" /> {project}
+                    <Badge key={i} variant="outline" className="bg-background shadow-sm text-xs">
+                      {project}
                     </Badge>
                   ))}
                 </div>
-              </div>
-              
-              <div className="mt-4 flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i}
-                    className={cn(
-                      "h-4 w-4", 
-                      i < Math.round(member.performance / 20) 
-                        ? "text-amber-400 fill-amber-400" 
-                        : "text-muted-foreground"
-                    )}
-                  />
-                ))}
               </div>
             </div>
           </Card>

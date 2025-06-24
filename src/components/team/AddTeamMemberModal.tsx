@@ -24,10 +24,8 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
     role: "",
     projects: [] as string[],
     performance: 0,
-    attendance: 0,
-    hoursLogged: 0,
-    tasksCompleted: 0,
-    tasks: 0
+    actualHours: 0,
+    plannedHours: 0
   });
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
