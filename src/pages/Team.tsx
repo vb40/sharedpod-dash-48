@@ -72,7 +72,7 @@ const Team = () => {
         {teamMembers.map((member) => (
           <Card 
             key={member.id} 
-            className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border-transparent group"
+            className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-400 group bg-white dark:bg-[#242023]"
             onClick={() => handleMemberClick(member)}
           >
             <div className="relative p-6">
