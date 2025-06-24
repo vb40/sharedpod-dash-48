@@ -68,7 +68,7 @@ const ProjectFilters = ({
       
       <Button 
         onClick={handleViewAllProjects}
-        className="bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-[#ff9e16] focus:border-[#ff9e16]"
+        variant="outline"
       >
         View All
       </Button>
