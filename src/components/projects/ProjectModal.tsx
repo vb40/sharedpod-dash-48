@@ -20,8 +20,6 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
     name: project?.name || "",
     status: project?.status || "Active",
     progress: project?.progress || 0,
-    budget: project?.budget || 0,
-    spent: project?.spent || 0,
     hoursUsed: project?.hoursUsed || 0,
   });
 
@@ -106,32 +104,6 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="budget">Budget ($)</Label>
-              <Input 
-                id="budget" 
-                name="budget" 
-                type="number" 
-                min="0" 
-                value={formData.budget} 
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="grid gap-2">
-              <Label htmlFor="spent">Spent ($)</Label>
-              <Input 
-                id="spent" 
-                name="spent" 
-                type="number" 
-                min="0" 
-                value={formData.spent} 
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          
           <div className="grid gap-2">
             <Label htmlFor="hoursUsed">Hours Used (80h/month available)</Label>
             <Input 
@@ -160,7 +132,13 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
         
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Update</Button>
+          <Button 
+            onClick={handleSubmit}
+            style={{ backgroundColor: '#0081bc', color: 'white' }}
+            className="hover:opacity-90"
+          >
+            Update
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

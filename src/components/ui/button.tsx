@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -9,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "text-white hover:opacity-90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -40,11 +41,19 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, style, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+    
+    // Apply Shared POD color (#0081bc) for default variant
+    const defaultStyle = variant === "default" || !variant ? { 
+      backgroundColor: '#0081bc', 
+      ...style 
+    } : style;
+    
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
+        style={defaultStyle}
         ref={ref}
         {...props}
       />
