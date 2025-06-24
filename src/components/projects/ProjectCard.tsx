@@ -33,81 +33,80 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
   const hoursRemaining = Math.max(0, 80 - hoursUsed);
 
   return (
-    <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border-transparent shadow-md relative">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div>
+    <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md relative w-full h-full bg-white dark:bg-[#242023]">
+      {/* Three-dot menu positioned at top-right corner */}
+      <div className="absolute top-2 right-2 z-10">
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 z-50">
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onProjectClick(project);
+                }}
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </DropdownMenuItem>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={(e) => e.stopPropagation()}
+                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Project</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{project.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => onDeleteProject(project.id, project.name)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
       
       <div onClick={() => onProjectClick(project)}>
         <CardHeader className="pb-2 md:pb-3">
-          <div className="flex justify-between items-start gap-2">
+          <div className="flex justify-between items-start gap-2 pr-10">
             <div className="min-w-0 flex-1">
               <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge
-                className={cn(
-                  "transition-all group-hover:scale-110 text-xs shrink-0",
-                  project.status === "In Progress" ? "bg-blue-500" : 
-                  project.status === "OnHold" ? "bg-amber-500" : 
-                  "bg-green-500"
-                )}
-              >
-                {project.status}
-              </Badge>
-              
-              <AlertDialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 z-10"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 z-50">
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onProjectClick(project);
-                      }}
-                      className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </DropdownMenuItem>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem
-                        onClick={(e) => e.stopPropagation()}
-                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400"
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Project</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete "{project.name}"? This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => onDeleteProject(project.id, project.name)}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+            <Badge
+              className={cn(
+                "transition-all group-hover:scale-110 text-xs shrink-0",
+                project.status === "In Progress" ? "bg-blue-500" : 
+                project.status === "OnHold" ? "bg-amber-500" : 
+                "bg-green-500"
+              )}
+            >
+              {project.status}
+            </Badge>
           </div>
         </CardHeader>
         
