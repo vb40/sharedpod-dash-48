@@ -98,7 +98,7 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => {
       if (!open) onClose();
     }}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
         <TicketHeader mode={mode} />
         
         <TicketForm
@@ -110,11 +110,16 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
           onAddComment={handleAddComment}
         />
         
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end gap-2 mt-6 pt-4 border-t">
+          <Button 
+            variant="outline"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
           <Button 
             onClick={handleSubmit} 
             disabled={isSubmitting}
-            className="ml-auto"
           >
             {isSubmitting ? "Processing..." : mode === "create" ? "Create Ticket" : "Update Ticket"}
           </Button>

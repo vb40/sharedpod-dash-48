@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
@@ -7,8 +6,10 @@ import TicketDetailModal from "@/components/tickets/TicketDetailModal";
 import TimeTrackingModal from "@/components/tickets/TimeTrackingModal";
 import TicketTable from "@/components/tickets/TicketTable";
 import AdvancedFilters from "@/components/tickets/AdvancedFilters";
-import CreateTicketHeader from "@/components/tickets/CreateTicketHeader";
 import PaginationControls from "@/components/tickets/PaginationControls";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 interface Ticket {
   id: string;
@@ -163,6 +164,17 @@ const Tickets = () => {
     return filteredTickets.slice(startIndex, endIndex);
   };
 
+  const handleCreateManualTicket = () => {
+    setEditTicket(undefined);
+    setModalMode("create");
+    setIsModalOpen(true);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Search is handled by the useEffect that watches searchQuery
+  };
+
   const currentPageTickets = getCurrentPageTickets();
 
   return (
@@ -174,10 +186,6 @@ const Tickets = () => {
         </p>
       </div>
 
-      <CreateTicketHeader
-        onCreateManualTicket={handleCreateManualTicket}
-      />
-
       <AdvancedFilters
         onSearch={setSearchQuery}
         onStatusFilter={setStatusFilter}
@@ -186,6 +194,26 @@ const Tickets = () => {
         onAssigneeFilter={setAssigneeFilter}
         onResetFilters={handleResetFilters}
       />
+
+      {/* Search Bar and Create Button on same line */}
+      <div className="flex justify-between items-center gap-4 mb-4">
+        <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search title or description..."
+            className="pl-9"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </form>
+        
+        <Button 
+          onClick={handleCreateManualTicket}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          + Create
+        </Button>
+      </div>
 
       <TicketTable
         tickets={currentPageTickets}
