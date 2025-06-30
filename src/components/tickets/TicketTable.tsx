@@ -49,13 +49,17 @@ const getPriorityColor = (priority: string) => {
     case 'critical':
       return 'bg-red-500 text-white border-red-500';
     case 'medium':
-      return 'bg-orange-500 text-white border-orange-500';
+      return 'bg-purple-500 text-white border-purple-500';
     case 'low':
     case 'lowest':
       return 'bg-blue-500 text-white border-blue-500';
     default:
       return 'bg-gray-500 text-white border-gray-500';
   }
+};
+
+const capitalizeFirst = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, onSelectAll }: TicketTableProps) => {
@@ -67,6 +71,13 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
   const allTicketsSelected = tickets.length > 0 && selectedTickets.length === tickets.length;
   const someTicketsSelected = selectedTickets.length > 0 && selectedTickets.length < tickets.length;
 
+  React.useEffect(() => {
+    const headerCheckbox = document.querySelector('[data-header-checkbox]') as HTMLInputElement;
+    if (headerCheckbox) {
+      headerCheckbox.indeterminate = someTicketsSelected && !allTicketsSelected;
+    }
+  }, [someTicketsSelected, allTicketsSelected]);
+
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
       <Table>
@@ -74,10 +85,8 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
           <TableRow className="bg-gray-50 dark:bg-gray-800">
             <TableHead className="w-12">
               <Checkbox
+                data-header-checkbox
                 checked={allTicketsSelected}
-                ref={(el) => {
-                  if (el) el.indeterminate = someTicketsSelected;
-                }}
                 onCheckedChange={onSelectAll}
                 className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
@@ -124,12 +133,12 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                 </TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(ticket.status)}>
-                    {ticket.status}
+                    {capitalizeFirst(ticket.status)}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <Badge className={getPriorityColor(ticket.priority)}>
-                    {ticket.priority}
+                    {capitalizeFirst(ticket.priority)}
                   </Badge>
                 </TableCell>
                 <TableCell>
