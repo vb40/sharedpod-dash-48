@@ -67,7 +67,11 @@ export function TicketComments({ comments, onAddComment, currentUser, onUpdate }
             type="button" 
             variant="secondary" 
             onClick={handleUpdate}
-            className="bg-orange-500 hover:bg-orange-600 text-black"
+            style={{ 
+              backgroundColor: '#f97316', 
+              color: '#000000' 
+            }}
+            className="hover:opacity-90"
           >
             Save Changes
           </Button>
