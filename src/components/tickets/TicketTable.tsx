@@ -70,6 +70,16 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
 
   const allTicketsSelected = tickets.length > 0 && selectedTickets.length === tickets.length;
   const someTicketsSelected = selectedTickets.length > 0 && selectedTickets.length < tickets.length;
+  const headerCheckboxRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (headerCheckboxRef.current) {
+      const inputElement = headerCheckboxRef.current.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (inputElement) {
+        inputElement.indeterminate = someTicketsSelected && !allTicketsSelected;
+      }
+    }
+  }, [someTicketsSelected, allTicketsSelected]);
 
   const handleSelectAll = () => {
     if (allTicketsSelected) {
@@ -91,10 +101,8 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
           <TableRow className="bg-gray-50 dark:bg-gray-800">
             <TableHead className="w-12">
               <Checkbox
+                ref={headerCheckboxRef}
                 checked={allTicketsSelected}
-                ref={(el) => {
-                  if (el) el.indeterminate = someTicketsSelected && !allTicketsSelected;
-                }}
                 onCheckedChange={handleSelectAll}
                 className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
