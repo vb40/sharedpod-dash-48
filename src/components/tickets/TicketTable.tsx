@@ -71,12 +71,18 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
   const allTicketsSelected = tickets.length > 0 && selectedTickets.length === tickets.length;
   const someTicketsSelected = selectedTickets.length > 0 && selectedTickets.length < tickets.length;
 
-  React.useEffect(() => {
-    const headerCheckbox = document.querySelector('[data-header-checkbox]') as HTMLInputElement;
-    if (headerCheckbox) {
-      headerCheckbox.indeterminate = someTicketsSelected && !allTicketsSelected;
+  const handleSelectAll = () => {
+    if (allTicketsSelected) {
+      // Deselect all current page tickets
+      const currentTicketIds = tickets.map(ticket => ticket.id);
+      onSelectTicket(''); // This will trigger the parent to handle deselection
+      // Call onSelectAll to handle the bulk operation
+      onSelectAll();
+    } else {
+      // Select all current page tickets
+      onSelectAll();
     }
-  }, [someTicketsSelected, allTicketsSelected]);
+  };
 
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
@@ -85,9 +91,11 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
           <TableRow className="bg-gray-50 dark:bg-gray-800">
             <TableHead className="w-12">
               <Checkbox
-                data-header-checkbox
                 checked={allTicketsSelected}
-                onCheckedChange={onSelectAll}
+                ref={(el) => {
+                  if (el) el.indeterminate = someTicketsSelected && !allTicketsSelected;
+                }}
+                onCheckedChange={handleSelectAll}
                 className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
             </TableHead>
@@ -118,7 +126,7 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                     className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
                   />
                 </TableCell>
-                <TableCell className="font-medium text-[#0081bc]">
+                <TableCell className="font-medium text-[#FF6B35]">
                   {ticket.id}
                 </TableCell>
                 <TableCell>
