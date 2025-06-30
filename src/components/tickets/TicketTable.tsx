@@ -47,14 +47,14 @@ const getPriorityColor = (priority: string) => {
   switch (priority.toLowerCase()) {
     case 'high':
     case 'critical':
-      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      return 'bg-red-500 text-white border-red-500';
     case 'medium':
-      return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+      return 'bg-orange-500 text-white border-orange-500';
     case 'low':
     case 'lowest':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      return 'bg-blue-500 text-white border-blue-500';
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+      return 'bg-gray-500 text-white border-gray-500';
   }
 };
 
@@ -64,6 +64,9 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
     return Math.min(Math.round((timeSpent / timeEstimate) * 100), 100);
   };
 
+  const allTicketsSelected = tickets.length > 0 && selectedTickets.length === tickets.length;
+  const someTicketsSelected = selectedTickets.length > 0 && selectedTickets.length < tickets.length;
+
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-card">
       <Table>
@@ -71,8 +74,12 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
           <TableRow className="bg-gray-50 dark:bg-gray-800">
             <TableHead className="w-12">
               <Checkbox
-                checked={selectedTickets.length === tickets.length && tickets.length > 0}
+                checked={allTicketsSelected}
+                ref={(el) => {
+                  if (el) el.indeterminate = someTicketsSelected;
+                }}
                 onCheckedChange={onSelectAll}
+                className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
             </TableHead>
             <TableHead className="font-semibold">TICKET NO</TableHead>
@@ -87,6 +94,8 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
         <TableBody>
           {tickets.map((ticket) => {
             const progress = calculateProgress(ticket.timeSpent, ticket.timeEstimate);
+            const isSelected = selectedTickets.includes(ticket.id);
+            
             return (
               <TableRow 
                 key={ticket.id} 
@@ -95,11 +104,12 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
               >
                 <TableCell onClick={(e) => e.stopPropagation()}>
                   <Checkbox
-                    checked={selectedTickets.includes(ticket.id)}
+                    checked={isSelected}
                     onCheckedChange={() => onSelectTicket(ticket.id)}
+                    className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
                   />
                 </TableCell>
-                <TableCell className="font-medium text-blue-600">
+                <TableCell className="font-medium text-[#0081bc]">
                   {ticket.id}
                 </TableCell>
                 <TableCell>
