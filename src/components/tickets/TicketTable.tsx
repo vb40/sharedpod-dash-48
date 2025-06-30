@@ -49,7 +49,7 @@ const getPriorityColor = (priority: string) => {
     case 'critical':
       return 'bg-red-500 text-white border-red-500';
     case 'medium':
-      return 'bg-purple-500 text-white border-purple-500';
+      return 'bg-orange-500 text-white border-orange-500';
     case 'low':
     case 'lowest':
       return 'bg-blue-500 text-white border-blue-500';
@@ -84,13 +84,18 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
   const handleSelectAll = () => {
     if (allTicketsSelected) {
       // Deselect all current page tickets
-      const currentTicketIds = tickets.map(ticket => ticket.id);
-      onSelectTicket(''); // This will trigger the parent to handle deselection
-      // Call onSelectAll to handle the bulk operation
-      onSelectAll();
+      tickets.forEach(ticket => {
+        if (selectedTickets.includes(ticket.id)) {
+          onSelectTicket(ticket.id);
+        }
+      });
     } else {
       // Select all current page tickets
-      onSelectAll();
+      tickets.forEach(ticket => {
+        if (!selectedTickets.includes(ticket.id)) {
+          onSelectTicket(ticket.id);
+        }
+      });
     }
   };
 
@@ -104,7 +109,7 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                 ref={headerCheckboxRef}
                 checked={allTicketsSelected}
                 onCheckedChange={handleSelectAll}
-                className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:text-white border-2 border-orange-500"
               />
             </TableHead>
             <TableHead className="font-semibold">TICKET NO</TableHead>
@@ -131,10 +136,10 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                   <Checkbox
                     checked={isSelected}
                     onCheckedChange={() => onSelectTicket(ticket.id)}
-                    className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                    className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:text-white border-2 border-orange-500"
                   />
                 </TableCell>
-                <TableCell className="font-medium text-[#FF6B35]">
+                <TableCell className="font-medium text-orange-500">
                   {ticket.id}
                 </TableCell>
                 <TableCell>
