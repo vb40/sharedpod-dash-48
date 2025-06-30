@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
@@ -188,27 +187,9 @@ const Tickets = () => {
         onPriorityFilter={setPriorityFilter}
         onAssigneeFilter={setAssigneeFilter}
         onResetFilters={handleResetFilters}
+        onCreateTicket={handleCreateManualTicket}
+        searchQuery={searchQuery}
       />
-
-      {/* Search Bar and Create Button on same line */}
-      <div className="flex justify-between items-center gap-4 mb-4">
-        <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search title or description..."
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
-        
-        <Button 
-          onClick={handleCreateManualTicket}
-          className="bg-green-600 hover:bg-green-700"
-        >
-          + Create
-        </Button>
-      </div>
 
       <TicketTable
         tickets={currentPageTickets}

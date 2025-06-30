@@ -12,6 +12,8 @@ interface AdvancedFiltersProps {
   onPriorityFilter: (priority: string | null) => void;
   onAssigneeFilter: (assignee: string | null) => void;
   onResetFilters: () => void;
+  onCreateTicket: () => void;
+  searchQuery: string;
 }
 
 const AdvancedFilters = ({
@@ -20,18 +22,38 @@ const AdvancedFilters = ({
   onProjectFilter,
   onPriorityFilter,
   onAssigneeFilter,
-  onResetFilters
+  onResetFilters,
+  onCreateTicket,
+  searchQuery
 }: AdvancedFiltersProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(searchQuery);
+    // Search is handled by the parent component
   };
 
   return (
     <div className="space-y-4 mb-6">
-      {/* Filter Row */}
+      {/* Search Bar and Create Button on top */}
+      <div className="flex justify-between items-center gap-4">
+        <form onSubmit={handleSearchSubmit} className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search title or description..."
+            className="pl-9"
+            value={searchQuery}
+            onChange={(e) => onSearch(e.target.value)}
+          />
+        </form>
+        
+        <Button 
+          onClick={onCreateTicket}
+          className="bg-green-600 hover:bg-green-700 shrink-0"
+        >
+          + Create
+        </Button>
+      </div>
+
+      {/* Filter Row below */}
       <div className="flex flex-wrap gap-4 items-center">
         <Select onValueChange={(value) => onStatusFilter(value === "all" ? null : value)} defaultValue="all">
           <SelectTrigger className="w-[180px]">
