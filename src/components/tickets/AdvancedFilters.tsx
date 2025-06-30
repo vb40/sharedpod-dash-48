@@ -12,7 +12,6 @@ interface AdvancedFiltersProps {
   onPriorityFilter: (priority: string | null) => void;
   onAssigneeFilter: (assignee: string | null) => void;
   onResetFilters: () => void;
-  onRefresh: () => void;
 }
 
 const AdvancedFilters = ({
@@ -21,8 +20,7 @@ const AdvancedFilters = ({
   onProjectFilter,
   onPriorityFilter,
   onAssigneeFilter,
-  onResetFilters,
-  onRefresh
+  onResetFilters
 }: AdvancedFiltersProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -33,17 +31,6 @@ const AdvancedFilters = ({
 
   return (
     <div className="space-y-4 mb-6">
-      {/* Search Bar */}
-      <form onSubmit={handleSearchSubmit} className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search title or description..."
-          className="pl-9"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </form>
-
       {/* Filter Row */}
       <div className="flex flex-wrap gap-4 items-center">
         <Select onValueChange={(value) => onStatusFilter(value === "all" ? null : value)} defaultValue="all">
@@ -109,15 +96,21 @@ const AdvancedFilters = ({
           </SelectContent>
         </Select>
 
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={onResetFilters}>
-            Reset Filters
-          </Button>
-          <Button onClick={onRefresh}>
-            Refresh
-          </Button>
-        </div>
+        <Button variant="outline" onClick={onResetFilters}>
+          Reset Filters
+        </Button>
       </div>
+
+      {/* Search Bar */}
+      <form onSubmit={handleSearchSubmit} className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search title or description..."
+          className="pl-9"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </form>
     </div>
   );
 };

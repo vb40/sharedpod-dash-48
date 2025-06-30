@@ -98,16 +98,6 @@ const Tickets = () => {
     setIsModalOpen(true);
   };
 
-  const handleCreateJiraTicket = (ticketId: string) => {
-    // Mock Jira ticket creation - in real implementation, this would call an API
-    toast.success(`Creating ticket from Jira: ${ticketId}`);
-  };
-
-  const handleFetchTickets = (projectName: string) => {
-    // Mock ticket fetching - in real implementation, this would call an API
-    toast.success(`Fetching tickets for project: ${projectName}`);
-  };
-
   const handleTicketClick = (ticket: Ticket) => {
     setSelectedTicket(ticket);
   };
@@ -144,11 +134,6 @@ const Tickets = () => {
     setProjectFilter(null);
     setPriorityFilter(null);
     setAssigneeFilter(null);
-  };
-
-  const handleRefresh = () => {
-    toast.success("Refreshing tickets...");
-    // In real implementation, this would refetch data
   };
 
   const handleSaveTimeTracking = (data: { timeSpent: number; timeEstimate: number; notes?: string }) => {
@@ -190,9 +175,7 @@ const Tickets = () => {
       </div>
 
       <CreateTicketHeader
-        onCreateJiraTicket={handleCreateJiraTicket}
         onCreateManualTicket={handleCreateManualTicket}
-        onFetchTickets={handleFetchTickets}
       />
 
       <AdvancedFilters
@@ -202,7 +185,6 @@ const Tickets = () => {
         onPriorityFilter={setPriorityFilter}
         onAssigneeFilter={setAssigneeFilter}
         onResetFilters={handleResetFilters}
-        onRefresh={handleRefresh}
       />
 
       <TicketTable
@@ -220,8 +202,6 @@ const Tickets = () => {
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
         onItemsPerPageChange={setItemsPerPage}
-        selectAll={selectedTickets.length === currentPageTickets.length && currentPageTickets.length > 0}
-        onSelectAllChange={handleSelectAll}
       />
 
       {/* Modals */}

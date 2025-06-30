@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -11,8 +10,6 @@ interface PaginationControlsProps {
   itemsPerPage: number;
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (items: number) => void;
-  selectAll: boolean;
-  onSelectAllChange: (checked: boolean) => void;
 }
 
 const PaginationControls = ({
@@ -21,9 +18,7 @@ const PaginationControls = ({
   totalItems,
   itemsPerPage,
   onPageChange,
-  onItemsPerPageChange,
-  selectAll,
-  onSelectAllChange
+  onItemsPerPageChange
 }: PaginationControlsProps) => {
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
@@ -31,13 +26,9 @@ const PaginationControls = ({
   return (
     <div className="flex items-center justify-between mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Checkbox
-            checked={selectAll}
-            onCheckedChange={onSelectAllChange}
-          />
-          <span className="text-sm text-muted-foreground">Select All</span>
-        </div>
+        <span className="text-sm text-muted-foreground">
+          Showing {startItem} to {endItem} of {totalItems} entries
+        </span>
       </div>
 
       <div className="flex items-center gap-4">
