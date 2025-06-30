@@ -3,8 +3,12 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
 import TicketModal from "@/components/tickets/TicketModal";
-import { TabContent } from "@/components/tickets/TabContent";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TicketDetailModal from "@/components/tickets/TicketDetailModal";
+import TimeTrackingModal from "@/components/tickets/TimeTrackingModal";
+import TicketTable from "@/components/tickets/TicketTable";
+import AdvancedFilters from "@/components/tickets/AdvancedFilters";
+import CreateTicketHeader from "@/components/tickets/CreateTicketHeader";
+import PaginationControls from "@/components/tickets/PaginationControls";
 
 interface Ticket {
   id: string;
@@ -27,12 +31,25 @@ const Tickets = () => {
   const [editTicket, setEditTicket] = useState<Ticket | undefined>(undefined);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(tickets);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
+  const [showTimeTrackingModal, setShowTimeTrackingModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [projectFilter, setProjectFilter] = useState<string | null>(null);
+  const [priorityFilter, setPriorityFilter] = useState<string | null>(null);
+  const [assigneeFilter, setAssigneeFilter] = useState<string | null>(null);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     filterTickets();
-  }, [tickets, searchQuery, statusFilter]);
+  }, [tickets, searchQuery, statusFilter, projectFilter, priorityFilter, assigneeFilter]);
 
   const filterTickets = () => {
     let filtered = [...tickets];
@@ -49,16 +66,50 @@ const Tickets = () => {
 
     // Status filter
     if (statusFilter) {
-      filtered = filtered.filter((ticket) => ticket.status === statusFilter);
+      filtered = filtered.filter((ticket) => ticket.status.toLowerCase() === statusFilter.toLowerCase());
+    }
+
+    // Project filter
+    if (projectFilter) {
+      filtered = filtered.filter((ticket) => ticket.project === projectFilter);
+    }
+
+    // Priority filter
+    if (priorityFilter) {
+      filtered = filtered.filter((ticket) => ticket.priority.toLowerCase() === priorityFilter.toLowerCase());
+    }
+
+    // Assignee filter
+    if (assigneeFilter) {
+      if (assigneeFilter === "Unassigned") {
+        filtered = filtered.filter((ticket) => !ticket.assignee || ticket.assignee === "Unassigned");
+      } else {
+        filtered = filtered.filter((ticket) => ticket.assignee === assigneeFilter);
+      }
     }
 
     setFilteredTickets(filtered);
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
-  const handleCreateTicket = () => {
+  const handleCreateManualTicket = () => {
     setEditTicket(undefined);
     setModalMode("create");
     setIsModalOpen(true);
+  };
+
+  const handleCreateJiraTicket = (ticketId: string) => {
+    // Mock Jira ticket creation - in real implementation, this would call an API
+    toast.success(`Creating ticket from Jira: ${ticketId}`);
+  };
+
+  const handleFetchTickets = (projectName: string) => {
+    // Mock ticket fetching - in real implementation, this would call an API
+    toast.success(`Fetching tickets for project: ${projectName}`);
+  };
+
+  const handleTicketClick = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
   };
 
   const handleEditTicket = (ticket: Ticket) => {
@@ -67,31 +118,67 @@ const Tickets = () => {
     setIsModalOpen(true);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleStatusChange = (status: string | null) => {
-    setStatusFilter(status);
-  };
-
-  const getTicketsByStatus = (status: string) => {
-    return filteredTickets.filter((ticket) => ticket.status === status);
-  };
-
-  const getAllTickets = () => filteredTickets;
-
-  const getInProgressTickets = () => {
-    return filteredTickets.filter((ticket) => 
-      ticket.status === "in-progress" || ticket.status === "dev"
+  const handleSelectTicket = (ticketId: string) => {
+    setSelectedTickets(prev => 
+      prev.includes(ticketId) 
+        ? prev.filter(id => id !== ticketId)
+        : [...prev, ticketId]
     );
   };
 
-  const getCompletedTickets = () => {
-    return filteredTickets.filter((ticket) => 
-      ticket.status === "completed" || ticket.status === "done"
-    );
+  const handleSelectAll = () => {
+    const currentPageTickets = getCurrentPageTickets();
+    const allSelected = currentPageTickets.every(ticket => selectedTickets.includes(ticket.id));
+    
+    if (allSelected) {
+      setSelectedTickets(prev => prev.filter(id => !currentPageTickets.find(ticket => ticket.id === id)));
+    } else {
+      const newSelections = currentPageTickets.map(ticket => ticket.id);
+      setSelectedTickets(prev => [...new Set([...prev, ...newSelections])]);
+    }
   };
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setStatusFilter(null);
+    setProjectFilter(null);
+    setPriorityFilter(null);
+    setAssigneeFilter(null);
+  };
+
+  const handleRefresh = () => {
+    toast.success("Refreshing tickets...");
+    // In real implementation, this would refetch data
+  };
+
+  const handleSaveTimeTracking = (data: { timeSpent: number; timeEstimate: number; notes?: string }) => {
+    if (selectedTicket) {
+      const updatedTicket = {
+        ...selectedTicket,
+        timeSpent: data.timeSpent,
+        timeEstimate: data.timeEstimate,
+        updatedAt: new Date().toISOString(),
+      };
+      updateTicket(updatedTicket);
+      setSelectedTicket(updatedTicket);
+      toast.success("Time tracking updated successfully!");
+    }
+  };
+
+  const handleDeleteTicket = (ticketId: string) => {
+    // In real implementation, this would call deleteTicket from context
+    toast.success("Ticket deleted successfully!");
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+  const getCurrentPageTickets = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredTickets.slice(startIndex, endIndex);
+  };
+
+  const currentPageTickets = getCurrentPageTickets();
 
   return (
     <div className="p-6 space-y-6">
@@ -102,73 +189,68 @@ const Tickets = () => {
         </p>
       </div>
 
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="all">
-            All ({getAllTickets().length})
-          </TabsTrigger>
-          <TabsTrigger value="in-progress">
-            In Progress ({getInProgressTickets().length})
-          </TabsTrigger>
-          <TabsTrigger value="completed">
-            Completed ({getCompletedTickets().length})
-          </TabsTrigger>
-          <TabsTrigger value="blocked">
-            Blocked ({getTicketsByStatus("blocked").length})
-          </TabsTrigger>
-        </TabsList>
+      <CreateTicketHeader
+        onCreateJiraTicket={handleCreateJiraTicket}
+        onCreateManualTicket={handleCreateManualTicket}
+        onFetchTickets={handleFetchTickets}
+      />
 
-        <TabsContent value="all" className="space-y-4">
-          <TabContent
-            tickets={getAllTickets()}
-            onSearch={handleSearch}
-            onStatusChange={handleStatusChange}
-            onCreateTicket={handleCreateTicket}
-            onEditTicket={handleEditTicket}
-            emptyMessage="No tickets found. Create your first ticket to get started."
-          />
-        </TabsContent>
+      <AdvancedFilters
+        onSearch={setSearchQuery}
+        onStatusFilter={setStatusFilter}
+        onProjectFilter={setProjectFilter}
+        onPriorityFilter={setPriorityFilter}
+        onAssigneeFilter={setAssigneeFilter}
+        onResetFilters={handleResetFilters}
+        onRefresh={handleRefresh}
+      />
 
-        <TabsContent value="in-progress" className="space-y-4">
-          <TabContent
-            tickets={getInProgressTickets()}
-            onSearch={handleSearch}
-            onStatusChange={handleStatusChange}
-            onCreateTicket={handleCreateTicket}
-            onEditTicket={handleEditTicket}
-            emptyMessage="No tickets in progress. Move some tickets to in-progress status."
-          />
-        </TabsContent>
+      <TicketTable
+        tickets={currentPageTickets}
+        onTicketClick={handleTicketClick}
+        selectedTickets={selectedTickets}
+        onSelectTicket={handleSelectTicket}
+        onSelectAll={handleSelectAll}
+      />
 
-        <TabsContent value="completed" className="space-y-4">
-          <TabContent
-            tickets={getCompletedTickets()}
-            onSearch={handleSearch}
-            onStatusChange={handleStatusChange}
-            onCreateTicket={handleCreateTicket}
-            onEditTicket={handleEditTicket}
-            emptyMessage="No completed tickets yet. Complete some tickets to see them here."
-          />
-        </TabsContent>
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={filteredTickets.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={setItemsPerPage}
+        selectAll={selectedTickets.length === currentPageTickets.length && currentPageTickets.length > 0}
+        onSelectAllChange={handleSelectAll}
+      />
 
-        <TabsContent value="blocked" className="space-y-4">
-          <TabContent
-            tickets={getTicketsByStatus("blocked")}
-            onSearch={handleSearch}
-            onStatusChange={handleStatusChange}
-            onCreateTicket={handleCreateTicket}
-            onEditTicket={handleEditTicket}
-            emptyMessage="No blocked tickets. This is good news!"
-          />
-        </TabsContent>
-      </Tabs>
-
+      {/* Modals */}
       <TicketModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         ticket={editTicket}
         mode={modalMode}
       />
+
+      {selectedTicket && !isEditing && (
+        <TicketDetailModal
+          selectedTicket={selectedTicket}
+          closeModal={() => setSelectedTicket(null)}
+          setIsEditing={setIsEditing}
+          setShowTimeTrackingModal={setShowTimeTrackingModal}
+          setEditingTicket={handleEditTicket}
+          handleDeleteTicket={handleDeleteTicket}
+        />
+      )}
+
+      {showTimeTrackingModal && selectedTicket && (
+        <TimeTrackingModal
+          showTimeTrackingModal={showTimeTrackingModal}
+          setShowTimeTrackingModal={setShowTimeTrackingModal}
+          handleSaveTimeTracking={handleSaveTimeTracking}
+          selectedTicket={selectedTicket}
+        />
+      )}
     </div>
   );
 };
