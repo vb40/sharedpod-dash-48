@@ -63,8 +63,13 @@ export function TicketComments({ comments, onAddComment, currentUser, onUpdate }
           <Button type="submit" disabled={!newComment.trim()}>
             Add Comment
           </Button>
-          <Button type="button" variant="secondary" onClick={handleUpdate}>
-            Update Ticket
+          <Button 
+            type="button" 
+            variant="secondary" 
+            onClick={handleUpdate}
+            className="bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            Save Changes
           </Button>
         </div>
       </form>
