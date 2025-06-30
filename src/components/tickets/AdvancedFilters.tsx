@@ -31,6 +31,17 @@ const AdvancedFilters = ({
 
   return (
     <div className="space-y-4 mb-6">
+      {/* Search Bar */}
+      <form onSubmit={handleSearchSubmit} className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search title or description..."
+          className="pl-9"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </form>
+
       {/* Filter Row */}
       <div className="flex flex-wrap gap-4 items-center">
         <Select onValueChange={(value) => onStatusFilter(value === "all" ? null : value)} defaultValue="all">
@@ -100,17 +111,6 @@ const AdvancedFilters = ({
           Reset Filters
         </Button>
       </div>
-
-      {/* Search Bar */}
-      <form onSubmit={handleSearchSubmit} className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search title or description..."
-          className="pl-9"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </form>
     </div>
   );
 };
