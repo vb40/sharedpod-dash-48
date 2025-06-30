@@ -48,7 +48,7 @@ const getPriorityColor = (priority: string) => {
     case 'critical':
       return 'bg-red-500 text-white border-red-500';
     case 'medium':
-      return 'bg-orange-500 text-white border-orange-500';
+      return 'bg-amber-500 text-black border-amber-500';
     case 'low':
     case 'lowest':
       return 'bg-blue-500 text-white border-blue-500';
