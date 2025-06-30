@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
@@ -162,12 +163,6 @@ const Tickets = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return filteredTickets.slice(startIndex, endIndex);
-  };
-
-  const handleCreateManualTicket = () => {
-    setEditTicket(undefined);
-    setModalMode("create");
-    setIsModalOpen(true);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
