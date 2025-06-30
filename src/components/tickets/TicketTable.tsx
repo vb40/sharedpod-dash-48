@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -109,7 +108,6 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                 ref={headerCheckboxRef}
                 checked={allTicketsSelected}
                 onCheckedChange={handleSelectAll}
-                className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:text-white border-2 border-orange-500"
               />
             </TableHead>
             <TableHead className="font-semibold">TICKET NO</TableHead>
@@ -136,10 +134,9 @@ const TicketTable = ({ tickets, onTicketClick, selectedTickets, onSelectTicket, 
                   <Checkbox
                     checked={isSelected}
                     onCheckedChange={() => onSelectTicket(ticket.id)}
-                    className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:text-white border-2 border-orange-500"
                   />
                 </TableCell>
-                <TableCell className="font-medium text-orange-500">
+                <TableCell className="font-medium text-[#0081bc]">
                   {ticket.id}
                 </TableCell>
                 <TableCell>
