@@ -56,7 +56,7 @@ const AdvancedFilters = ({
       {/* Filter Row below */}
       <div className="flex flex-wrap gap-4 items-center">
         <Select onValueChange={(value) => onStatusFilter(value === "all" ? null : value)} defaultValue="all">
-          <SelectTrigger className="w-[180px] border-orange-500 bg-orange-50 dark:bg-orange-900 text-orange-900 dark:text-orange-100">
+          <SelectTrigger className="w-[180px] !border-orange-500 bg-orange-50 dark:bg-orange-900 text-orange-900 dark:text-orange-100">
             <SelectValue placeholder="Filter status" />
           </SelectTrigger>
           <SelectContent>
