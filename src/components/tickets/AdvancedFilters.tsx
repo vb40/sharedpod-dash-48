@@ -56,7 +56,7 @@ const AdvancedFilters = ({
       {/* Filter Row below */}
       <div className="flex flex-wrap gap-4 items-center">
         <Select onValueChange={(value) => onStatusFilter(value === "all" ? null : value)} defaultValue="all">
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] border-orange-500 bg-orange-50 dark:bg-orange-900 text-orange-900 dark:text-orange-100">
             <SelectValue placeholder="Filter status" />
           </SelectTrigger>
           <SelectContent>
@@ -72,7 +72,7 @@ const AdvancedFilters = ({
         </Select>
 
         <Select onValueChange={(value) => onProjectFilter(value === "all" ? null : value)} defaultValue="all">
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] focus:border-orange-500 focus:bg-orange-50 dark:focus:bg-orange-900 data-[state=open]:border-orange-500 data-[state=open]:bg-orange-50 dark:data-[state=open]:bg-orange-900 focus:text-orange-900 dark:focus:text-orange-100 data-[state=open]:text-orange-900 dark:data-[state=open]:text-orange-100">
             <SelectValue placeholder="Filter project" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ const AdvancedFilters = ({
         </Select>
 
         <Select onValueChange={(value) => onPriorityFilter(value === "all" ? null : value)} defaultValue="all">
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] focus:border-orange-500 focus:bg-orange-50 dark:focus:bg-orange-900 data-[state=open]:border-orange-500 data-[state=open]:bg-orange-50 dark:data-[state=open]:bg-orange-900 focus:text-orange-900 dark:focus:text-orange-100 data-[state=open]:text-orange-900 dark:data-[state=open]:text-orange-100">
             <SelectValue placeholder="Filter priority" />
           </SelectTrigger>
           <SelectContent>
@@ -104,7 +104,7 @@ const AdvancedFilters = ({
         </Select>
 
         <Select onValueChange={(value) => onAssigneeFilter(value === "all" ? null : value)} defaultValue="all">
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] focus:border-orange-500 focus:bg-orange-50 dark:focus:bg-orange-900 data-[state=open]:border-orange-500 data-[state=open]:bg-orange-50 dark:data-[state=open]:bg-orange-900 focus:text-orange-900 dark:focus:text-orange-100 data-[state=open]:text-orange-900 dark:data-[state=open]:text-orange-100">
             <SelectValue placeholder="Filter assignee" />
           </SelectTrigger>
           <SelectContent>
