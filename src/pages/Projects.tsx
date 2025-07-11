@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import ProjectModal from "@/components/projects/ProjectModal";
 import AddProjectModal from "@/components/projects/AddProjectModal";
 import ProjectsList from "@/components/projects/ProjectsList";
+import ProjectModal from "@/components/dashboard/ProjectModal";
 import { useToast } from "@/hooks/use-toast";
 
 const Projects = () => {
@@ -61,9 +61,9 @@ const Projects = () => {
       />
       
       <ProjectModal 
+        project={selectedProject}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        project={selectedProject}
       />
       
       <AddProjectModal 
