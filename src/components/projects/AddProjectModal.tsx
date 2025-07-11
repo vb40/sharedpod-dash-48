@@ -54,7 +54,6 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
       budget: 0,
       spent: 0,
       hoursLogged: 0,
-      hoursUsed: 0,
       startDate: formData.startDate,
       endDate: formData.endDate,
       team: [],
