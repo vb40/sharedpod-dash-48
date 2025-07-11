@@ -34,11 +34,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <div ref={sidebarRef}>
+      <div ref={sidebarRef} className="fixed left-0 top-0 h-full z-50">
         <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
       </div>
       
-      <div className="flex flex-col flex-1 w-full min-w-0">
+      <div className="flex flex-col flex-1 w-full min-w-0 ml-64 lg:ml-64">
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />
         
         <main className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">

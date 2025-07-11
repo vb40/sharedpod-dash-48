@@ -27,14 +27,27 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
     return format(date, "MMM dd");
   };
 
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case "Active":
+        return "bg-green-500";
+      case "On Hold":
+        return "bg-amber-500";
+      case "Pipeline":
+        return "bg-gray-500";
+      case "Completed":
+        return "bg-blue-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
   return (
     <Card 
+      id="project-card"
       className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md w-full h-full bg-white dark:bg-[#242023]"
       onClick={() => onClick(project)}
     >
-      
-      {/* <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80"></div> */}
-      
       <CardHeader className="pb-2 md:pb-3">
         <div className="flex justify-between items-start gap-2">
           <div className="min-w-0 flex-1">
@@ -43,9 +56,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
           <Badge
             className={cn(
               "transition-all group-hover:scale-110 text-xs shrink-0",
-              project.status === "In Progress" ? "bg-blue-500" : 
-              project.status === "OnHold" ? "bg-amber-500" : 
-              "bg-green-500"
+              getStatusBadgeClass(project.status)
             )}
           >
             {project.status}
@@ -132,8 +143,10 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
                     </AvatarFallback>
                   </Avatar>
                 </HoverCardTrigger>
-                <HoverCardContent className="text-sm">
-                  {member}
+                <HoverCardContent className="text-sm w-auto max-w-48">
+                  <span className="truncate block">
+                    {member.length > 20 ? `${member.substring(0, 17)}...` : member}
+                  </span>
                 </HoverCardContent>
               </HoverCard>
             ))}

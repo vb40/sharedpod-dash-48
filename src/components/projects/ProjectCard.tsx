@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -29,11 +28,31 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
     return project.hoursUsed || Math.floor(Math.random() * 80);
   };
 
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case "Active":
+      case "In Progress":
+        return "bg-green-500";
+      case "On Hold":
+      case "OnHold":
+        return "bg-amber-500";
+      case "Pipeline":
+        return "bg-gray-500";
+      case "Completed":
+        return "bg-blue-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
   const hoursUsed = getHoursUsed(project);
   const hoursRemaining = Math.max(0, 80 - hoursUsed);
 
   return (
-    <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md relative w-full h-full bg-white dark:bg-[#242023]">
+    <Card 
+      id="project-card"
+      className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md relative w-full h-full bg-white dark:bg-[#242023]"
+    >
       {/* Three-dot menu positioned at top-right corner */}
       <div className="absolute top-2 right-2 z-10">
         <AlertDialog>
@@ -93,24 +112,23 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
       
       <div onClick={() => onProjectClick(project)}>
         <CardHeader className="pb-2 md:pb-3">
-          <div className="flex justify-between items-start gap-2 pr-10">
+          <div className="flex items-center justify-between gap-2 pr-10">
             <div className="min-w-0 flex-1">
               <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
             </div>
             <Badge
               className={cn(
                 "transition-all group-hover:scale-110 text-xs shrink-0",
-                project.status === "In Progress" ? "bg-blue-500" : 
-                project.status === "OnHold" ? "bg-amber-500" : 
-                "bg-green-500"
+                getStatusBadgeClass(project.status)
               )}
             >
-              {project.status}
+              {project.status === "OnHold" ? "On Hold" : project.status}
             </Badge>
           </div>
         </CardHeader>
         
         <CardContent className="space-y-3 md:space-y-4">
+          
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs md:text-sm">
               <div className="flex items-center gap-1">
@@ -200,8 +218,10 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
                       </AvatarFallback>
                     </Avatar>
                   </HoverCardTrigger>
-                  <HoverCardContent className="text-sm">
-                    {member}
+                  <HoverCardContent className="text-sm w-auto max-w-48 relative z-50">
+                    <span className="truncate block">
+                      {member.length > 20 ? `${member.substring(0, 17)}...` : member}
+                    </span>
                   </HoverCardContent>
                 </HoverCard>
               ))}

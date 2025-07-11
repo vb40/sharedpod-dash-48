@@ -18,10 +18,10 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
   const { projects, updateProject } = useApp();
   const [formData, setFormData] = useState({
     name: "",
-    status: "In Progress",
-    progress: 0,
+    status: "Active",
+    hoursPerMonth: 80,
+    startDate: "",
     endDate: "",
-    team: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,12 +36,12 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
     setFormData(prev => ({ ...prev, status: value }));
   };
 
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, endDate: e.target.value }));
+  const handleDateChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
   };
 
   const handleSubmit = () => {
-    if (!formData.name || !formData.endDate) {
+    if (!formData.name || !formData.startDate || !formData.endDate) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -50,10 +50,12 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
       id: `project-${Date.now()}`,
       name: formData.name,
       status: formData.status,
-      progress: formData.progress,
+      progress: 0,
       budget: 0,
       spent: 0,
       hoursLogged: 0,
+      hoursUsed: 0,
+      startDate: formData.startDate,
       endDate: formData.endDate,
       team: [],
       tasks: {
@@ -62,25 +64,24 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
       },
     };
 
-    // Add to projects list (using updateProject with new ID)
     updateProject(newProject.id, newProject);
     
     toast.success("Project created successfully");
     setFormData({
       name: "",
-      status: "In Progress",
-      progress: 0,
+      status: "Active",
+      hoursPerMonth: 80,
+      startDate: "",
       endDate: "",
-      team: [],
     });
     onClose();
   };
 
-  const statusOptions = ["In Progress", "OnHold", "Completed"];
+  const statusOptions = ["Active", "Pipeline", "On Hold", "Completed"];
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px]" id="add-project-modal">
         <DialogHeader>
           <DialogTitle>Add New Project</DialogTitle>
         </DialogHeader>
@@ -118,28 +119,41 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="progress">Progress (%)</Label>
+              <Label htmlFor="hoursPerMonth">Hours per Month</Label>
               <Input 
-                id="progress" 
-                name="progress" 
+                id="hoursPerMonth" 
+                name="hoursPerMonth" 
                 type="number" 
-                min="0" 
-                max="100" 
-                value={formData.progress} 
+                min="1" 
+                max="200" 
+                value={formData.hoursPerMonth} 
                 onChange={handleChange}
               />
             </div>
           </div>
           
-          <div className="grid gap-2">
-            <Label htmlFor="endDate">End Date *</Label>
-            <Input 
-              id="endDate" 
-              name="endDate" 
-              type="date" 
-              value={formData.endDate} 
-              onChange={handleEndDateChange}
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="startDate">Start Date *</Label>
+              <Input 
+                id="startDate" 
+                name="startDate" 
+                type="date" 
+                value={formData.startDate} 
+                onChange={handleDateChange("startDate")}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="endDate">End Date *</Label>
+              <Input 
+                id="endDate" 
+                name="endDate" 
+                type="date" 
+                value={formData.endDate} 
+                onChange={handleDateChange("endDate")}
+              />
+            </div>
           </div>
         </div>
         

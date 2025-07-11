@@ -45,8 +45,9 @@ const ProjectFilters = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all" className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">All Status</SelectItem>
-            <SelectItem value="In Progress">In Progress</SelectItem>
-            <SelectItem value="OnHold">OnHold</SelectItem>
+            <SelectItem value="Active">Active</SelectItem>
+            <SelectItem value="Pipeline">Pipeline</SelectItem>
+            <SelectItem value="On Hold">On Hold</SelectItem>
             <SelectItem value="Completed">Completed</SelectItem>
           </SelectContent>
         </Select>

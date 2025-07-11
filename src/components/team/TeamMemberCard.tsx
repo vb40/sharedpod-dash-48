@@ -24,16 +24,20 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
       .toUpperCase();
   };
 
-  const getPerformanceColor = (performance: number) => {
-    if (performance >= 90) return "text-emerald-500";
-    if (performance >= 80) return "text-green-500";
-    if (performance >= 70) return "text-amber-500";
-    if (performance >= 60) return "text-orange-500";
+  const getUtilizationColor = (utilization: number) => {
+    if (utilization >= 90) return "text-emerald-500";
+    if (utilization >= 80) return "text-green-500";
+    if (utilization >= 70) return "text-amber-500";
+    if (utilization >= 60) return "text-orange-500";
     return "text-rose-500";
   };
 
+  // Calculate utilization percentage based on planned hours (80h max)
+  const utilizationPercentage = Math.round(((member.plannedHours || 0) / 80) * 100);
+
   return (
     <Card 
+      id="member-card"
       className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-400 group bg-white dark:bg-[#242023]"
       onClick={() => onMemberClick(member)}
     >
@@ -71,8 +75,8 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
             <span 
               className={cn(
                 "absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-background",
-                member.performance >= 85 ? "bg-green-500" : 
-                member.performance >= 70 ? "bg-amber-500" : 
+                utilizationPercentage >= 85 ? "bg-green-500" : 
+                utilizationPercentage >= 70 ? "bg-amber-500" : 
                 "bg-rose-500"
               )} 
             ></span>
@@ -90,9 +94,9 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
               <TrendingUp className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Performance</p>
-              <p className={cn("font-semibold text-xs md:text-sm", getPerformanceColor(member.performance))}>
-                {member.performance}%
+              <p className="text-xs text-muted-foreground">% of Utilisation</p>
+              <p className={cn("font-semibold text-xs md:text-sm", getUtilizationColor(utilizationPercentage))}>
+                {utilizationPercentage}%
               </p>
             </div>
           </div>
@@ -135,7 +139,7 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
             <p className="text-xs text-muted-foreground">{member.projects.length}</p>
           </div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" id="member-projects">
             {member.projects.length === 0 && (
               <span className="text-xs text-muted-foreground">No projects assigned</span>
             )}
