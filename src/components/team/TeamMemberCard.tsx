@@ -7,6 +7,8 @@ import { TrendingUp, Clock, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { TeamMember } from "@/context/types";
+import { useApp } from "@/context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 interface TeamMemberCardProps {
   member: TeamMember;
@@ -16,6 +18,9 @@ interface TeamMemberCardProps {
 }
 
 const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }: TeamMemberCardProps) => {
+  const { projects } = useApp();
+  const navigate = useNavigate();
+  
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -32,6 +37,21 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
     return "text-rose-500";
   };
 
+  const handleProjectClick = (projectName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const project = projects.find(p => p.name === projectName);
+    if (project) {
+      navigate('/projects');
+      // Small delay to ensure navigation completes before triggering project modal
+      setTimeout(() => {
+        const projectCard = document.querySelector(`[data-project-id="${project.id}"]`);
+        if (projectCard) {
+          (projectCard as HTMLElement).click();
+        }
+      }, 100);
+    }
+  };
+
   // Calculate utilization percentage based on planned hours (80h max)
   const utilizationPercentage = Math.round(((member.plannedHours || 0) / 80) * 100);
 
@@ -42,50 +62,52 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
       onClick={() => onMemberClick(member)}
     >
       <div className="relative p-6">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-8 w-8 z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-popover shadow-md">
-            <DropdownMenuItem onClick={(e) => onEditMember(member, e)}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => onDeleteMember(member.id, e)} className="text-destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="relative">
+              <Avatar className="h-16 w-16 border-4 border-background shadow-md">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg">
+                  {getInitials(member.name)}
+                </AvatarFallback>
+              </Avatar>
+              <span 
+                className={cn(
+                  "absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-background",
+                  utilizationPercentage >= 85 ? "bg-green-500" : 
+                  utilizationPercentage >= 70 ? "bg-amber-500" : 
+                  "bg-rose-500"
+                )} 
+              ></span>
+            </div>
+            
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base md:text-lg font-semibold truncate">{member.name}</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">{member.role}</p>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <Avatar className="h-16 w-16 border-4 border-background shadow-md">
-              <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg">
-                {getInitials(member.name)}
-              </AvatarFallback>
-            </Avatar>
-            <span 
-              className={cn(
-                "absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-background",
-                utilizationPercentage >= 85 ? "bg-green-500" : 
-                utilizationPercentage >= 70 ? "bg-amber-500" : 
-                "bg-rose-500"
-              )} 
-            ></span>
-          </div>
-          
-          <div>
-            <h3 className="text-base md:text-lg font-semibold">{member.name}</h3>
-            <p className="text-xs md:text-sm text-muted-foreground">{member.role}</p>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 shrink-0"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-popover shadow-md">
+              <DropdownMenuItem onClick={(e) => onEditMember(member, e)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={(e) => onDeleteMember(member.id, e)} className="text-destructive">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         
         <div className="mt-6 grid grid-cols-2 gap-4">
@@ -94,7 +116,7 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
               <TrendingUp className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">% of Utilisation</p>
+              <p className="text-xs text-muted-foreground">Utilisation</p>
               <p className={cn("font-semibold text-xs md:text-sm", getUtilizationColor(utilizationPercentage))}>
                 {utilizationPercentage}%
               </p>
@@ -144,7 +166,12 @@ const TeamMemberCard = ({ member, onMemberClick, onEditMember, onDeleteMember }:
               <span className="text-xs text-muted-foreground">No projects assigned</span>
             )}
             {member.projects.map((project, i) => (
-              <Badge key={i} variant="outline" className="bg-background shadow-sm text-xs">
+              <Badge 
+                key={i} 
+                variant="outline" 
+                className="bg-background shadow-sm text-xs cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                onClick={(e) => handleProjectClick(project, e)}
+              >
                 {project}
               </Badge>
             ))}

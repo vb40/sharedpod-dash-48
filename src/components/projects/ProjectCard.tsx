@@ -53,11 +53,12 @@ const ProjectCard = ({ project, onProjectClick, onEditProject, onDeleteProject }
   return (
     <Card 
       id="project-card"
+      data-project-id={project.id}
       className="overflow-hidden group hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-400 shadow-md relative w-full h-full bg-white dark:bg-[#242023]"
       onClick={() => onProjectClick(project)}
     >
       <CardHeader className="pb-2 md:pb-3">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <CardTitle className="text-base md:text-lg truncate">{project.name}</CardTitle>
           </div>

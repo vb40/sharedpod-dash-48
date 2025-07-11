@@ -1,8 +1,9 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Check, X } from "lucide-react";
+import { Check, X, Plus } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,6 +27,8 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
     actualHours: 0,
     plannedHours: 0
   });
+  const [customProject, setCustomProject] = useState("");
+  const [showCustomProject, setShowCustomProject] = useState(false);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,6 +45,17 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
         ? prev.projects.filter(p => p !== projectName)
         : [...prev.projects, projectName]
     }));
+  };
+
+  const handleAddCustomProject = () => {
+    if (customProject.trim() && !formData.projects.includes(customProject.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        projects: [...prev.projects, customProject.trim()]
+      }));
+      setCustomProject("");
+      setShowCustomProject(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -61,6 +75,18 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
 
     addTeamMember(newMember);
     toast.success("Team member added successfully");
+    
+    // Reset form
+    setFormData({
+      name: "",
+      role: "",
+      projects: [],
+      performance: 0,
+      actualHours: 0,
+      plannedHours: 0
+    });
+    setCustomProject("");
+    setShowCustomProject(false);
     onClose();
   };
 
@@ -106,33 +132,63 @@ const AddTeamMemberModal = ({ isOpen, onClose }: TeamMemberModalProps) => {
           
           <div className="grid gap-2">
             <Label>Projects</Label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="justify-between w-full">
-                  Select Projects
-                  <Check 
-                    className={`ml-2 h-4 w-4 ${formData.projects.length === 0 ? 'opacity-0' : 'opacity-100'}`}
-                  />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[200px] bg-popover shadow-md">
-                {projects.map(project => (
-                  <DropdownMenuItem
-                    key={project.id}
-                    onSelect={(e) => {
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="justify-between flex-1">
+                    Select Projects
+                    <Check 
+                      className={`ml-2 h-4 w-4 ${formData.projects.length === 0 ? 'opacity-0' : 'opacity-100'}`}
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[200px] bg-popover shadow-md">
+                  {projects.map(project => (
+                    <DropdownMenuItem
+                      key={project.id}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        handleProjectSelect(project.name);
+                      }}
+                      className="flex items-center justify-between"
+                    >
+                      {project.name}
+                      {formData.projects.includes(project.name) && (
+                        <Check className="h-4 w-4" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => setShowCustomProject(!showCustomProject)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {showCustomProject && (
+              <div className="flex gap-2 mt-2">
+                <Input
+                  placeholder="Custom project name"
+                  value={customProject}
+                  onChange={(e) => setCustomProject(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
                       e.preventDefault();
-                      handleProjectSelect(project.name);
-                    }}
-                    className="flex items-center justify-between"
-                  >
-                    {project.name}
-                    {formData.projects.includes(project.name) && (
-                      <Check className="h-4 w-4" />
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      handleAddCustomProject();
+                    }
+                  }}
+                />
+                <Button type="button" onClick={handleAddCustomProject} size="sm">
+                  Add
+                </Button>
+              </div>
+            )}
 
             {formData.projects.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">

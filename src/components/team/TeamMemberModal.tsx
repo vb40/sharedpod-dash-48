@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,19 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
     plannedHours: member?.plannedHours || 0,
     projects: member?.projects || []
   });
+
+  useEffect(() => {
+    if (member && isOpen) {
+      setFormData({
+        name: member.name || "",
+        role: member.role || "",
+        performance: member.performance || 0,
+        actualHours: member.actualHours || 0,
+        plannedHours: member.plannedHours || 0,
+        projects: member.projects || []
+      });
+    }
+  }, [member, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -143,7 +156,7 @@ const TeamMemberModal = ({ isOpen, onClose, member }: TeamMemberModalProps) => {
           </div>
           
           <div className="grid gap-2">
-            <Label htmlFor="performance" className="text-xs">Performance (%)</Label>
+            <Label htmlFor="performance" className="text-xs">Utilisation (%)</Label>
             <Input 
               id="performance" 
               name="performance" 
