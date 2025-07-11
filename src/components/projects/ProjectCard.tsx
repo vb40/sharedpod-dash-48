@@ -13,10 +13,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 interface ProjectCardProps {
   project: any;
   onProjectClick: (project: any) => void;
+  onEditProject: (project: any) => void;
   onDeleteProject: (projectId: string, projectName: string) => void;
 }
 
-const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardProps) => {
+const ProjectCard = ({ project, onProjectClick, onEditProject, onDeleteProject }: ProjectCardProps) => {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -85,7 +86,7 @@ const ProjectCard = ({ project, onProjectClick, onDeleteProject }: ProjectCardPr
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
-                      onProjectClick(project);
+                      onEditProject(project);
                     }}
                     className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   >

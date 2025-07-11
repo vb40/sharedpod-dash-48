@@ -6,23 +6,36 @@ import { Plus } from "lucide-react";
 import AddProjectModal from "@/components/projects/AddProjectModal";
 import ProjectsList from "@/components/projects/ProjectsList";
 import ProjectModal from "@/components/dashboard/ProjectModal";
+import ProjectEditModal from "@/components/projects/ProjectModal";
 import { useToast } from "@/hooks/use-toast";
 
 const Projects = () => {
   const { projects, deleteProject } = useApp();
   const [selectedProject, setSelectedProject] = useState<any | undefined>(undefined);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editProject, setEditProject] = useState<any | undefined>(undefined);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { toast } = useToast();
 
   const handleProjectClick = (project: any) => {
     setSelectedProject(project);
-    setIsModalOpen(true);
+    setIsInfoModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleEditProject = (project: any) => {
+    setEditProject(project);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseInfoModal = () => {
+    setIsInfoModalOpen(false);
     setSelectedProject(undefined);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditProject(undefined);
   };
 
   const handleAddProject = () => {
@@ -57,13 +70,22 @@ const Projects = () => {
       <ProjectsList
         projects={projects}
         onProjectClick={handleProjectClick}
+        onEditProject={handleEditProject}
         onDeleteProject={handleDeleteProject}
       />
       
+      {/* Info Modal (like dashboard) */}
       <ProjectModal 
         project={selectedProject}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        isOpen={isInfoModalOpen}
+        onClose={handleCloseInfoModal}
+      />
+      
+      {/* Edit Modal (original projects modal) */}
+      <ProjectEditModal 
+        project={editProject}
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
       />
       
       <AddProjectModal 
