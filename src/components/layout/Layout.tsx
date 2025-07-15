@@ -38,7 +38,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar isMobileOpen={isMobileOpen} closeMobileSidebar={closeMobileSidebar} />
       </div>
       
-      <div className="flex flex-col flex-1 w-full min-w-0 ml-64 lg:ml-64">
+      <div className="flex flex-col flex-1 w-full min-w-0 lg:ml-64">
         <Header isMobileOpen={isMobileOpen} toggleMobileSidebar={toggleMobileSidebar} />
         
         <main className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">

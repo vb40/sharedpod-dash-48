@@ -146,23 +146,24 @@ const TicketDetailModal = ({
                 </span>
               </div>
 
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                <div
-                  className={`h-3 rounded-full ${
-                    actualTime.total > estimatedTime.total
-                      ? 'bg-red-500'
-                      : percentage >= 80
-                      ? 'bg-yellow-500'
-                      : percentage >= 50
-                      ? 'bg-blue-500'
-                      : 'bg-green-500'
-                  }`}
-                  style={{ width: `${Math.min(percentage, 100)}%` }}
-                ></div>
-              </div>
-
-              <div className="text-xs text-gray-500 mt-2 text-right">
-                {percentage}% completed
+              <div className="flex items-center gap-2 mt-2">
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                  <div
+                    className={`h-3 rounded-full ${
+                      actualTime.total > estimatedTime.total
+                        ? 'bg-red-500'
+                        : percentage >= 80
+                        ? 'bg-yellow-500'
+                        : percentage >= 50
+                        ? 'bg-blue-500'
+                        : 'bg-green-500'
+                    }`}
+                    style={{ width: `${Math.min(percentage, 100)}%` }}
+                  ></div>
+                </div>
+                <span className="text-xs text-gray-500">
+                  {percentage}% completed
+                </span>
               </div>
             </div>
 

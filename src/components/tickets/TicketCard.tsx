@@ -129,20 +129,20 @@ const TicketCard = ({ ticket, onEdit }: TicketCardProps) => {
         </div>
         
         <div className="space-y-1">
-          <div className="flex justify-between items-center text-xs">
+          <div className="flex items-center justify-between text-xs">
             <span>Time Progress</span>
-            <span>{progressPercentage}%</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 relative h-2 bg-secondary rounded-full overflow-hidden">
-              <div 
-                className={cn(
-                  "absolute h-full left-0 top-0 rounded-full transition-all",
-                  progressPercentage >= 100 ? "bg-green-500" : 
-                  progressPercentage >= 66 ? "bg-amber-500" : "bg-primary"
-                )}
-                style={{ width: `${progressPercentage}%` }}
-              />
+            <div className="flex items-center gap-2">
+              <div className="flex-1 relative h-2 bg-secondary rounded-full overflow-hidden">
+                <div 
+                  className={cn(
+                    "absolute h-full left-0 top-0 rounded-full transition-all",
+                    progressPercentage >= 100 ? "bg-green-500" : 
+                    progressPercentage >= 66 ? "bg-amber-500" : "bg-primary"
+                  )}
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
+              <span>{progressPercentage}%</span>
             </div>
           </div>
         </div>

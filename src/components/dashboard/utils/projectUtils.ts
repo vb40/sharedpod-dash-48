@@ -1,10 +1,10 @@
 
 export const normalizeStatus = (status: string) => {
-  if (status === "Active" || status === "Planning") return "Active";
+  if (status === "Active" || status === "Planning" || status === "Just Started" || status === "Near Completion") return "Active";
   if (status === "Completed") return "Completed";
   if (status === "Pipeline") return "Pipeline";
   if (status === "OnHold" || status === "On Hold") return "On Hold";
-  return "On Hold";
+  return status; // Return original status if no specific normalization is needed
 };
 
 export const getHoursUsed = (project: any) => {

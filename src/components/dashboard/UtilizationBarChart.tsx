@@ -2,13 +2,19 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
 
 // Dropdown options
 const projectOptions = ['USHG', 'P2P', 'Uctapharma', 'DN', 'FPL', 'Met Iren'];
-const timeOptions = ['Week', '1 Month', '3 Month', '6 Month', '1 Year'];
+const timeOptions = ['Month', '1 Month', '3 Month', '6 Month', '1 Year', 'Custom'];
 const memberOptions = ['Sathish', 'Mukesh', 'Pradeep', 'Perumal'];
 
 // Mock data (expandable)
@@ -95,8 +101,10 @@ const getBarColor = (value: number) => {
 
 const UtilizationBarChart = () => {
   const [selectedProject, setSelectedProject] = useState('USHG');
-  const [selectedTime, setSelectedTime] = useState('Week');
+  const [selectedTime, setSelectedTime] = useState('Month');
   const [selectedMember, setSelectedMember] = useState('Sathish');
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
   const data =
     mockUtilizationData[selectedProject]?.[selectedMember]?.[selectedTime] || [];
@@ -135,6 +143,55 @@ const UtilizationBarChart = () => {
               </SelectContent>
             </Select>
 
+            {selectedTime === 'Custom' && (
+              <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[180px] justify-start text-left font-normal",
+                        !startDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? format(startDate, "PPP") : <span>Start Date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[180px] justify-start text-left font-normal",
+                        !endDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? format(endDate, "PPP") : <span>End Date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
+
             <Select value={selectedMember} onValueChange={setSelectedMember}>
               <SelectTrigger className="w-auto min-w-[100px] focus:ring-[#ff9e16] focus:border-[#ff9e16]">
                 <SelectValue placeholder="Member" />
@@ -171,12 +228,12 @@ const UtilizationBarChart = () => {
                 formatter={(value) => [`${value}%`, 'Utilization']}
                 labelFormatter={(label) => `Day: ${label}`}
                 contentStyle={{
-                  backgroundColor: 'var(--background)',
-                  border: '1px solid var(--border)',
+                  backgroundColor: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
                   borderRadius: '6px',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                   fontSize: '12px',
-                  color: 'var(--foreground)'
+                  color: 'hsl(var(--foreground))'
                 }}
               />
               <Bar dataKey="utilization" radius={[4, 4, 0, 0]}>
