@@ -1,5 +1,8 @@
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import type { Ticket, TeamMember, Project, Holiday } from "@/context/types";
+import type { Certification } from "@/components/certifications/types";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 class ApiService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -28,108 +31,108 @@ class ApiService {
   }
 
   // Tickets API
-  async getTickets() {
-    return this.request('/tickets');
+  async getTickets(): Promise<Ticket[]> {
+    return this.request<Ticket[]>('/tickets');
   }
 
-  async createTicket(ticket: any) {
-    return this.request('/tickets', {
+  async createTicket(ticket: Omit<Ticket, 'id'>): Promise<Ticket> {
+    return this.request<Ticket>('/tickets', {
       method: 'POST',
       body: JSON.stringify(ticket),
     });
   }
 
-  async updateTicket(id: string, ticket: any) {
-    return this.request(`/tickets/${id}`, {
+  async updateTicket(id: string, ticket: Partial<Ticket>): Promise<Ticket> {
+    return this.request<Ticket>(`/tickets/${id}`, {
       method: 'PUT',
       body: JSON.stringify(ticket),
     });
   }
 
-  async deleteTicket(id: string) {
-    return this.request(`/tickets/${id}`, {
+  async deleteTicket(id: string): Promise<void> {
+    return this.request<void>(`/tickets/${id}`, {
       method: 'DELETE',
     });
   }
 
   // Projects API
-  async getProjects() {
-    return this.request('/projects');
+  async getProjects(): Promise<Project[]> {
+    return this.request<Project[]>('/projects');
   }
 
-  async createProject(project: any) {
-    return this.request('/projects', {
+  async createProject(project: Omit<Project, 'id'>): Promise<Project> {
+    return this.request<Project>('/projects', {
       method: 'POST',
       body: JSON.stringify(project),
     });
   }
 
-  async updateProject(id: string, project: any) {
-    return this.request(`/projects/${id}`, {
+  async updateProject(id: string, project: Partial<Project>): Promise<Project> {
+    return this.request<Project>(`/projects/${id}`, {
       method: 'PUT',
       body: JSON.stringify(project),
     });
   }
 
-  async deleteProject(id: string) {
-    return this.request(`/projects/${id}`, {
+  async deleteProject(id: string): Promise<void> {
+    return this.request<void>(`/projects/${id}`, {
       method: 'DELETE',
     });
   }
 
   // Team Members API
-  async getTeamMembers() {
-    return this.request('/team-members');
+  async getTeamMembers(): Promise<TeamMember[]> {
+    return this.request<TeamMember[]>('/team-members');
   }
 
-  async createTeamMember(member: any) {
-    return this.request('/team-members', {
+  async createTeamMember(member: Omit<TeamMember, 'id'>): Promise<TeamMember> {
+    return this.request<TeamMember>('/team-members', {
       method: 'POST',
       body: JSON.stringify(member),
     });
   }
 
-  async updateTeamMember(id: string, member: any) {
-    return this.request(`/team-members/${id}`, {
+  async updateTeamMember(id: string, member: Partial<TeamMember>): Promise<TeamMember> {
+    return this.request<TeamMember>(`/team-members/${id}`, {
       method: 'PUT',
       body: JSON.stringify(member),
     });
   }
 
-  async deleteTeamMember(id: string) {
-    return this.request(`/team-members/${id}`, {
+  async deleteTeamMember(id: string): Promise<void> {
+    return this.request<void>(`/team-members/${id}`, {
       method: 'DELETE',
     });
   }
 
   // Certifications API
-  async getCertifications() {
-    return this.request('/certifications');
+  async getCertifications(): Promise<Certification[]> {
+    return this.request<Certification[]>('/certifications');
   }
 
-  async createCertification(certification: any) {
-    return this.request('/certifications', {
+  async createCertification(certification: Omit<Certification, 'id'>): Promise<Certification> {
+    return this.request<Certification>('/certifications', {
       method: 'POST',
       body: JSON.stringify(certification),
     });
   }
 
-  async updateCertification(id: string, certification: any) {
-    return this.request(`/certifications/${id}`, {
+  async updateCertification(id: string, certification: Partial<Certification>): Promise<Certification> {
+    return this.request<Certification>(`/certifications/${id}`, {
       method: 'PUT',
       body: JSON.stringify(certification),
     });
   }
 
-  async deleteCertification(id: string) {
-    return this.request(`/certifications/${id}`, {
+  async deleteCertification(id: string): Promise<void> {
+    return this.request<void>(`/certifications/${id}`, {
       method: 'DELETE',
     });
   }
 
   // Holidays API
-  async getHolidays() {
-    return this.request('/holidays');
+  async getHolidays(): Promise<Holiday[]> {
+    return this.request<Holiday[]>('/holidays');
   }
 }
 

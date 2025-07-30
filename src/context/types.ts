@@ -62,7 +62,7 @@ export interface AppContextType {
   certifications: any[];
   holidays: Holiday[];
   loading?: boolean;
-  addTicket: (ticket: Ticket) => Promise<void>;
+  addTicket: (ticket: Omit<Ticket, 'id'>) => Promise<void>;
   updateTicket: (ticket: Ticket) => Promise<void>;
   deleteTicket: (id: string) => Promise<void>;
   filterTickets: (status: string) => Ticket[];
@@ -72,6 +72,6 @@ export interface AppContextType {
   updateTeamMember: (memberId: string, updatedMember: Partial<TeamMember>) => Promise<void>;
   updateProject: (projectId: string, updatedProject: Partial<Project>) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
-  addTeamMember: (member: TeamMember) => Promise<void>;
+  addTeamMember: (member: Omit<TeamMember, 'id'>) => Promise<void>;
   deleteTeamMember: (memberId: string) => Promise<void>;
 }

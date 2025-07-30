@@ -52,7 +52,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     loadData();
   }, []);
 
-  const addTicket = async (ticket: Ticket) => {
+  const addTicket = async (ticket: Omit<Ticket, 'id'>) => {
     try {
       const newTicket = await apiService.createTicket(ticket);
       setTickets(prev => [...prev, newTicket]);
@@ -187,7 +187,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addTeamMember = async (member: TeamMember) => {
+  const addTeamMember = async (member: Omit<TeamMember, 'id'>) => {
     try {
       const newMember = await apiService.createTeamMember(member);
       setTeamMembers(prev => [...prev, newMember]);
