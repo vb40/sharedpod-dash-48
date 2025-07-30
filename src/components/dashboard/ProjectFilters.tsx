@@ -58,7 +58,7 @@ const ProjectFilters = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all" className="data-[state=checked]:bg-[#ff9e16] data-[state=checked]:text-white">All Members</SelectItem>
-            {teamMembers.map(member => (
+            {(teamMembers || []).map(member => (
               <SelectItem key={member.id} value={member.name}>
                 {member.name}
               </SelectItem>

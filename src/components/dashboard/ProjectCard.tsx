@@ -134,7 +134,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
         <div className="space-y-2">
           <div className="text-xs md:text-sm font-medium">Team Members</div>
           <div className="flex -space-x-1 md:-space-x-2">
-            {project.team.map((member: string, index: number) => (
+            {(project.team || []).map((member: string, index: number) => (
               <HoverCard key={index}>
                 <HoverCardTrigger>
                   <Avatar className="border-2 border-background h-6 w-6 md:h-8 md:w-8">
