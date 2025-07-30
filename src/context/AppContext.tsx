@@ -1,47 +1,93 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
-import data from "@/data/data.json";
-import { initialCertifications } from "./initialData";
+
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { ThemeProvider, useTheme } from "./ThemeContext";
+import { apiService } from "@/services/api";
+import { toast } from "sonner";
 import type { AppContextType, Ticket, TeamMember, Project, Holiday } from "./types";
 
 export const AppContext = createContext<AppContextType>({} as AppContextType);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme, toggleTheme } = useTheme();
-  const [tickets, setTickets] = useState(data.tickets || []);
-  
-  // Convert team member IDs from number to string to match our TeamMember interface
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(
-    (data.teamMembers || []).map(member => ({
-      ...member,
-      id: String(member.id), // Convert id to string
-      actualHours: (member as any).actualHours || 0,
-      plannedHours: (member as any).plannedHours || 0
-    }))
-  );
-  
-  // Make sure project data matches our Project interface
-  const [projects, setProjects] = useState<Project[]>(
-    (data.projects || []).map(project => ({
-      ...project,
-      hoursLogged: project.hoursLogged || 0 // Ensure hoursLogged exists
-    }))
-  );
-  
-  const [certifications, setCertifications] = useState(initialCertifications);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [certifications, setCertifications] = useState<any[]>([]);
+  const [holidays, setHolidays] = useState<Holiday[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const addTicket = (ticket: Ticket) => {
-    setTickets([...tickets, ticket]);
+  // Load data from API on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        
+        const [
+          ticketsData,
+          teamMembersData,
+          projectsData,
+          certificationsData,
+          holidaysData
+        ] = await Promise.all([
+          apiService.getTickets(),
+          apiService.getTeamMembers(),
+          apiService.getProjects(),
+          apiService.getCertifications(),
+          apiService.getHolidays()
+        ]);
+
+        setTickets(ticketsData || []);
+        setTeamMembers(teamMembersData || []);
+        setProjects(projectsData || []);
+        setCertifications(certificationsData || []);
+        setHolidays(holidaysData || []);
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        toast.error('Failed to load data from server');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const addTicket = async (ticket: Ticket) => {
+    try {
+      const newTicket = await apiService.createTicket(ticket);
+      setTickets(prev => [...prev, newTicket]);
+      toast.success('Ticket created successfully');
+    } catch (error) {
+      console.error('Failed to create ticket:', error);
+      toast.error('Failed to create ticket');
+      throw error;
+    }
   };
 
-  const updateTicket = (updatedTicket: Ticket) => {
-    setTickets(
-      tickets.map((ticket) => (ticket.id === updatedTicket.id ? updatedTicket : ticket))
-    );
+  const updateTicket = async (updatedTicket: Ticket) => {
+    try {
+      const updated = await apiService.updateTicket(updatedTicket.id, updatedTicket);
+      setTickets(prev => 
+        prev.map(ticket => ticket.id === updatedTicket.id ? updated : ticket)
+      );
+      toast.success('Ticket updated successfully');
+    } catch (error) {
+      console.error('Failed to update ticket:', error);
+      toast.error('Failed to update ticket');
+      throw error;
+    }
   };
 
-  const deleteTicket = (id: string) => {
-    setTickets(tickets.filter((ticket) => ticket.id !== id));
+  const deleteTicket = async (id: string) => {
+    try {
+      await apiService.deleteTicket(id);
+      setTickets(prev => prev.filter(ticket => ticket.id !== id));
+      toast.success('Ticket deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete ticket:', error);
+      toast.error('Failed to delete ticket');
+      throw error;
+    }
   };
 
   const filterTickets = useCallback(
@@ -68,53 +114,102 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     [tickets]
   );
 
-  const addCertification = (certification: any) => {
-    setCertifications([...certifications, certification]);
+  const addCertification = async (certification: any) => {
+    try {
+      const newCertification = await apiService.createCertification(certification);
+      setCertifications(prev => [...prev, newCertification]);
+      toast.success('Certification added successfully');
+    } catch (error) {
+      console.error('Failed to add certification:', error);
+      toast.error('Failed to add certification');
+      throw error;
+    }
   };
 
-  const updateCertification = (updatedCertification: any) => {
-    setCertifications(
-      certifications.map((cert) => 
-        cert.id === updatedCertification.id ? updatedCertification : cert
-      )
-    );
+  const updateCertification = async (updatedCertification: any) => {
+    try {
+      const updated = await apiService.updateCertification(updatedCertification.id, updatedCertification);
+      setCertifications(prev =>
+        prev.map(cert => cert.id === updatedCertification.id ? updated : cert)
+      );
+      toast.success('Certification updated successfully');
+    } catch (error) {
+      console.error('Failed to update certification:', error);
+      toast.error('Failed to update certification');
+      throw error;
+    }
   };
 
-  const updateTeamMember = (memberId: string, updatedMember: Partial<TeamMember>) => {
-    setTeamMembers(teamMembers.map(member => 
-      member.id === memberId ? { ...member, ...updatedMember } : member
-    ));
+  const updateTeamMember = async (memberId: string, updatedMember: Partial<TeamMember>) => {
+    try {
+      const updated = await apiService.updateTeamMember(memberId, updatedMember);
+      setTeamMembers(prev => 
+        prev.map(member => member.id === memberId ? { ...member, ...updated } : member)
+      );
+      toast.success('Team member updated successfully');
+    } catch (error) {
+      console.error('Failed to update team member:', error);
+      toast.error('Failed to update team member');
+      throw error;
+    }
   };
 
-  const updateProject = (projectId: string, updatedProject: Partial<Project>) => {
-    setProjects(projects => {
-      const existingProject = projects.find(p => p.id === projectId);
-      if (existingProject) {
-        // Update existing project
-        return projects.map(project => 
-          project.id === projectId ? { ...project, ...updatedProject } : project
-        );
-      } else {
-        // Add new project
-        return [...projects, updatedProject as Project];
-      }
-    });
+  const updateProject = async (projectId: string, updatedProject: Partial<Project>) => {
+    try {
+      const updated = await apiService.updateProject(projectId, updatedProject);
+      setProjects(prev => {
+        const existingProject = prev.find(p => p.id === projectId);
+        if (existingProject) {
+          return prev.map(project => 
+            project.id === projectId ? { ...project, ...updated } : project
+          );
+        } else {
+          return [...prev, updated as Project];
+        }
+      });
+      toast.success('Project updated successfully');
+    } catch (error) {
+      console.error('Failed to update project:', error);
+      toast.error('Failed to update project');
+      throw error;
+    }
   };
 
-  const deleteProject = (projectId: string) => {
-    setProjects(projects => projects.filter(project => project.id !== projectId));
+  const deleteProject = async (projectId: string) => {
+    try {
+      await apiService.deleteProject(projectId);
+      setProjects(prev => prev.filter(project => project.id !== projectId));
+      toast.success('Project deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete project:', error);
+      toast.error('Failed to delete project');
+      throw error;
+    }
   };
 
-  const addTeamMember = (member: TeamMember) => {
-    console.log("Adding team member:", member);
-    setTeamMembers(prev => [...prev, member]);
+  const addTeamMember = async (member: TeamMember) => {
+    try {
+      const newMember = await apiService.createTeamMember(member);
+      setTeamMembers(prev => [...prev, newMember]);
+      toast.success('Team member added successfully');
+    } catch (error) {
+      console.error('Failed to add team member:', error);
+      toast.error('Failed to add team member');
+      throw error;
+    }
   };
 
-  const deleteTeamMember = (memberId: string) => {
-    setTeamMembers(prev => prev.filter(member => member.id !== memberId));
+  const deleteTeamMember = async (memberId: string) => {
+    try {
+      await apiService.deleteTeamMember(memberId);
+      setTeamMembers(prev => prev.filter(member => member.id !== memberId));
+      toast.success('Team member deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete team member:', error);
+      toast.error('Failed to delete team member');
+      throw error;
+    }
   };
-
-  const holidays = data.holidays || [];
 
   return (
     <AppContext.Provider
@@ -126,6 +221,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         tickets,
         certifications,
         holidays,
+        loading,
         addTicket,
         updateTicket,
         deleteTicket,
@@ -147,7 +243,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useApp = () => useContext(AppContext);
 
-// Wrap the AppProvider with ThemeProvider
 export const AppContextProvider = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider>
     <AppProvider>{children}</AppProvider>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useApp } from "@/context/AppContext";
@@ -54,44 +53,44 @@ const TicketModal = ({ isOpen, onClose, ticket, mode }: TicketModalProps) => {
   const { addTicket, updateTicket } = useApp();
   const { formData, errors, comments, handleChange, handleSelectChange, handleAddComment, validateForm, resetForm } = useTicketState(ticket, mode);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
       resetForm(ticket, mode);
-      setIsSubmitted(false);
     }
   }, [isOpen, ticket, mode, resetForm]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) return;
     
     setIsSubmitting(true);
     
-    const projectCode = generateProjectCode(formData.project);
-    const ticketId = mode === "create" 
-      ? `${projectCode}-${Math.floor(Math.random() * 1000)}`
-      : ticket?.id;
-    
-    const updatedTicket = {
-      id: ticketId!,
-      ...formData,
-      createdAt: mode === "create" ? new Date().toISOString() : ticket!.createdAt,
-      updatedAt: new Date().toISOString(),
-      comments,
-    };
-    
-    if (mode === "create") {
-      addTicket(updatedTicket);
-      toast.success("Ticket created successfully!");
-    } else {
-      updateTicket(updatedTicket);
-      toast.success("Ticket updated successfully!");
+    try {
+      const projectCode = generateProjectCode(formData.project);
+      const ticketId = mode === "create" 
+        ? `${projectCode}-${Math.floor(Math.random() * 1000)}`
+        : ticket?.id;
+      
+      const updatedTicket = {
+        id: ticketId!,
+        ...formData,
+        createdAt: mode === "create" ? new Date().toISOString() : ticket!.createdAt,
+        updatedAt: new Date().toISOString(),
+        comments,
+      };
+      
+      if (mode === "create") {
+        await addTicket(updatedTicket);
+      } else {
+        await updateTicket(updatedTicket);
+      }
+      
+      onClose();
+    } catch (error) {
+      console.error('Failed to save ticket:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    onClose();
   };
 
   return (

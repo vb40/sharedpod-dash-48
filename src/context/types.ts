@@ -61,16 +61,17 @@ export interface AppContextType {
   tickets: Ticket[];
   certifications: any[];
   holidays: Holiday[];
-  addTicket: (ticket: Ticket) => void;
-  updateTicket: (ticket: Ticket) => void;
-  deleteTicket: (id: string) => void;
+  loading?: boolean;
+  addTicket: (ticket: Ticket) => Promise<void>;
+  updateTicket: (ticket: Ticket) => Promise<void>;
+  deleteTicket: (id: string) => Promise<void>;
   filterTickets: (status: string) => Ticket[];
   searchTickets: (query: string) => Ticket[];
-  addCertification: (certification: any) => void;
-  updateCertification: (certification: any) => void;
-  updateTeamMember: (memberId: string, updatedMember: Partial<TeamMember>) => void;
-  updateProject: (projectId: string, updatedProject: Partial<Project>) => void;
-  deleteProject: (projectId: string) => void;
-  addTeamMember: (member: TeamMember) => void;
-  deleteTeamMember: (memberId: string) => void;
+  addCertification: (certification: any) => Promise<void>;
+  updateCertification: (certification: any) => Promise<void>;
+  updateTeamMember: (memberId: string, updatedMember: Partial<TeamMember>) => Promise<void>;
+  updateProject: (projectId: string, updatedProject: Partial<Project>) => Promise<void>;
+  deleteProject: (projectId: string) => Promise<void>;
+  addTeamMember: (member: TeamMember) => Promise<void>;
+  deleteTeamMember: (memberId: string) => Promise<void>;
 }
