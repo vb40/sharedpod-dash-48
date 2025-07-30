@@ -2,7 +2,7 @@
 import type { Ticket, TeamMember, Project, Holiday } from "@/context/types";
 import type { Certification } from "@/components/certifications/types";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
 
 class ApiService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -82,25 +82,25 @@ class ApiService {
 
   // Team Members API
   async getTeamMembers(): Promise<TeamMember[]> {
-    return this.request<TeamMember[]>('/team-members');
+    return this.request<TeamMember[]>('/members');
   }
 
   async createTeamMember(member: Omit<TeamMember, 'id'>): Promise<TeamMember> {
-    return this.request<TeamMember>('/team-members', {
+    return this.request<TeamMember>('/members', {
       method: 'POST',
       body: JSON.stringify(member),
     });
   }
 
   async updateTeamMember(id: string, member: Partial<TeamMember>): Promise<TeamMember> {
-    return this.request<TeamMember>(`/team-members/${id}`, {
+    return this.request<TeamMember>(`/members/${id}`, {
       method: 'PUT',
       body: JSON.stringify(member),
     });
   }
 
   async deleteTeamMember(id: string): Promise<void> {
-    return this.request<void>(`/team-members/${id}`, {
+    return this.request<void>(`/members/${id}`, {
       method: 'DELETE',
     });
   }

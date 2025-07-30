@@ -25,22 +25,18 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         const [
           ticketsData,
           teamMembersData,
-          projectsData,
-          certificationsData,
-          holidaysData
+          projectsData
         ] = await Promise.all([
           apiService.getTickets(),
           apiService.getTeamMembers(),
-          apiService.getProjects(),
-          apiService.getCertifications(),
-          apiService.getHolidays()
+          apiService.getProjects()
         ]);
 
         setTickets(ticketsData || []);
         setTeamMembers(teamMembersData || []);
         setProjects(projectsData || []);
-        setCertifications(certificationsData || []);
-        setHolidays(holidaysData || []);
+        setCertifications([]);
+        setHolidays([]);
       } catch (error) {
         console.error('Failed to load data:', error);
         toast.error('Failed to load data from server');
